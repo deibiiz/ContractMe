@@ -1,3 +1,5 @@
+SetUp del proyecto
+
 # UBU-ContractMe
 
 SetUp inicial de aplicación ContractMe.
