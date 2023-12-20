@@ -8,6 +8,7 @@ contract MyContract is ERC721 {
     mapping(uint256 => ContractDetails) public contractDetails;
     event ContractSigned(uint256 indexed tokenId, address worker);
     event SalaryReleased(uint256 indexed tokenId, uint256 salary);
+    event TokenMinted(uint256 tokenId);
     struct ContractDetails {
         uint256 salary;
         uint256 startDate;
@@ -25,11 +26,15 @@ contract MyContract is ERC721 {
         string memory _description
     ) public payable returns (uint256) {
         require(
-            msg.value == _salary,
+            msg.value >= _salary,
             "Dede enviar el salario como valor del contrato"
         );
         tokenID++;
         _mint(msg.sender, tokenID);
+        uint256 remainder = msg.value - _salary;
+        if (remainder > 0) {
+            payable(msg.sender).transfer(remainder);
+        }
 
         ContractDetails memory newContract = ContractDetails({
             salary: _salary,
@@ -41,6 +46,7 @@ contract MyContract is ERC721 {
         });
 
         contractDetails[tokenID] = newContract;
+        emit TokenMinted(tokenID);
 
         return tokenID;
     }
@@ -54,7 +60,7 @@ contract MyContract is ERC721 {
             "No puedes firmar tu propio contrato"
         );
         require(
-            contractDetails[_tokenID].isSigned,
+            !contractDetails[_tokenID].isSigned,
             "El contrato ya ha sido firmado"
         );
         require(
