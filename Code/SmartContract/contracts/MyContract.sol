@@ -16,6 +16,10 @@ contract MyContract is ERC721 {
         string description;
         bool isSigned;
         address worker;
+        bool isFinished;
+        bool isPaused;
+        uint256 pauseTime;
+        uint256 pauseDuration;
     }
 
     constructor() ERC721("MyToken", "MTK") {}
@@ -43,7 +47,11 @@ contract MyContract is ERC721 {
             duration: _duration,
             description: _description,
             isSigned: false,
-            worker: _to
+            worker: _to,
+            isFinished: false,
+            isPaused: false,
+            pauseTime: 0,
+            pauseDuration: 0
         });
 
         contractDetails[tokenID] = newContract;
@@ -52,7 +60,7 @@ contract MyContract is ERC721 {
         return tokenID;
     }
 
-    function signContract(uint256 _tokenID) public payable {
+    function signContract(uint256 _tokenID) public {
         try this.ownerOf(_tokenID) {} catch {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
@@ -67,6 +75,10 @@ contract MyContract is ERC721 {
         require(
             !contractDetails[_tokenID].isSigned,
             "El contrato ya ha sido firmado"
+        );
+        require(
+            contractDetails[_tokenID].isFinished == false,
+            "El contrato ha finalizado"
         );
         require(
             contractDetails[_tokenID].startDate +
@@ -93,10 +105,15 @@ contract MyContract is ERC721 {
             "Solo el propietario puede liberar el salario"
         );
         require(
-            contractDetails[_tokenID].startDate +
-                contractDetails[_tokenID].duration <=
+            contractDetails[_tokenID].isFinished == true ||
+                contractDetails[_tokenID].startDate +
+                    contractDetails[_tokenID].duration <=
                 block.timestamp,
-            "El contrato no ha expirado aun"
+            "El contrato no ha expirado aun o no ha finalizado"
+        );
+        require(
+            contractDetails[_tokenID].isPaused == false,
+            "El contrato esta pausado"
         );
 
         address payable worker = payable(contractDetails[_tokenID].worker);
@@ -104,4 +121,93 @@ contract MyContract is ERC721 {
         worker.transfer(salary);
         emit SalaryReleased(_tokenID, salary);
     }
+
+    function finalizeContract(uint256 _tokenID) public {
+        try this.ownerOf(_tokenID) {} catch {
+            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
+        }
+        require(
+            msg.sender == ownerOf(_tokenID),
+            "Solo el propietario puede finalizar el contrato"
+        );
+        require(
+            contractDetails[_tokenID].isSigned,
+            "El contrato no ha sido firmado"
+        );
+        require(
+            contractDetails[_tokenID].isFinished == false,
+            "El contrato ya ha finalizado"
+        );
+        require(
+            contractDetails[_tokenID].startDate +
+                contractDetails[_tokenID].duration >
+                block.timestamp,
+            "El contrato ya ha expirado"
+        );
+
+        contractDetails[_tokenID].isFinished = true;
+    }
+
+    function pauseContract(uint256 _tokenID) public {
+        try this.ownerOf(_tokenID) {} catch {
+            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
+        }
+        require(
+            msg.sender == ownerOf(_tokenID),
+            "Solo el propietario puede pausar el contrato"
+        );
+        require(
+            contractDetails[_tokenID].isSigned,
+            "El contrato no ha sido firmado"
+        );
+        require(
+            contractDetails[_tokenID].startDate +
+                contractDetails[_tokenID].duration >=
+                block.timestamp,
+            "El contrato ha expirado"
+        );
+        require(
+            !contractDetails[_tokenID].isPaused,
+            "El contrato ya esta pausado"
+        );
+
+        contractDetails[_tokenID].isPaused = true;
+        contractDetails[_tokenID].pauseTime = block.timestamp;
+    }
+
+    function unPauseContract(uint256 _tokenID) public {
+        try this.ownerOf(_tokenID) {} catch {
+            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
+        }
+        require(
+            msg.sender == ownerOf(_tokenID),
+            "Solo el propietario puede despausar el contrato"
+        );
+        require(
+            contractDetails[_tokenID].isSigned,
+            "El contrato no ha sido firmado"
+        );
+        require(
+            contractDetails[_tokenID].isPaused,
+            "El contrato no esta pausado"
+        );
+
+        contractDetails[_tokenID].pauseDuration =
+            block.timestamp -
+            contractDetails[_tokenID].pauseTime;
+
+        contractDetails[_tokenID].duration += contractDetails[_tokenID]
+            .pauseDuration;
+
+        contractDetails[_tokenID].pauseTime = 0;
+        contractDetails[_tokenID].isPaused = false;
+    }
+
+    //Funcion para dar permisos a otro dueño del contrato que pueda manejarlo en caso de que el dueño original no pueda
+    //Funcion para cancelar un contrato que no haya sido firmado
+    //Funcion para modificar un contrato que no haya sido firmado
+    //Funcion para modificar un contrato que haya sido firmado con la aprobación del trabajador
+    //funcion para abrir un disputa en un contrato activo. Tanto como trabajador como como empleador
+    //funcion para analis: que permita saber el salario medio, el numero de contratos firmados, el numero de contratos activos, el numero de contratos cancelados, el numero de contratos finalizados, el numero de contratos en disputa, el numero de contratos que han expirado
+    //Fucnion que penalice a un trabajador que no haya cumplido con el contrato
 }
