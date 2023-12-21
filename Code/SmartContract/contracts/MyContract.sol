@@ -21,6 +21,7 @@ contract MyContract is ERC721 {
     constructor() ERC721("MyToken", "MTK") {}
 
     function mint(
+        address _to,
         uint256 _salary,
         uint256 _duration,
         string memory _description
@@ -42,7 +43,7 @@ contract MyContract is ERC721 {
             duration: _duration,
             description: _description,
             isSigned: false,
-            worker: address(0) // 0x0000000
+            worker: _to
         });
 
         contractDetails[tokenID] = newContract;
@@ -58,6 +59,10 @@ contract MyContract is ERC721 {
         require(
             msg.sender != ownerOf(_tokenID),
             "No puedes firmar tu propio contrato"
+        );
+        require(
+            msg.sender == contractDetails[_tokenID].worker,
+            "Solo el trabajador puede firmar el contrato"
         );
         require(
             !contractDetails[_tokenID].isSigned,

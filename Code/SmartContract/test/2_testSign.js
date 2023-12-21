@@ -1,7 +1,7 @@
 const MyContract = artifacts.require("MyContract");
 
 contract("MyContract", accounts => {
-    const [owner, buyer] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
+    const [owner, buyer, buer2] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
     const salary = web3.utils.toWei("1", "ether");
     const duration = 5; 
     const description = "Contrato de prueba para firmar";
@@ -11,7 +11,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         try{
             await contract.signContract(tokenId, { from: owner });
@@ -22,11 +22,26 @@ contract("MyContract", accounts => {
         assert(errorOcurred, "El dueño del contrato no puede firmarlo");
     });
 
+    it("Verifica que solo el usuario especificado en el contrato pueda firmarlo", async () => {
+        const contract = await MyContract.deployed();
+        let errorOcurred = false;
+
+        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const tokenId = mintedToken.logs[0].args.tokenId;
+        try{
+            await contract.signContract(tokenId, { from: buyer2 });
+        }catch(e){
+            errorOcurred = true;
+        }
+
+        assert(errorOcurred, "Solo el usuario especificado en el contrato puede firmarlo");
+    });
+
     it("Verifica que el un contrato que haya sido firmado no pueda ser firmado de nuevo", async () => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
@@ -43,9 +58,28 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
         
-        const mintedToken = await contract.mint(salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
-        await new Promise(resolve => setTimeout(resolve, duration+10000)); //para el tiempo esta cantidad de tiempo
+            // Avanza el tiempo
+    await new Promise((resolve, reject) => {
+        web3.currentProvider.send({
+            jsonrpc: '2.0',
+            method: 'evm_increaseTime',
+            params: [duration + 1], // Aumenta el tiempo más allá de la duración del contrato
+            id: new Date().getTime()
+        }, (err, result) => {
+            if (err) { return reject(err); }
+            web3.currentProvider.send({
+                jsonrpc: '2.0',
+                method: 'evm_mine',
+                params: [],
+                id: new Date().getTime()
+            }, (err, result) => {
+                if (err) { return reject(err); }
+                resolve();
+            });
+        });
+    });
 
 
         try{

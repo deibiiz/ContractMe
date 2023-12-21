@@ -4,7 +4,7 @@ contract("MyContract", accounts => {
   
   const [owner, buyer] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
   const salary = web3.utils.toWei("1", "ether");
-  const overpayAmount = web3.utils.toWei("50", "ether");
+  const overpayAmount = web3.utils.toWei("3", "ether");
   const duration = 120; // 2 minutos
   const description = "Trabajo de prueba"; 
 
@@ -12,7 +12,7 @@ contract("MyContract", accounts => {
     const contract = await MyContract.deployed();
 
     const initialBalance = await web3.eth.getBalance(buyer);
-    await contract.mint(salary, duration, description, { from: buyer, value: salary });
+    await contract.mint(buyer, salary, duration, description, { from: buyer, value: salary });
     const finalBalance = await web3.eth.getBalance(buyer);
     const cost = web3.utils.toBN(initialBalance).sub(web3.utils.toBN(finalBalance));
 
@@ -27,7 +27,7 @@ contract("MyContract", accounts => {
     const contract = await MyContract.deployed();
     
     const initialBalance = await web3.eth.getBalance(buyer);
-    await contract.mint(salary, duration, description, { from: buyer, value: overpayAmount });
+    await contract.mint(buyer, salary, duration, description, { from: buyer, value: overpayAmount });
     const finalBalance = await web3.eth.getBalance(buyer);
     const expectedFinalBalance = web3.utils.toBN(initialBalance).sub(web3.utils.toBN(overpayAmount));
 
