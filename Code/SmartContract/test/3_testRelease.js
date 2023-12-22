@@ -61,9 +61,10 @@ contract("MyContract", accounts => {
         assert(errorOcurred, "El salario no puede ser liberado antes de que el contrato expire");
     });
 
-    it("Comprueba que el salario se transfiera al comprador cuando se libere el pago", async () => {
+    it("Comprueba que el salario se transfiera al trabajador cuando se libere el pago", async () => {
         const contract = await MyContract.deployed();
-        const initialBalance = await web3.eth.getBalance(buyer);
+        const BN = web3.utils.BN;
+        const initialBalance = new BN(await web3.eth.getBalance(buyer));
         const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer });
         const tokenId = mintedToken.logs[0].args.tokenId;
@@ -89,9 +90,9 @@ contract("MyContract", accounts => {
             });
         });
         await contract.releaseSalary(tokenId, { from: owner });
-        const finalBalance = await web3.eth.getBalance(buyer);
+        const finalBalance = new BN(await web3.eth.getBalance(buyer));
 
-        assert(finalBalance > initialBalance, "El salario no se transfirió al comprador");
+        assert(finalBalance.gt(initialBalance), "El salario no se transfirió al trabajador");
     });
 
 
