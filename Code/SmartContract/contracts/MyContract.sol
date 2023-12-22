@@ -2,13 +2,11 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract MyContract is ERC721 {
+contract MyContract is ERC721, AccessControl {
     uint256 tokenID;
     mapping(uint256 => ContractDetails) public contractDetails;
-    event ContractSigned(uint256 indexed tokenId, address worker);
-    event SalaryReleased(uint256 indexed tokenId, uint256 salary);
-    event TokenMinted(uint256 tokenId);
     struct ContractDetails {
         uint256 salary;
         uint256 startDate;
@@ -21,8 +19,26 @@ contract MyContract is ERC721 {
         uint256 pauseTime;
         uint256 pauseDuration;
     }
+    event ContractSigned(uint256 indexed tokenId, address worker);
+    event SalaryReleased(uint256 indexed tokenId, uint256 salary);
+    event TokenMinted(uint256 tokenId);
+    event ContractCancelled(uint256 indexed tokenId);
 
-    constructor() ERC721("MyToken", "MTK") {}
+    bytes32 public constant CONTRACT_MANAGER_ROLE =
+        keccak256("CONTRACT_MANAGER_ROLE");
+
+    constructor() ERC721("MyToken", "MTK") {
+        _grantRole(CONTRACT_MANAGER_ROLE, msg.sender);
+        (CONTRACT_MANAGER_ROLE, msg.sender);
+    }
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC721, AccessControl) returns (bool) {
+        return
+            ERC721.supportsInterface(interfaceId) ||
+            AccessControl.supportsInterface(interfaceId);
+    }
 
     function mint(
         address _to,
@@ -33,6 +49,10 @@ contract MyContract is ERC721 {
         require(
             msg.value >= _salary,
             "Dede enviar el salario como valor del contrato"
+        );
+        require(
+            hasRole(CONTRACT_MANAGER_ROLE, _to) != false,
+            "El trabajador no puede ser un manager del contrato"
         );
         tokenID++;
         _mint(msg.sender, tokenID);
@@ -65,7 +85,7 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            msg.sender != ownerOf(_tokenID),
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
             "No puedes firmar tu propio contrato"
         );
         require(
@@ -101,8 +121,8 @@ contract MyContract is ERC721 {
             "El contrato no ha sido firmado"
         );
         require(
-            msg.sender == ownerOf(_tokenID),
-            "Solo el propietario puede liberar el salario"
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede liberar el salario"
         );
         require(
             contractDetails[_tokenID].isFinished == true ||
@@ -127,8 +147,8 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            msg.sender == ownerOf(_tokenID),
-            "Solo el propietario puede finalizar el contrato"
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede finalizar un contrato"
         );
         require(
             contractDetails[_tokenID].isSigned,
@@ -153,8 +173,8 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            msg.sender == ownerOf(_tokenID),
-            "Solo el propietario puede pausar el contrato"
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede pausar un contrato"
         );
         require(
             contractDetails[_tokenID].isSigned,
@@ -180,8 +200,8 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            msg.sender == ownerOf(_tokenID),
-            "Solo el propietario puede despausar el contrato"
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede reanudar un contrato"
         );
         require(
             contractDetails[_tokenID].isSigned,
@@ -203,8 +223,42 @@ contract MyContract is ERC721 {
         contractDetails[_tokenID].isPaused = false;
     }
 
-    //Funcion para dar permisos a otro dueño del contrato que pueda manejarlo en caso de que el dueño original no pueda
-    //Funcion para cancelar un contrato que no haya sido firmado
+    function cancelContract(uint256 _tokenID) public {
+        try this.ownerOf(_tokenID) {} catch {
+            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
+        }
+        require(
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede cancelar un contrato"
+        );
+        require(
+            !contractDetails[_tokenID].isSigned,
+            "El contrato ya ha sido firmado"
+        );
+
+        address payable owner = payable(msg.sender);
+        uint256 salary = contractDetails[_tokenID].salary;
+        owner.transfer(salary);
+        _burn(_tokenID);
+        emit ContractCancelled(_tokenID);
+    }
+
+    function assignManager(address _newManager) public {
+        require(
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede asignar otro manager"
+        );
+        grantRole(CONTRACT_MANAGER_ROLE, _newManager);
+    }
+
+    function revokeManager(address _manager) public {
+        require(
+            hasRole(CONTRACT_MANAGER_ROLE, msg.sender),
+            "Solo un manager puede revocar otro manager"
+        );
+        revokeRole(CONTRACT_MANAGER_ROLE, _manager);
+    }
+
     //Funcion para modificar un contrato que no haya sido firmado
     //Funcion para modificar un contrato que haya sido firmado con la aprobación del trabajador
     //funcion para abrir un disputa en un contrato activo. Tanto como trabajador como como empleador

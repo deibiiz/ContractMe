@@ -94,7 +94,7 @@ contract("MyContract", accounts => {
         assert(finalBalance > initialBalance, "El salario no se transfirió al comprador");
     });
 
-    //test de si no ha expirado pero se ha dado como finalizado deje retornar el dinero al comprador
+
     it("Comprueba que permita finalizar un contrato cuando no ha expirado pero el dueño lo haya declarado como finalizado", async () => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
