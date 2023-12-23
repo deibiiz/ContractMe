@@ -7,6 +7,8 @@ contract MyContract is ERC721 {
     uint256 tokenID;
     mapping(uint256 => mapping(address => bool)) public tokenManagers;
     mapping(uint256 => ContractDetails) public contractDetails;
+    mapping(address => uint256[]) private contractsOwner;
+    mapping(address => uint256[]) private activeContractsOfWorker;
     struct ContractDetails {
         uint256 salary;
         uint256 startDate;
@@ -58,6 +60,7 @@ contract MyContract is ERC721 {
 
         contractDetails[tokenID] = newContract;
         tokenManagers[tokenID][msg.sender] = true;
+        contractsOwner[msg.sender].push(tokenID);
         emit TokenMinted(tokenID);
 
         return tokenID;
@@ -92,6 +95,7 @@ contract MyContract is ERC721 {
 
         contractDetails[_tokenID].isSigned = true;
         contractDetails[_tokenID].worker = msg.sender;
+        activeContractsOfWorker[msg.sender].push(_tokenID);
         emit ContractSigned(_tokenID, msg.sender);
     }
 
@@ -226,7 +230,6 @@ contract MyContract is ERC721 {
         emit ContractCancelled(_tokenID);
     }
 
-    // Asignar manager a un contrato específico
     function assignManagerToToken(
         uint256 _tokenId,
         address _newManager
@@ -236,9 +239,9 @@ contract MyContract is ERC721 {
             "Solo un manager de este contrato puede asignar otro manager"
         );
         tokenManagers[_tokenId][_newManager] = true;
+        contractsOwner[_newManager].push(tokenID);
     }
 
-    // Revocar manager de un contrato específico
     function revokeManagerFromToken(uint256 _tokenId, address _manager) public {
         require(
             tokenManagers[_tokenId][msg.sender],
@@ -247,7 +250,6 @@ contract MyContract is ERC721 {
         tokenManagers[_tokenId][_manager] = false;
     }
 
-    // Verificar si una dirección es manager de un contrato específico
     function isManagerOfToken(
         uint256 _tokenId,
         address _manager
@@ -256,8 +258,66 @@ contract MyContract is ERC721 {
     }
 
     //Funcion para modificar un contrato que no haya sido firmado
-    //Funcion para modificar un contrato que haya sido firmado con la aprobación del trabajador
-    //funcion para abrir un disputa en un contrato activo. Tanto como trabajador como como empleador
-    //funcion para analis: que permita saber el salario medio, el numero de contratos firmados, el numero de contratos activos, el numero de contratos cancelados, el numero de contratos finalizados, el numero de contratos en disputa, el numero de contratos que han expirado
-    //Fucnion que penalice a un trabajador que no haya cumplido con el contrato
+    function modifyContract(
+        uint256 _tokenID,
+        uint256 _salary,
+        uint256 _duration,
+        string memory _description
+    ) public payable {
+        try this.ownerOf(_tokenID) {} catch {
+            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
+        }
+        require(
+            tokenManagers[tokenID][msg.sender] == true,
+            "Solo un manager puede modificar un contrato"
+        );
+        require(
+            !contractDetails[_tokenID].isSigned,
+            "El contrato ya ha sido firmado"
+        );
+        require(
+            contractDetails[_tokenID].isFinished == false,
+            "El contrato ha finalizado"
+        );
+        require(
+            contractDetails[_tokenID].startDate +
+                contractDetails[_tokenID].duration >=
+                block.timestamp,
+            "El contrato ha expirado"
+        );
+
+        uint256 currentSalary = contractDetails[_tokenID].salary;
+
+        if (_salary > currentSalary) {
+            uint256 salaryDifference = _salary - currentSalary;
+            require(
+                msg.value >= salaryDifference,
+                "Fondos insuficientes para cubrir el incremento del salario"
+            );
+
+            uint256 excessAmount = msg.value - salaryDifference;
+            if (excessAmount > 0) {
+                payable(msg.sender).transfer(excessAmount);
+            }
+        } else if (_salary < currentSalary) {
+            uint256 refundAmount = currentSalary - _salary;
+            payable(msg.sender).transfer(refundAmount);
+        }
+
+        contractDetails[_tokenID].salary = _salary;
+        contractDetails[_tokenID].duration = _duration;
+        contractDetails[_tokenID].description = _description;
+    }
+
+    function getContractsFromOwner(
+        address _address
+    ) public view returns (uint256[] memory) {
+        return contractsOwner[_address];
+    }
+
+    function getContractsOfWorker(
+        address _address
+    ) public view returns (uint256[] memory) {
+        return activeContractsOfWorker[_address];
+    }
 }
