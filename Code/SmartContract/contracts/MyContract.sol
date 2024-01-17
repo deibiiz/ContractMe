@@ -320,4 +320,16 @@ contract MyContract is ERC721 {
     ) public view returns (uint256[] memory) {
         return activeContractsOfWorker[_address];
     }
+
+    function isContractPaused(uint256 _tokenID) public view returns (bool) {
+        return contractDetails[_tokenID].isPaused;
+    }
+
+    function isContractSigned(uint256 _tokenID) public view returns (bool) {
+        return contractDetails[_tokenID].isSigned;
+    }
+
+    function isContractFinished(uint256 _tokenID) public view returns (bool) {
+        return contractDetails[_tokenID].isFinished;
+    }
 }
