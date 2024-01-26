@@ -3,19 +3,20 @@ const MyContract = artifacts.require("MyContract");
 contract("MyContract", accounts => {
     const [owner, buyer, buer2] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
     const salary = web3.utils.toWei("1", "ether");
-    const duration = 5; 
+    const duration = 5;
     const description = "Contrato de prueba para firmar";
-    
+    const title = "Titulo de prueba";
+
 
     it("Verifica que solo un usuario distino al que acuñó el NFT pueda firmarlo", async () => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
-        try{
+        try {
             await contract.signContract(tokenId, { from: owner });
-        }catch(e){
+        } catch (e) {
             errorOcurred = true;
         }
 
@@ -26,11 +27,11 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
-        try{
+        try {
             await contract.signContract(tokenId, { from: buyer2 });
-        }catch(e){
+        } catch (e) {
             errorOcurred = true;
         }
 
@@ -41,13 +42,13 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
-        try{
+        try {
             await contract.signContract(tokenId, { from: buyer });
-        }catch(e){
+        } catch (e) {
             errorOcurred = true;
         }
 
@@ -57,34 +58,34 @@ contract("MyContract", accounts => {
     it("Verifica que un contrato no pueda ser firmado tras su vencimiento", async () => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
-        
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
-            // Avanza el tiempo
-    await new Promise((resolve, reject) => {
-        web3.currentProvider.send({
-            jsonrpc: '2.0',
-            method: 'evm_increaseTime',
-            params: [duration + 1], // Aumenta el tiempo más allá de la duración del contrato
-            id: new Date().getTime()
-        }, (err, result) => {
-            if (err) { return reject(err); }
+        // Avanza el tiempo
+        await new Promise((resolve, reject) => {
             web3.currentProvider.send({
                 jsonrpc: '2.0',
-                method: 'evm_mine',
-                params: [],
+                method: 'evm_increaseTime',
+                params: [duration + 1], // Aumenta el tiempo más allá de la duración del contrato
                 id: new Date().getTime()
             }, (err, result) => {
                 if (err) { return reject(err); }
-                resolve();
+                web3.currentProvider.send({
+                    jsonrpc: '2.0',
+                    method: 'evm_mine',
+                    params: [],
+                    id: new Date().getTime()
+                }, (err, result) => {
+                    if (err) { return reject(err); }
+                    resolve();
+                });
             });
         });
-    });
 
 
-        try{
+        try {
             await contract.signContract(tokenId, { from: buyer });
-        }catch(e){
+        } catch (e) {
             errorOcurred = true;
         }
 

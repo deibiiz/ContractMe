@@ -5,12 +5,13 @@ contract("MyContract", accounts => {
     const salary = web3.utils.toWei("1", "ether");
     const duration = 5;
     const description = "Contrato de prueba para firmar";
+    const title = "Titulo de prueba";
 
     it("Verifica que solo el propiertario pueda liberar el salario", async () => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer });
         const tokenId = mintedToken.logs[0].args.tokenId;
 
@@ -48,7 +49,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer });
         const tokenId = mintedToken.logs[0].args.tokenId;
 
@@ -65,7 +66,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         const BN = web3.utils.BN;
         const initialBalance = new BN(await web3.eth.getBalance(buyer));
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer });
         const tokenId = mintedToken.logs[0].args.tokenId;
 
@@ -100,7 +101,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
         const initialBalance = await web3.eth.getBalance(buyer);
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer });
         const tokenId = mintedToken.logs[0].args.tokenId;
 

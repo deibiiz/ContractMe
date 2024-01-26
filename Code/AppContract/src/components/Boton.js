@@ -8,7 +8,7 @@ export default function Boton({ texto, onPress, estiloBoton, estiloTexto }) {
     return (
         <TouchableOpacity style={[styles.container, estiloBoton]} onPress={onPress}>
             <View
-                style={[styles.boton, estiloBoton, { backgroundColor: '#2BA6FF' }]}
+                style={[styles.boton, estiloBoton]}
             >
                 <Text style={[styles.texto, estiloTexto]}>{texto}</Text>
             </View>
@@ -18,23 +18,19 @@ export default function Boton({ texto, onPress, estiloBoton, estiloTexto }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: 250,
         alignItems: "center",
-        marginTop: 30,
     },
     texto: {
         fontSize: 14,
-        color: "black",
+        color: "white",
         fontWeight: "bold",
     },
     boton: {
-        marginTop: 10,
-        width: "80%",
-        height: 50,
         borderRadius: 25,
         padding: 15,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#164863",
     },
 
 });

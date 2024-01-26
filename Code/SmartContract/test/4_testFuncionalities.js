@@ -5,10 +5,11 @@ contract("MyContract", accounts => {
     const salary = web3.utils.toWei("1", "ether");
     const duration = 10;
     const description = "Contrato de prueba para firmar";
+    const title = "Titulo de prueba";
 
     it("Comprueba que un contrato se pause de forma correcta", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
@@ -25,7 +26,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que el contrato se despause de forma correcta", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
         await contract.pauseContract(tokenId, { from: owner });
@@ -43,7 +44,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que un contrato se pueda cancelar y este deje de tener valor.", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
 
         await contract.cancelContract(tokenId, { from: owner });
@@ -63,7 +64,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que el rol de manager pueda interactuar con el contrato", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.assignManagerToToken(mintedToken.logs[0].args.tokenId, owner2);
 
@@ -81,16 +82,25 @@ contract("MyContract", accounts => {
         assert.isTrue(errorOcurred, "El contrato no se ha cancelado correctamente");
     });
 
-    it("Comrprueba que un manager pueda modificar un contrato que todavía no se ha firmado", async () => {
+    it("Comrprueba que un manager pueda modificar un contrato", async () => {
         const contract = await MyContract.deployed();
-        const newSalary = web3.utils.toWei("4", "ether");
+        const newSalary = web3.utils.toWei("2", "ether");
         const newDuration = 20;
-        const mintedToken = await contract.mint(buyer, salary, duration, description, { from: owner, value: salary });
+        const nwedescription = "Nuevo Contrato de prueba";
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
+        await contract.signContract(tokenId, { from: buyer });
 
-        await contract.modifyContract(tokenId, newSalary, newDuration, description, { from: owner, value: newSalary });
+
+        try {
+            await contract.proposeChange(tokenId, newSalary, newDuration, nwedescription, false, { from: owner, value: newSalary });
+            await contract.applyChange(tokenId, { from: buyer });
+        } catch (e) {
+            console.log(e);
+        }
+
+
         const modifiedContract = await contract.contractDetails(tokenId);
-
         assert.equal(modifiedContract.salary, newSalary, "El salario no se ha modificado correctamente");
         assert.equal(modifiedContract.duration, newDuration, "La duración no se ha modificado correctamente");
 
@@ -98,9 +108,9 @@ contract("MyContract", accounts => {
 
     it("Comprueba los contratos que ha emitido un owner", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer2, salary, duration, description, { from: owner3, value: salary });
-        const mintedToken2 = await contract.mint(buyer2, salary, duration, description, { from: owner3, value: salary });
-        const mintedToken3 = await contract.mint(buyer2, salary, duration, description, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer2, salary, duration, description, title, { from: owner3, value: salary });
+        const mintedToken2 = await contract.mint(buyer2, salary, duration, description, title, { from: owner3, value: salary });
+        const mintedToken3 = await contract.mint(buyer2, salary, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer2 });
         await contract.signContract(mintedToken2.logs[0].args.tokenId, { from: buyer2 });
         await contract.signContract(mintedToken3.logs[0].args.tokenId, { from: buyer2 });
@@ -110,4 +120,5 @@ contract("MyContract", accounts => {
         assert.equal(contractsOwner.length, 2, "El número de contratos del owner no es correcto");
         assert.equal(contractsWorker.length, 3, "El número de contratos del trabajador no es correcto");
     });
+
 });

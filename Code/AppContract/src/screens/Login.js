@@ -14,7 +14,7 @@ export default function Login({ AutenticarConHuella, AutenticarDirecto }) {
         height={100}
         fill="none"
       >
-        <Path fill="#2BA6FF" d="M0 0h1800v250H0V0Z" />
+        <Path fill="#164863" d="M0 0h1800v250H0V0Z" />
       </Svg>
     )
   }
@@ -36,19 +36,21 @@ export default function Login({ AutenticarConHuella, AutenticarDirecto }) {
           style={styles.textoInput}
           secureTextEntry={true}
         />
-        <Text style={styles.olvidoContraseña}> ¿Ha olvidado su contraña? </Text>
         <Boton
           texto="Iniciar sesión"
           onPress={AutenticarDirecto}
+          estiloBoton={{
+            width: 180,
+            marginTop: 15,
+          }}
         />
         <Text style={styles.olvidoContraseña}> No tengo cuenta </Text>
         <Boton
           texto="Acceso Biométrico"
           onPress={AutenticarConHuella}
-          colores={["#AEDDF5", "#12B0FF"]}
           estiloBoton={{
             width: 280,
-            marginTop: 20,
+            marginTop: 25,
             borderRadius: 15,
           }}
         />
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
   olvidoContraseña: {
     fontSize: 14,
     color: "gray",
-    marginTop: 20,
+    marginTop: 15,
   },
   textoInput: {
     padding: 10,

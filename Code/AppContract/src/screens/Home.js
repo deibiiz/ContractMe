@@ -15,10 +15,35 @@ const Home = () => {
             <Boton
                 texto="Crear Contrato"
                 onPress={() => navigation.navigate('CreateContract')}
+                estiloBoton={
+                    {
+                        borderRadius: 5,
+                        marginTop: 0,
+                        width: 300,
+                    }
+                }
             />
             <Boton
-                texto="Verificar Contrato"
-                onPress={() => navigation.navigate('infoContract')}
+                texto="Firmar Contrato"
+                onPress={() => navigation.navigate('SignContract')}
+                estiloBoton={
+                    {
+                        borderRadius: 5,
+                        marginTop: 10,
+                        width: 300,
+                    }
+                }
+            />
+            <Boton
+                texto="Ver Contratos"
+                onPress={() => navigation.navigate('ShowContract')}
+                estiloBoton={
+                    {
+                        borderRadius: 5,
+                        marginTop: 10,
+                        width: 300,
+                    }
+                }
             />
         </View>
     );
@@ -28,8 +53,8 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         flex: 1,
-        backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
     },

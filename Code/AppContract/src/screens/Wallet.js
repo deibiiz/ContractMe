@@ -1,21 +1,24 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import MetaMask from "../ether/MetaMask.js";
 
-export default function Home() {
+const MiComponente = () => {
+    const { connectWallet, isConnected, account } = MetaMask();
+
+    const handleBlockchainInteraction = async () => {
+        if (!isConnected) {
+            await connectWallet();
+        }
+        if (isConnected) {
+            // Realiza la operación de la blockchain aquí
+        }
+    };
+
     return (
-        <View style={styles.container}>
-            <Text>WALLET</Text>
-            <StatusBar style="auto" />
-        </View>
+        <div>
+            {/* Contenido del componente */}
+            <button onClick={handleBlockchainInteraction}>Interactuar con Blockchain</button>
+        </div>
     );
-}
+};
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});
+export default MiComponente;

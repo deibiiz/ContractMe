@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function Home() {
     return (
         <View style={styles.container}>
-            <Text>STATS</Text>
+            <Text>STATSSSs</Text>
             <StatusBar style="auto" />
         </View>
     );
@@ -14,7 +14,6 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
     },

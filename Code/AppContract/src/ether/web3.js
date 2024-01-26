@@ -1,10 +1,9 @@
-
 import Web3 from 'web3';
 
 const MyContract = require('./MyContract.json');
-const ganacheUrl = 'http://localhost:8545';
+const ganacheUrl = 'http://192.168.1.33:8545';
 const web3 = new Web3(new Web3.providers.HttpProvider(ganacheUrl));
-const contractAddress = '0x98a3465AaA0d9451AA8eC996f4a99d9c15376770';
+const contractAddress = '0xAA35aDdD720e29aaC8Eb05C28A820754091cfD77';
 
 const MyContract1 = new web3.eth.Contract(MyContract.abi, contractAddress);
 
