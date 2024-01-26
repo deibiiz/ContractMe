@@ -59,8 +59,7 @@ export default function Alertas() {
             const newEndDate = proposal.newDuration ? new Date((Number(details.startDate) + Number(proposal.newDuration)) * 1000).toLocaleString() : endDate;
 
             const newDescription = proposal.newDescription ? proposal.newDescription : details.description;
-            const newIsPaused = proposal.newIsPaused ? proposal.newIsPaused : details.isPaused;
-
+            const newIsPaused = proposal.isPaused ? proposal.isPaused : details.isPaused;
 
             const contractData = {
                 ...details,

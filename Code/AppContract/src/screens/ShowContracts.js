@@ -8,24 +8,26 @@ import { web3, MyContract1 } from '../ether/web3.js';
 const initialLayout = { width: Dimensions.get('window').width };
 
 
-const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContracts, finalizedOwnerContracts, contractDetail }) => {
+const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContracts, finalizedOwnerContracts }) => {
     const navigation = useNavigation();
 
     return (
+
         <ScrollView>
             <View style={styles.container}>
                 <FlatList
                     data={contracts}
                     keyExtractor={item => item}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
-                        >
-                            <Text>Contrato ID: {item}</Text>
-
-                        </TouchableOpacity>
-                    )}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                                onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
+                            >
+                                <Text>Contrato ID: {item}</Text>
+                            </TouchableOpacity>
+                        );
+                    }}
                 />
 
                 <TouchableOpacity
@@ -54,7 +56,7 @@ const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedCon
     );
 };
 
-const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContracts, finalizedWorkerContracts, contractDetail }) => {
+const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContracts, finalizedWorkerContracts }) => {
     const navigation = useNavigation();
 
     return (
@@ -114,7 +116,6 @@ export default function OwnerContracts() {
     const [showFinalizedContracts, setShowFinalizedContracts] = useState(false);
     const [finalizedOwnerContracts, setFinalizedOwnerContracts] = useState([]);
     const [finalizedWorkerContracts, setFinalizedWorkerContracts] = useState([]);
-    const [contractDetails, setContractDetails] = useState({});
 
 
     const loadAccountAndContracts = async () => {
@@ -124,7 +125,7 @@ export default function OwnerContracts() {
                 const account = accounts[0];
                 await fetchOwnerContracts(account);
                 await fetchSignedContracts(account);
-                await fetchContractDetails();
+
 
             } else {
                 setFetchStatus("No se encontraron cuentas.");
@@ -140,6 +141,7 @@ export default function OwnerContracts() {
             loadAccountAndContracts();
         }, [])
     );
+
 
     const fetchOwnerContracts = async (account) => {
         if (!account) {
@@ -170,6 +172,7 @@ export default function OwnerContracts() {
 
             setEmployerContracts(signedOwnerContracts.concat(pendingOwnerContracts));
             setFinalizedOwnerContracts(finalizedOwnerContracts);
+
 
         } catch (error) {
             console.error("Error al obtener los contratos:", error);
@@ -212,30 +215,16 @@ export default function OwnerContracts() {
         }
     };
 
-    const fetchContractDetails = async () => {
-        const details = {};
-        for (const tokenId of employerContracts) {
-            const contractDetail = await MyContract1.methods.contractDetails(tokenId).call();
-            details[tokenId] = contractDetail;
-        }
-        for (const tokenId of workerContracts) {
-            const contractDetail = await MyContract1.methods.contractDetails(tokenId).call();
-            details[tokenId] = contractDetail;
-        }
-        setContractDetails(details);
-    };
-
-
 
     const renderScene = ({ route }) => {
         switch (route.key) {
             case 'employer':
                 return <EmployerScreen
+
                     contracts={employerContracts}
                     showFinalizedContracts={showFinalizedContracts}
                     setShowFinalizedContracts={setShowFinalizedContracts}
                     finalizedOwnerContracts={finalizedOwnerContracts}
-                    contractDetails={contractDetails}
                 />;
             case 'worker':
                 return <WorkerScreen
@@ -243,7 +232,7 @@ export default function OwnerContracts() {
                     showFinalizedContracts={showFinalizedContracts}
                     setShowFinalizedContracts={setShowFinalizedContracts}
                     finalizedWorkerContracts={finalizedWorkerContracts}
-                    contractDetails={contractDetails}
+
                 />;
             default:
                 return null;

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, Button, Switch } from "react-native";
 import { web3, MyContract1 } from '../ether/web3.js';
+import Boton from "../components/Boton.js";
 
 const ModifyContract = ({ route, navigation }) => {
     const { contractDetails } = route.params;
+    const [title, setTitle] = useState(contractDetails.title);
     const [salary, setSalary] = useState(contractDetails.salary);
     const [duration, setDuration] = useState(contractDetails.duration);
     const [endDate, setEndDate] = useState(contractDetails.endDate);
@@ -16,8 +18,8 @@ const ModifyContract = ({ route, navigation }) => {
         try {
             const accounts = await web3.eth.getAccounts();
             let parsedSalary = web3.utils.toWei(salary, 'ether')
-            console.log(tokenId, parsedSalary, duration, description, isPaused)
-            MyContract1.methods.proposeChange(tokenId, parsedSalary, duration, description, isPaused).send({ from: accounts[0], value: parsedSalary, gas: 1000000 });
+            console.log(tokenId, title, parsedSalary, duration, description, isPaused)
+            MyContract1.methods.proposeChange(tokenId, title, parsedSalary, duration, description, isPaused).send({ from: accounts[0], value: parsedSalary, gas: 1000000 });
             navigation.navigate('ShowContract', { tokenId: tokenId });
         } catch (error) {
             console.error("Error al modificar el contrato:", error);
@@ -26,46 +28,78 @@ const ModifyContract = ({ route, navigation }) => {
     };
 
     return (
-        <View>
-            <TextInput
-                value={salary}
-                onChangeText={setSalary}
-                maxLength={8}
-                keyboardType="numeric"
-            />
-            <TextInput
-                value={description}
-                onChangeText={setDescription}
-                maxLength={1000}
-            />
-            <TextInput
-                value={duration}
-                onChangeText={setDuration}
-                maxLength={8}
-                keyboardType="numeric"
-            />
-            <View style={styles.switchContainer}>
-                <Text style={styles.text}>Pausar Contrato </Text>
-                <Switch
-                    value={isPaused}
-                    onValueChange={setIsPaused}
-                    trackColor={{ false: "#767577", true: "#30CBC4" }}
+        <View style={styles.container}>
+            <View style={styles.innerContainer}>
+
+                <Text style={styles.text}>Título</Text>
+                <TextInput
+                    style={styles.input}
+                    value={title}
+                    onChangeText={setTitle}
+                    maxLength={35}
                 />
+
+                <Text style={styles.text}>Salario</Text>
+                <TextInput
+                    style={styles.input}
+                    value={salary}
+                    onChangeText={setSalary}
+                    maxLength={8}
+                    keyboardType="numeric"
+                />
+
+                <Text style={styles.text}>Descripción</Text>
+                <TextInput
+                    style={styles.input}
+                    value={description}
+                    onChangeText={setDescription}
+                    maxLength={1000}
+                />
+
+                <Text style={styles.text}>Duración</Text>
+                <TextInput
+                    style={styles.input}
+                    value={duration}
+                    onChangeText={setDuration}
+                    maxLength={8}
+                    keyboardType="numeric"
+                />
+
+                <View style={styles.switchContainer}>
+                    <Text style={styles.switchText}>Pausar Contrato </Text>
+                    <Switch
+                        value={isPaused}
+                        onValueChange={setIsPaused}
+                    //trackColor={{ false: "#767577", true: "#164863" }}
+                    />
+                </View>
+
+                <Boton
+                    texto="Solicitar Cambios"
+                    onPress={sendProposal}
+                    estiloBoton={{
+                        borderRadius: 5,
+                        marginTop: 20,
+                        width: "100%",
+                    }}
+                />
+                <Text style={styles.textoAviso}> Solo si el trabajador acepta los cambios estos surgiran efecto  </Text>
             </View>
-            <Button
-                title="Solicitar Cambios"
-                onPress={sendProposal}
-            />
-            <Text style={styles.textoAviso}> Solo si el trabajador acepta los cambios estos surgiran efecto  </Text>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        margin: 10,
+    container: {
+        flex: 1,
+        backgroundColor: "#F2F2F2",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+    },
+    innerContainer: {
+        width: "80%",
+        alignItems: 'stretch',
     },
     textoAviso: {
         fontSize: 16,
@@ -75,6 +109,34 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         textAlign: "center",
         paddingHorizontal: 10,
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        backgroundColor: "white",
+    },
+    text: {
+        fontSize: 16,
+        color: "black",
+        marginBottom: -5,
+        marginTop: 10,
+        textAlign: "left",
+        paddingHorizontal: 15,
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        marginTop: 14,
+        paddingHorizontal: 15,
+    },
+    switchText: {
+        fontSize: 16,
+        color: "black",
+        alignSelf: 'center',
+        marginRight: 13,
     },
 });
 

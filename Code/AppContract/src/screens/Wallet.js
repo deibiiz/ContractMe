@@ -9,13 +9,13 @@ const MiComponente = () => {
             await connectWallet();
         }
         if (isConnected) {
-            // Realiza la operación de la blockchain aquí
+
         }
     };
 
     return (
         <div>
-            {/* Contenido del componente */}
+            { }
             <button onClick={handleBlockchainInteraction}>Interactuar con Blockchain</button>
         </div>
     );

@@ -7,6 +7,7 @@ import Boton from '../components/Boton.js';
 const ContractAlertScreen = ({ route }) => {
     const { contractDetails } = route.params;
     const navigation = useNavigation();
+    console.log(contractDetails.newIsPaused);
 
 
 
@@ -15,7 +16,7 @@ const ContractAlertScreen = ({ route }) => {
             const accounts = await web3.eth.getAccounts();
             const receipt = await MyContract1.methods.rejectChange(contractDetails.tokenId).send({ from: accounts[1] });
             console.log("Transacción completada:", receipt);
-            navigation.goBack();
+            navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al rechazar los cambios:", error);
             alert('Error al rechazar los cambios.');
@@ -27,7 +28,7 @@ const ContractAlertScreen = ({ route }) => {
             const accounts = await web3.eth.getAccounts();
             const receipt = await MyContract1.methods.applyChange(contractDetails.tokenId).send({ from: accounts[1] });
             console.log("Transacción completada:", receipt);
-            navigation.goBack();
+            navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al aceptar los cambios:", error);
             alert('Error al aceptar los cambios.');

@@ -87,13 +87,15 @@ contract("MyContract", accounts => {
         const newSalary = web3.utils.toWei("2", "ether");
         const newDuration = 20;
         const nwedescription = "Nuevo Contrato de prueba";
+        const newTitle = "Titulo de prueba";
+
         const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
 
         try {
-            await contract.proposeChange(tokenId, newSalary, newDuration, nwedescription, false, { from: owner, value: newSalary });
+            await contract.proposeChange(tokenId, newTitle, newSalary, newDuration, nwedescription, true, { from: owner, value: newSalary });
             await contract.applyChange(tokenId, { from: buyer });
         } catch (e) {
             console.log(e);

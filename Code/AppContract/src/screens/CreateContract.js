@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import { web3, MyContract1 } from "../ether/web3.js"; // Asegúrate de que la ruta es correcta
+import { web3, MyContract1 } from "../ether/web3.js";
 import Boton from "../components/Boton.js";
 
 export default function CreateContract() {

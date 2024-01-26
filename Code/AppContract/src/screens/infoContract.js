@@ -128,7 +128,7 @@ const ContractDetailsScreen = ({ route }) => {
                     <Text style={styles.title}>Fechas del contrato</Text>
                     <Text>Inicio:  {contractDetails.startDate}</Text>
                     <Text>Fin:      {contractDetails.endDate}</Text>
-                    {contractDetails.isPaused && (
+                    {contractDetails.isPaused && !contractDetails.isFinished && (
                         <Text>Pausa: {contractDetails.pauseTime}</Text>
                     )}
                 </View>
@@ -136,7 +136,7 @@ const ContractDetailsScreen = ({ route }) => {
                 <View style={styles.block}>
                     <Text style={styles.title}>Estado</Text>
                     <Text>{getContractState()}</Text>
-                    {contractDetails.isPaused && (
+                    {contractDetails.isPaused && !contractDetails.isFinished && (
                         <Text>Fecha de pausa: {contractDetails.pauseDate}</Text>
                     )}
                 </View>

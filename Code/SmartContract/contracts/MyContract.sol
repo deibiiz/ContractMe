@@ -27,6 +27,7 @@ contract MyContract is ERC721 {
     }
 
     struct ChangeProposal {
+        string newTitle;
         uint256 newSalary;
         uint256 newDuration;
         string newDescription;
@@ -110,9 +111,7 @@ contract MyContract is ERC721 {
             "El contrato ha finalizado"
         );
         require(
-            contractDetails[_tokenID].startDate +
-                contractDetails[_tokenID].duration >=
-                block.timestamp,
+            isContractFinished(_tokenID) == false,
             "El contrato ha expirado"
         );
 
@@ -139,11 +138,8 @@ contract MyContract is ERC721 {
             "Solo un manager puede liberar el salario"
         );
         require(
-            contractDetails[_tokenID].isFinished == true ||
-                contractDetails[_tokenID].startDate +
-                    contractDetails[_tokenID].duration <=
-                block.timestamp,
-            "El contrato no ha expirado aun o no ha finalizado"
+            isContractFinished(_tokenID) == true,
+            "El contrato no ha expirado"
         );
         require(
             contractDetails[_tokenID].isPaused == false,
@@ -174,10 +170,8 @@ contract MyContract is ERC721 {
             "El contrato ya ha finalizado"
         );
         require(
-            contractDetails[_tokenID].startDate +
-                contractDetails[_tokenID].duration >
-                block.timestamp,
-            "El contrato ya ha expirado"
+            isContractFinished(_tokenID) == false,
+            "El contrato ha expirado"
         );
 
         contractDetails[_tokenID].isFinished = true;
@@ -189,17 +183,11 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            tokenManagers[_tokenID][msg.sender] == true,
-            "Solo un manager puede pausar un contrato"
-        );
-        require(
             contractDetails[_tokenID].isSigned,
             "El contrato no ha sido firmado"
         );
         require(
-            contractDetails[_tokenID].startDate +
-                contractDetails[_tokenID].duration >=
-                block.timestamp,
+            isContractFinished(_tokenID) == false,
             "El contrato ha expirado"
         );
         require(
@@ -216,10 +204,6 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            tokenManagers[_tokenID][msg.sender] == true,
-            "Solo un manager puede reanudar un contrato"
-        );
-        require(
             contractDetails[_tokenID].isSigned,
             "El contrato no ha sido firmado"
         );
@@ -227,13 +211,14 @@ contract MyContract is ERC721 {
             contractDetails[_tokenID].isPaused,
             "El contrato no esta pausado"
         );
+        require(
+            isContractFinished(_tokenID) == false,
+            "El contrato ha expirado"
+        );
 
         contractDetails[_tokenID].pauseDuration =
             block.timestamp -
             contractDetails[_tokenID].pauseTime;
-
-        contractDetails[_tokenID].duration += contractDetails[_tokenID]
-            .pauseDuration;
 
         contractDetails[_tokenID].pauseTime = 0;
         contractDetails[_tokenID].isPaused = false;
@@ -311,15 +296,12 @@ contract MyContract is ERC721 {
     //funcion para proponer un cambio en un contrato
     function proposeChange(
         uint256 _tokenID,
+        string memory _newTitle,
         uint256 _newSalary,
         uint256 _newDuration,
         string memory _newDescription,
         bool _isPaused
     ) public payable {
-        require(
-            changeProposals[_tokenID].isPending == false,
-            "Ya hay un cambio propuesto para este contrato"
-        );
         uint256 currentSalary = contractDetails[_tokenID].salary;
         if (_newSalary > currentSalary) {
             uint256 salaryDifference = _newSalary - currentSalary;
@@ -335,6 +317,7 @@ contract MyContract is ERC721 {
         }
 
         changeProposals[_tokenID] = ChangeProposal({
+            newTitle: _newTitle,
             newSalary: _newSalary,
             newDuration: _newDuration,
             newDescription: _newDescription,
@@ -376,6 +359,7 @@ contract MyContract is ERC721 {
             payable(owner).transfer(refundAmount);
         }
 
+        contractDetails[_tokenID].title = proposedChange.newTitle;
         contractDetails[_tokenID].salary = proposedChange.newSalary;
         contractDetails[_tokenID].duration = proposedChange.newDuration;
         contractDetails[_tokenID].description = proposedChange.newDescription;
@@ -411,7 +395,8 @@ contract MyContract is ERC721 {
         if (
             block.timestamp >
             contractDetails[_tokenID].startDate +
-                contractDetails[_tokenID].duration
+                contractDetails[_tokenID].duration +
+                contractDetails[_tokenID].pauseDuration
         ) {
             return true;
         }
