@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, Button, Switch } from "react-native";
-import { web3, MyContract1 } from '../ether/web3.js';
+import { MyContract1 } from '../ether/web3.js';
 import Boton from "../components/Boton.js";
+import web3 from 'web3';
+import { useAccount } from '../components/ContextoCuenta';
 
 const ModifyContract = ({ route, navigation }) => {
     const { contractDetails } = route.params;
@@ -12,14 +14,18 @@ const ModifyContract = ({ route, navigation }) => {
     const [description, setDescription] = useState(contractDetails.description);
     const [isPaused, setIsPaused] = useState(contractDetails.isPaused);
     const [tokenId, setTokenId] = useState(contractDetails.tokenId);
+    const { selectedAccount } = useAccount();
 
 
     const sendProposal = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
             let parsedSalary = web3.utils.toWei(salary, 'ether')
-            console.log(tokenId, title, parsedSalary, duration, description, isPaused)
-            MyContract1.methods.proposeChange(tokenId, title, parsedSalary, duration, description, isPaused).send({ from: accounts[0], value: parsedSalary, gas: 1000000 });
+            MyContract1.methods.proposeChange(tokenId, title, parsedSalary, duration, description, isPaused).send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
             navigation.navigate('ShowContract', { tokenId: tokenId });
         } catch (error) {
             console.error("Error al modificar el contrato:", error);

@@ -3,7 +3,9 @@ import { View, StyleSheet, Dimensions, Text, FlatList, ScrollView } from 'react-
 import { TabView, TabBar } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { web3, MyContract1 } from '../ether/web3.js';
+import { MyContract1 } from '../ether/web3.js';
+import web3 from 'web3';
+import { useAccount } from '../components/ContextoCuenta';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -117,16 +119,14 @@ export default function OwnerContracts() {
     const [finalizedOwnerContracts, setFinalizedOwnerContracts] = useState([]);
     const [finalizedWorkerContracts, setFinalizedWorkerContracts] = useState([]);
 
+    const { selectedAccount } = useAccount();
+
 
     const loadAccountAndContracts = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            if (accounts.length > 0) {
-                const account = accounts[0];
-                await fetchOwnerContracts(account);
-                await fetchSignedContracts(account);
-
-
+            if (selectedAccount) {
+                await fetchOwnerContracts(selectedAccount);
+                await fetchSignedContracts(selectedAccount);
             } else {
                 setFetchStatus("No se encontraron cuentas.");
             }
@@ -139,7 +139,7 @@ export default function OwnerContracts() {
     useFocusEffect(
         useCallback(() => {
             loadAccountAndContracts();
-        }, [])
+        }, [selectedAccount])
     );
 
 

@@ -4,21 +4,24 @@ import { useAuthentication } from './src/Authentication';
 import "react-native-gesture-handler";
 import Login from "./src/screens/Login";
 import Navigation from './src/Navigation';
+import { AccountProvider } from './src/components/ContextoCuenta';
 
 
 
 export default function App() {
   const { esAutenticado, AutenticarConHuella, AutenticarDirecto } = useAuthentication();
 
-  if (!esAutenticado) {
-    return (
-      <View style={styles.mainContainer}>
-        <Login AutenticarConHuella={AutenticarConHuella} AutenticarDirecto={AutenticarDirecto} />
-      </View>
-    );
-  }
-
-  return <Navigation />;
+  return (
+    <AccountProvider>
+      {!esAutenticado ? (
+        <View style={styles.mainContainer}>
+          <Login AutenticarConHuella={AutenticarConHuella} AutenticarDirecto={AutenticarDirecto} />
+        </View>
+      ) : (
+        <Navigation />
+      )}
+    </AccountProvider>
+  );
 }
 
 const styles = StyleSheet.create({

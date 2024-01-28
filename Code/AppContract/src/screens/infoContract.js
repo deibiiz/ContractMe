@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { web3, MyContract1 } from '../ether/web3.js';
+import { MyContract1 } from '../ether/web3.js';
+import web3 from 'web3';
 import { useNavigation } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
+import { useAccount } from '../components/ContextoCuenta.js';
+
 
 const ContractDetailsScreen = ({ route }) => {
     const { tokenId, fromWorkerSection } = route.params;
     const [contractDetails, setContractDetails] = useState(null);
     const navigation = useNavigation();
+    const { selectedAccount } = useAccount();
 
     useEffect(() => {
         const fetchContractDetails = async () => {
@@ -43,8 +47,12 @@ const ContractDetailsScreen = ({ route }) => {
 
     const finalizeContract = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            MyContract1.methods.finalizeContract(tokenId).send({ from: accounts[0] });
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            MyContract1.methods.finalizeContract(tokenId).send({ from: selectedAccount });
             navigation.navigate('ShowContract');
         } catch (error) {
             console.error("Error al finalizar el contrato:", error);
@@ -54,12 +62,12 @@ const ContractDetailsScreen = ({ route }) => {
 
     const cancelarContrato = async (contractId) => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            if (accounts.length === 0) {
-                alert("No se encontraron cuentas.");
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
                 return;
             }
-            await MyContract1.methods.cancelContract(contractId).send({ from: accounts[0] });
+
+            await MyContract1.methods.cancelContract(contractId).send({ from: selectedAccount });
             navigation.navigate('ShowContract');
         } catch (error) {
             console.error("Error al cancelar el contrato:", error);
@@ -69,8 +77,12 @@ const ContractDetailsScreen = ({ route }) => {
 
     const releaseSalary = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            MyContract1.methods.releaseSalary(tokenId).send({ from: accounts[0] });
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            MyContract1.methods.releaseSalary(tokenId).send({ from: selectedAccount });
             navigation.navigate('ShowContract');
         } catch (error) {
             console.error("Error al liberar el salario:", error);

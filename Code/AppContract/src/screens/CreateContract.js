@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import { web3, MyContract1 } from "../ether/web3.js";
+import { MyContract1 } from "../ether/web3.js";
+import Web3 from "web3";
 import Boton from "../components/Boton.js";
+import { useAccount } from "../components/ContextoCuenta.js";
 
 export default function CreateContract() {
     const [title, setTitle] = useState('');
@@ -10,6 +12,7 @@ export default function CreateContract() {
     const [duration, setDuration] = useState('');
     const [description, setDescription] = useState('');
     const [mintStatus, setMintStatus] = useState('');
+    const { selectedAccount } = useAccount();
 
     const mintContract = async () => {
         if (!recipient || !salary || !duration || !description || !title) {
@@ -18,11 +21,17 @@ export default function CreateContract() {
         }
 
         try {
+            const web3 = new Web3(window.ethereum);
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
             const accounts = await web3.eth.getAccounts();
             const parsedSalary = web3.utils.toWei(salary, 'ether');
             const parsedDuration = Number(duration);
             const result = await MyContract1.methods.mint(recipient, parsedSalary, parsedDuration, description, title)
-                .send({ from: accounts[0], value: parsedSalary, gas: 1000000 });
+                .send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
             setMintStatus(`Contrato creado con el ID: ${result.events.Transfer.returnValues.tokenId}`);
         } catch (error) {
             console.error("Error al interactuar con el contrato:", error);

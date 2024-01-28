@@ -1,22 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { web3, MyContract1 } from '../ether/web3.js';
+import { MyContract1 } from '../ether/web3.js';
+
 import { useNavigation } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
+import { useAccount } from '../components/ContextoCuenta';
 
 const ContractAlertScreen = ({ route }) => {
     const { contractDetails } = route.params;
     const navigation = useNavigation();
-    console.log(contractDetails.newIsPaused);
+    const { selectedAccount } = useAccount();
 
 
 
     const rejectChanges = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            const receipt = await MyContract1.methods.rejectChange(contractDetails.tokenId).send({ from: accounts[1] });
-            console.log("Transacción completada:", receipt);
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+            await MyContract1.methods.rejectChange(contractDetails.tokenId).send({ from: selectedAccount });
             navigation.navigate("Home1");
+
         } catch (error) {
             console.error("Error al rechazar los cambios:", error);
             alert('Error al rechazar los cambios.');
@@ -25,9 +30,12 @@ const ContractAlertScreen = ({ route }) => {
 
     const acceptChanges = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            const receipt = await MyContract1.methods.applyChange(contractDetails.tokenId).send({ from: accounts[1] });
-            console.log("Transacción completada:", receipt);
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            await MyContract1.methods.applyChange(contractDetails.tokenId).send({ from: selectedAccount });
             navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al aceptar los cambios:", error);

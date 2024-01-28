@@ -1,26 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { web3, MyContract1 } from '../ether/web3.js';
+import { MyContract1 } from '../ether/web3.js';
+import web3 from 'web3';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useAccount } from '../components/ContextoCuenta';
 
 export default function Alertas() {
 
     const [pendingContracts, setPendingContracts] = useState([]);
     const navigation = useNavigation();
+    const { selectedAccount } = useAccount();
 
     useFocusEffect(
         useCallback(() => {
             fetchWorkerContracts();
-        }, [])
+        }, [selectedAccount])
     );
 
 
     const fetchWorkerContracts = async () => {
         try {
-            const accounts = await web3.eth.getAccounts();
-            if (accounts.length > 0) {
-                const account = accounts[1];
-                const contractsList = await MyContract1.methods.getContractsOfWorker(account).call();
+
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            if (selectedAccount) {
+                const contractsList = await MyContract1.methods.getContractsOfWorker(selectedAccount).call();
                 let pendingOwnerContracts = [];
 
                 for (let contractId of contractsList) {
@@ -34,6 +41,7 @@ export default function Alertas() {
         } catch (error) {
             console.error("Error al obtener los contratos:", error);
         }
+
     };
 
     const selectContract = async (tokenId) => {

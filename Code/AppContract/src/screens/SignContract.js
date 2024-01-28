@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import { web3, MyContract1 } from "../ether/web3.js";
+import { MyContract1 } from "../ether/web3.js";
 import Boton from "../components/Boton.js";
+import web3 from "web3";
+import { useAccount } from "../components/ContextoCuenta";
 
 export default function SignContract() {
     const [tokenId, setTokenId] = useState('');
     const [signStatus, setSignStatus] = useState('');
+    const { selectedAccount } = useAccount();
 
     const signTheContract = async () => {
         if (!tokenId) {
@@ -14,9 +17,13 @@ export default function SignContract() {
         }
 
         try {
-            const accounts = await web3.eth.getAccounts();
-            const result = await MyContract1.methods.signContract(tokenId)
-                .send({ from: accounts[1] });
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            await MyContract1.methods.signContract(tokenId)
+                .send({ from: selectedAccount, gas: 1000000 });
 
             setSignStatus(`Contrato con ID: ${tokenId} firmado exitosamente.`);
         } catch (error) {
