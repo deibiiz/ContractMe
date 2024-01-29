@@ -67,11 +67,35 @@ const ContractDetailsScreen = ({ route }) => {
                 return;
             }
 
+            console.log(contractId);
+            console.log(tokenId)
             await MyContract1.methods.cancelContract(contractId).send({ from: selectedAccount });
-            navigation.navigate('ShowContract');
+            navigation.navigate('Home1');
         } catch (error) {
             console.error("Error al cancelar el contrato:", error);
             alert("Error al cancelar el contrato.");
+        }
+    };
+
+    const signTheContract = async () => {
+        if (!tokenId) {
+            alert('Falta ID del contrato.');
+            return;
+        }
+
+        try {
+            if (!selectedAccount) {
+                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                return;
+            }
+
+            await MyContract1.methods.signContract(tokenId)
+                .send({ from: selectedAccount, gas: 1000000 });
+
+            navigation.navigate('Home1');
+        } catch (error) {
+            console.error("Error al firmar el contrato:", error);
+            setSignStatus("Error al firmar el contrato");
         }
     };
 
@@ -243,7 +267,23 @@ const ContractDetailsScreen = ({ route }) => {
                                     }}
                                 />
                             )}
+
                         </>
+                    )}
+
+                    {!contractDetails.isSigned && fromWorkerSection && (
+                        <Boton
+                            texto="Firmar contrato"
+                            onPress={() => { signTheContract(contractDetails.tokenId) }}
+                            estiloBoton={{
+                                width: "100%",
+                                borderRadius: 8,
+                            }}
+                            estiloTexto={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                            }}
+                        />
                     )}
                 </View>
             </View>

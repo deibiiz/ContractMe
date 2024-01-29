@@ -74,7 +74,7 @@ const CarteraScreen = () => {
                     console.log('MetaMask está instalado, pero no hay cuentas conectadas.');
                 }
             } catch (error) {
-                console.error("El usuario rechazó la conexión a la cuenta", error);
+                console.error("El usuario rechazó la conexión con la cuenta", error);
             }
             setLoading(false);
         } else {
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 13,
         paddingHorizontal: 20,
-        backgroundColor: '#4caf50'
     },
     picker: {
         width: "100%",

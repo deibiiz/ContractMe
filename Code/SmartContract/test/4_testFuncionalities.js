@@ -42,12 +42,33 @@ contract("MyContract", accounts => {
         assert.equal(contractDetails.isPaused, false, "El contrato no se ha despausado correctamente");
     });
 
-    it("Comprueba que un contrato se pueda cancelar y este deje de tener valor.", async () => {
+    it("Comprueba que un dueño se pueda cancelar y este deje de tener valor.", async () => {
+        const contract = await MyContract.deployed();
+        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken1 = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken2 = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const tokenId2 = mintedToken2.logs[0].args.tokenId;
+
+        await contract.cancelContract(tokenId2, { from: owner });
+
+
+        let errorOcurred = false;
+        try {
+            await contract.ownerOf(tokenId2);
+        } catch (e) {
+            errorOcurred = true;
+        }
+
+        assert.isTrue(errorOcurred, "El contrato no se ha cancelado correctamente");
+
+    });
+
+    it("Comprueba que un trabajador se pueda cancelar y este deje de tener valor.", async () => {
         const contract = await MyContract.deployed();
         const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
 
-        await contract.cancelContract(tokenId, { from: owner });
+        await contract.cancelContract(tokenId, { from: buyer });
 
 
         let errorOcurred = false;

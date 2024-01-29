@@ -9,6 +9,7 @@ contract MyContract is ERC721 {
     mapping(uint256 => ContractDetails) public contractDetails;
     mapping(address => uint256[]) private contractsOwner;
     mapping(address => uint256[]) private activeContractsOfWorker;
+    mapping(address => uint256[]) private unsignedContractsOfWorker;
     mapping(uint256 => ChangeProposal) public changeProposals;
 
     struct ContractDetails {
@@ -85,6 +86,7 @@ contract MyContract is ERC721 {
         contractDetails[tokenID] = newContract;
         tokenManagers[tokenID][msg.sender] = true;
         contractsOwner[msg.sender].push(tokenID);
+        unsignedContractsOfWorker[_to].push(tokenID);
         emit TokenMinted(tokenID);
 
         return tokenID;
@@ -229,19 +231,15 @@ contract MyContract is ERC721 {
             revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
         }
         require(
-            tokenManagers[_tokenID][msg.sender] == true,
-            "Solo un manager puede cancelar un contrato"
-        );
-        require(
             !contractDetails[_tokenID].isSigned,
             "El contrato ya ha sido firmado"
         );
 
-        address payable owner = payable(msg.sender);
+        address payable owner = payable(ownerOf(_tokenID));
         uint256 salary = contractDetails[_tokenID].salary;
         owner.transfer(salary);
+        removeContractFromOwner(_tokenID, owner);
         _burn(_tokenID);
-        removeContractFromOwner(_tokenID, msg.sender);
         emit ContractCancelled(_tokenID);
     }
 
@@ -251,6 +249,7 @@ contract MyContract is ERC721 {
     ) internal {
         uint256 contractIndex;
         uint256 lastContractIndex = contractsOwner[_owner].length - 1;
+
         for (uint i = 0; i < contractsOwner[_owner].length; i++) {
             if (contractsOwner[_owner][i] == _tokenId) {
                 contractIndex = i;
@@ -385,6 +384,40 @@ contract MyContract is ERC721 {
         address _address
     ) public view returns (uint256[] memory) {
         return activeContractsOfWorker[_address];
+    }
+
+    function getUnsignedContractsOfWorker(
+        address worker
+    ) public view returns (uint256[] memory) {
+        uint256 totalContracts = unsignedContractsOfWorker[worker].length;
+        uint256[] memory tempContracts = new uint256[](totalContracts);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < totalContracts; i++) {
+            uint256 contractId = unsignedContractsOfWorker[worker][i];
+
+            if (
+                !contractDetails[contractId].isSigned && tokenExists(contractId)
+            ) {
+                tempContracts[count] = contractId;
+                count++;
+            }
+        }
+
+        uint256[] memory result = new uint256[](count);
+        for (uint256 j = 0; j < count; j++) {
+            result[j] = tempContracts[j];
+        }
+
+        return result;
+    }
+
+    function tokenExists(uint256 _tokenId) public view returns (bool) {
+        try this.ownerOf(_tokenId) {
+            return true;
+        } catch {
+            return false;
+        }
     }
 
     function isContractFinished(uint256 _tokenID) public view returns (bool) {
