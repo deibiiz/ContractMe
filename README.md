@@ -23,7 +23,6 @@ Clonar el repositorio:
 
 Instalar dependencias de React y Expo:
 ```
-
 npm install expo-local-authentication
 npm install @react-navigation/native
 npm install @react-navigation/bottom-tabs
@@ -53,10 +52,11 @@ Instalar dependencias ERC721:
 ## Initialization
 
 1. Iniciar ganacle-cli con la ip de tu ordenador, y actualizar web3.js con dicha dirección. "ganache --host 192.168.1.33"
-2. Crear una cuenta en MetaMask y importar las cuentas de ganache.
-3. Con truffle desplegar el contrato y actualizar web3.js con la nueva dirección del contrato. "truffle migrate"
-4. Sustituir el archivo MyContract.json de la carpeta AppContract/ether por el nuevo archivo MyContract.json que se ha generado al desplegar el contrato, ubicado en SmartContract/build.
-5. Iniciar la aplicación con expo. "npx expo start"
+2. Crear una cuenta en MetaMask y añadir una nueva red con la nueva dirección del RPC. "http://192.168.1.33:8545"
+3. Añadir una billetera desde la sección "importar cuenta" a través de la clave privada proporcionada en ganache.
+4. Con truffle desplegar el contrato y actualizar web3.js con la nueva dirección del contrato. "truffle migrate"
+5. Sustituir el archivo MyContract.json de la carpeta AppContract/ether por el nuevo archivo MyContract.json que se ha generado al desplegar el contrato, ubicado en SmartContract/build.
+6. Iniciar la aplicación con expo. "npx expo start"
 
 ## Usage
 
