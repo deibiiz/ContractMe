@@ -1,10 +1,33 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
-import Svg, { Stop, Path, Defs } from "react-native-svg";
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity } from 'react-native';
+import Svg, { Path } from "react-native-svg";
 import Boton from '../components/Boton';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { firebaseAuth } from './firebaseConfig';
+import { useAuthentication } from './Authentication';
+
 const { width, height } = Dimensions.get("window")
 
-export default function Login({ AutenticarConHuella, AutenticarDirecto }) {
+export default function Login({ AutenticarDirecto, AutenticarConHuella, navigation }) {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+
+  const loginUsuario = () => {
+    signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        AutenticarDirecto();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  }
 
   function SvgTop() { // obtenido desde SVGR
     return (
@@ -29,33 +52,47 @@ export default function Login({ AutenticarConHuella, AutenticarDirecto }) {
         <Text style={styles.subtitulo}> Inicia sesión en tu cuenta </Text>
         <TextInput
           placeholder='david@gmail.com'
+          onChangeText={setEmail}
           style={styles.textoInput}
         />
         <TextInput
           placeholder='Contraseña'
+          onChangeText={setPassword}
           style={styles.textoInput}
           secureTextEntry={true}
         />
         <Boton
           texto="Iniciar sesión"
-          onPress={AutenticarDirecto}
+          onPress={loginUsuario}
           estiloBoton={{
             width: 180,
             marginTop: 15,
           }}
         />
-        <Text style={styles.olvidoContraseña}> No tengo cuenta </Text>
+
         <Boton
           texto="Acceso Biométrico"
           onPress={AutenticarConHuella}
           estiloBoton={{
             width: 280,
             marginTop: 25,
+            marginBottom: 25,
             borderRadius: 15,
           }}
         />
 
-        <StatusBar style="auto" />
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.olvidoContraseña}> ¿No tienes una cuenta? </Text>
+            <Text style={styles.olvidoContraseña1}> Regístrate </Text>
+          </View>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={AutenticarDirecto}>
+          <Text style={{ marginTop: 200 }}> acceso directo para desarrollo </Text>
+        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -80,11 +117,17 @@ const styles = StyleSheet.create({
   subtitulo: {
     marginTop: 80,
     fontSize: 21,
-    color: "gray"
+    color: "#403E3D",
   },
   olvidoContraseña: {
-    fontSize: 14,
-    color: "gray",
+    fontSize: 18,
+    color: "#403E3D",
+    marginTop: 15,
+  },
+  olvidoContraseña1: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#164863",
     marginTop: 15,
   },
   textoInput: {
@@ -98,3 +141,4 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
 });
+

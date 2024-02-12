@@ -1,32 +1,38 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { useAuthentication } from './src/Authentication';
-import "react-native-gesture-handler";
-import Login from "./src/screens/Login";
-import Navigation from './src/Navigation';
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useAuthentication } from './src/appLogin/Authentication';
 import { AccountProvider } from './src/components/ContextoCuenta';
 
+import Login from './src/appLogin/Login';
+import Register from './src/appLogin/Register';
+import MainNavigation from './src/Navigation';
 
+const Stack = createStackNavigator();
 
 export default function App() {
   const { esAutenticado, AutenticarConHuella, AutenticarDirecto } = useAuthentication();
 
   return (
     <AccountProvider>
-      {!esAutenticado ? (
-        <View style={styles.mainContainer}>
-          <Login AutenticarConHuella={AutenticarConHuella} AutenticarDirecto={AutenticarDirecto} />
-        </View>
-      ) : (
-        <Navigation />
-      )}
+      <NavigationContainer>
+        {esAutenticado ? (
+          <MainNavigation />
+        ) : (
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen
+              name="Login"
+              component={(props) => <Login {...props} AutenticarConHuella={AutenticarConHuella} AutenticarDirecto={AutenticarDirecto} />}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Register"
+              component={Register}
+            />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
     </AccountProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: '#F6F9FC',
-    flex: 1,
-  },
-});

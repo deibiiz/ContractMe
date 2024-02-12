@@ -29,6 +29,7 @@ export const useAuthentication = () => {
 
     const AutenticarDirecto = () => {
         setEsAutenticado(true);
+        console.log("Autenticación directa activada", true);
     };
 
     return { esAutenticado, AutenticarConHuella, AutenticarDirecto };

@@ -12,6 +12,10 @@ export default function SignContract() {
     const [unsignedContracts, setUnsignedContracts] = useState([]);
     navigation = useNavigation();
 
+    if (!selectedAccount) {
+        alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+    }
+
 
     const fetchUnsignedContracts = async () => {
         if (selectedAccount) {

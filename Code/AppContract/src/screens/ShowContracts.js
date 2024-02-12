@@ -4,7 +4,6 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { MyContract1 } from '../ether/web3.js';
-import web3 from 'web3';
 import { useAccount } from '../components/ContextoCuenta';
 
 const initialLayout = { width: Dimensions.get('window').width };

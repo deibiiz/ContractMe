@@ -14,6 +14,10 @@ export default function CreateContract() {
     const [mintStatus, setMintStatus] = useState('');
     const { selectedAccount } = useAccount();
 
+    if (!selectedAccount) {
+        alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+    }
+
     const mintContract = async () => {
         if (!recipient || !salary || !duration || !description || !title) {
             alert('Por favor, introduce todos los datos.');

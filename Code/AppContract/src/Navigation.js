@@ -2,10 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-
 
 //screens
 import Home from './screens/Home';
@@ -212,8 +210,6 @@ function MyTabs() {
 
 export default function Navigation() {
     return (
-        <NavigationContainer>
-            <MyTabs />
-        </NavigationContainer>
+        <MyTabs />
     );
 }
