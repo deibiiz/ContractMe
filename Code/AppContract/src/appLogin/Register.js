@@ -30,7 +30,7 @@ export default function Register({ AutenticarConHuella, AutenticarDirecto }) {
     return (
         <View>
             <View style={styles.container}>
-                <Text style={styles.subtitulo}> Rellena huecos con tus daots </Text>
+                <Text style={styles.subtitulo}> Introduce tus datos </Text>
                 <TextInput
                     placeholder='david@gmail.com'
                     onChangeText={setEmail}
@@ -90,7 +90,8 @@ const styles = StyleSheet.create({
         borderColor: "gray",
         width: "80%",
         marginTop: 20,
-        borderRadius: 20,
-        backgroundColor: "white"
+        borderRadius: 5,
+        backgroundColor: "white",
+        color: "gray",
     },
 });

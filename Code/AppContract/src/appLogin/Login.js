@@ -1,11 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity } from 'react-native';
 import Svg, { Path } from "react-native-svg";
 import Boton from '../components/Boton';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { firebaseAuth } from './firebaseConfig';
-import { useAuthentication } from './Authentication';
+
 
 const { width, height } = Dimensions.get("window")
 
@@ -61,36 +59,49 @@ export default function Login({ AutenticarDirecto, AutenticarConHuella, navigati
           style={styles.textoInput}
           secureTextEntry={true}
         />
-        <Boton
-          texto="Iniciar sesión"
-          onPress={loginUsuario}
-          estiloBoton={{
-            width: 180,
-            marginTop: 15,
-          }}
-        />
+
+        <View style={{ width: '80%' }}>
+          <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
+            <Text style={styles.textoAviso2}> ¿Has olvidado tu contraseña? </Text>
+          </TouchableOpacity>
+        </View>
+
 
         <Boton
           texto="Acceso Biométrico"
           onPress={AutenticarConHuella}
           estiloBoton={{
-            width: 280,
-            marginTop: 25,
-            marginBottom: 25,
-            borderRadius: 15,
+            width: "70%",
+            marginTop: 30,
+            borderRadius: 10,
           }}
         />
 
+        <Boton
+          texto="Iniciar sesión"
+          onPress={loginUsuario}
+          estiloBoton={{
+            width: "85%",
+            marginTop: 10,
+            borderRadius: 10,
+          }}
+          estiloTexto={{
+            fontSize: 17,
+          }}
+        />
+
+
+
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={styles.olvidoContraseña}> ¿No tienes una cuenta? </Text>
-            <Text style={styles.olvidoContraseña1}> Regístrate </Text>
+            <Text style={styles.textoAviso}> ¿No tienes una cuenta? </Text>
+            <Text style={styles.textoAviso1}> Regístrate </Text>
           </View>
         </TouchableOpacity>
 
 
         <TouchableOpacity onPress={AutenticarDirecto}>
-          <Text style={{ marginTop: 200 }}> acceso directo para desarrollo </Text>
+          <Text style={{ marginTop: 180 }}> acceso directo para desarrollo </Text>
         </TouchableOpacity>
 
       </View>
@@ -110,25 +121,32 @@ const styles = StyleSheet.create({
   },
   titulo: {
     marginTop: 40,
+    marginBottom: 40,
     fontSize: 60,
     color: "black",
     fontWeight: "bold",
   },
   subtitulo: {
-    marginTop: 80,
+    marginTop: 40,
     fontSize: 21,
     color: "#403E3D",
   },
-  olvidoContraseña: {
+  textoAviso: {
     fontSize: 18,
     color: "#403E3D",
     marginTop: 15,
   },
-  olvidoContraseña1: {
+  textoAviso1: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#164863",
     marginTop: 15,
+  },
+  textoAviso2: {
+    fontSize: 16,
+    color: "#164863",
+    marginTop: 5,
+    textAlign: "right",
   },
   textoInput: {
     padding: 10,
@@ -138,7 +156,8 @@ const styles = StyleSheet.create({
     width: "80%",
     marginTop: 20,
     borderRadius: 20,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    color: "gray",
   },
 });
 
