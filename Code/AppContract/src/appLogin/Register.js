@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import Boton from '../components/Boton';
 import { useNavigation } from "@react-navigation/native";
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { firebaseAuth } from './firebaseConfig';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+
 
 const { width, height } = Dimensions.get("window")
 
@@ -19,6 +20,17 @@ export default function Register({ AutenticarConHuella, AutenticarDirecto }) {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
+
+                sendEmailVerification(user)
+                    .then(() => {
+                        alert("Se ha enviado un correo de verificación");
+                        navigation.goBack();
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.log(errorCode, errorMessage);
+                    });
             })
             .catch((error) => {
                 const errorCode = error.code;

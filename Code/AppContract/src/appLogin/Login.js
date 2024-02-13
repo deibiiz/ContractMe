@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity } from 
 import Svg, { Path } from "react-native-svg";
 import Boton from '../components/Boton';
 import { firebaseAuth } from './firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 
 const { width, height } = Dimensions.get("window")
@@ -18,7 +19,11 @@ export default function Login({ AutenticarDirecto, AutenticarConHuella, navigati
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        AutenticarDirecto();
+        if (user.emailVerified) {
+          AutenticarDirecto();
+        } else {
+          alert("Verifica tu correo electrónico antes de iniciar sesión");
+        }
       })
       .catch((error) => {
         const errorCode = error.code;

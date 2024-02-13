@@ -30,12 +30,21 @@ export default function AppNavigation() {
                     <Stack.Screen
                         name="Register"
                         component={Register}
-                        options={{ title: 'Registro' }}
+                        options={{
+                            title: 'Registro',
+                            headerStyle: {
+                                backgroundColor: '#9BBEC8',
+                            },
+                        }}
                     />
                     <Stack.Screen
                         name="ResetPassword"
                         component={ResetPassword}
-                        options={{ title: 'Restablecer Contraseña' }}
+                        options={{
+                            title: 'Restablecer Contraseña', headerStyle: {
+                                backgroundColor: '#9BBEC8',
+                            },
+                        }}
                     />
                 </Stack.Navigator>
             )}
