@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 
@@ -17,6 +16,8 @@ import SignContract from './screens/SignContract';
 import ShowContract from './screens/ShowContracts';
 import ModifyContract from './screens/ModifyContract';
 import ApplyChanges from './screens/ApplyChanges';
+import AddManager from './screens/AddManager';
+
 
 const HomeStackNavigator = createNativeStackNavigator();
 
@@ -95,6 +96,17 @@ function MyStack() {
                     },
                 }}
             />
+            <HomeStackNavigator.Screen
+                name="AddManager"
+                component={AddManager}
+                options={{
+                    title: 'Agregar Administrador',
+                    headerStyle: {
+                        backgroundColor: '#9BBEC8',
+                    },
+                }}
+            />
+
         </HomeStackNavigator.Navigator>
     );
 }

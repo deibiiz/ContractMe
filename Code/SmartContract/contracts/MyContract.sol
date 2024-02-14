@@ -274,7 +274,7 @@ contract MyContract is ERC721 {
             "Solo un manager de este contrato puede asignar otro manager"
         );
         tokenManagers[_tokenId][_newManager] = true;
-        contractsOwner[_newManager].push(tokenID);
+        contractsOwner[_newManager].push(_tokenId);
     }
 
     function revokeManagerFromToken(uint256 _tokenId, address _manager) public {

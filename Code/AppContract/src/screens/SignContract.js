@@ -38,6 +38,9 @@ export default function SignContract() {
     return (
         <View style={styles.fullContainer}>
             <Text style={styles.title}>Contratos pendintes de firma</Text>
+            {
+                unsignedContracts.length === 0 && <Text style={styles.textoAviso} >No hay contratos pendientes de firma.</Text>
+            }
             <FlatList
                 data={unsignedContracts}
                 keyExtractor={item => item.toString()}
@@ -81,6 +84,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignSelf: 'center',
 
+    },
+    textoAviso: {
+        fontSize: 17,
+        color: "#586069",
+        marginBottom: 20,
+        marginTop: 20,
+        fontStyle: "italic",
+        textAlign: "center",
+        paddingHorizontal: 10,
     },
 
 });

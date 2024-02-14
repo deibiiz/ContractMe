@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MyContract1 } from '../ether/web3.js';
 import web3 from 'web3';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import { useAccount } from '../components/ContextoCuenta.js';
 
 const ContractDetailsScreen = ({ route }) => {
     const { tokenId, fromWorkerSection } = route.params;
+    console.log(tokenId, fromWorkerSection);
     const [contractDetails, setContractDetails] = useState(null);
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
@@ -119,8 +120,6 @@ const ContractDetailsScreen = ({ route }) => {
         return <Text>Cargando...</Text>;
     }
 
-    console.log("kdjfklsdfksdjfklsdjflkjfds", contractDetails.isSigned);
-
     const getContractState = () => {
         if (contractDetails.isFinished) {
             return 'Finalizado';
@@ -140,7 +139,15 @@ const ContractDetailsScreen = ({ route }) => {
     return (
         <ScrollView style={styles.ScrollView} >
             <View style={styles.container}>
-
+                {selectedAccount === contractDetails.employer && (
+                    <>
+                        <View style={{ width: "85%" }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('AddManager', { tokenId: tokenId })}>
+                                <Text style={styles.textoLink}> Gestionar permisos de acceso al contrato </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </>
+                )}
                 <View style={styles.block}>
                     <Text style={styles.title}>Título del contrato</Text>
                     <Text>{contractDetails.title}</Text>
@@ -336,6 +343,14 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingHorizontal: 10,
     },
+    textoLink: {
+        fontSize: 16,
+        color: "#164863",
+        textAlign: "right",
+        fontWeight: "bold",
+        marginBottom: 7,
+        fontStyle: "italic",
+    }
 
 });
 
