@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity } from 'react-native';
 import Svg, { Path } from "react-native-svg";
 import Boton from '../components/Boton';
 import { firebaseAuth } from './firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-
 
 const { width, height } = Dimensions.get("window")
 
@@ -52,6 +51,7 @@ export default function Login({ AutenticarDirecto, AutenticarConHuella, navigati
         <Text style={styles.titulo}> ContractMe </Text>
       </View>
       <View style={styles.container}>
+
         <Text style={styles.subtitulo}> Inicia sesión en tu cuenta </Text>
         <TextInput
           placeholder='david@gmail.com'

@@ -105,6 +105,7 @@ const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContr
 
 
 export default function OwnerContracts() {
+
     const [index, setIndex] = useState(0);
     const [routes] = useState([
         { key: 'employer', title: 'Contratos como Empleador' },
@@ -120,7 +121,6 @@ export default function OwnerContracts() {
 
     const { selectedAccount } = useAccount();
 
-
     const loadAccountAndContracts = async () => {
         try {
             if (selectedAccount) {
@@ -132,6 +132,10 @@ export default function OwnerContracts() {
         } catch (error) {
             console.error("Error al cargar los contratos:", error);
             setFetchStatus("Error al cargar los contratos");
+        }
+
+        if (!selectedAccount) {
+            alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
         }
     };
 

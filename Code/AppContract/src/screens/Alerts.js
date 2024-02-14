@@ -45,9 +45,9 @@ export default function Alertas() {
     };
 
     const selectContract = async (tokenId) => {
-        const details = await fetchContractDetails(tokenId);
-        if (details) {
-            navigation.navigate('ApplyChanges', { contractDetails: details });
+        const { oldDetails, newDetails } = await fetchContractDetails(tokenId);
+        if (newDetails) {
+            navigation.navigate('ApplyChanges', { oldContractDetails: oldDetails, newContractDetails: newDetails });
         } else {
             console.log("Detalles del contrato no disponibles.");
         }
@@ -59,6 +59,8 @@ export default function Alertas() {
             const proposal = await MyContract1.methods.changeProposals(tokenId).call();
             const employer = await MyContract1.methods.getOwnerOfContract(tokenId).call()
 
+            const newTitle = proposal.newTitle ? proposal.newTitle : details.title;
+
             const salaryInEther = web3.utils.fromWei(details.salary, 'ether');
             const newSalaryInEther = proposal.newSalary ? web3.utils.fromWei(proposal.newSalary, 'ether') : salaryInEther;
 
@@ -69,9 +71,21 @@ export default function Alertas() {
             const newDescription = proposal.newDescription ? proposal.newDescription : details.description;
             const newIsPaused = proposal.isPaused ? proposal.isPaused : details.isPaused;
 
-            const contractData = {
-                ...details,
+            const oldContractData = {
                 tokenId: tokenId,
+                title: details.title,
+                startDate: startDate,
+                endDate: endDate,
+                salary: salaryInEther,
+                description: details.description,
+                isPaused: details.isPaused,
+                employer: employer,
+                worker: details.worker,
+            };
+
+            const newContractData = {
+                tokenId: tokenId,
+                newTitle: newTitle,
                 startDate: startDate,
                 endDate: endDate,
                 newSalary: newSalaryInEther,
@@ -79,9 +93,10 @@ export default function Alertas() {
                 newDescription: newDescription,
                 newIsPaused: newIsPaused,
                 employer: employer,
+                worker: details.worker,
             };
 
-            return contractData;
+            return { oldDetails: oldContractData, newDetails: newContractData }
 
         } catch (error) {
             console.error("Error al obtener detalles del contrato:", error);

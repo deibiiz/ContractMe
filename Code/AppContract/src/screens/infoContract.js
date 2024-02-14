@@ -119,11 +119,17 @@ const ContractDetailsScreen = ({ route }) => {
         return <Text>Cargando...</Text>;
     }
 
+    console.log("kdjfklsdfksdjfklsdjflkjfds", contractDetails.isSigned);
+
     const getContractState = () => {
         if (contractDetails.isFinished) {
             return 'Finalizado';
         } else if (contractDetails.isPaused) {
             return 'Pausado';
+        } else if (!contractDetails.isSigned) {
+            return 'Pendiente de aprobación';
+        } else if (contractDetails.isPending) {
+            return 'Modificación pendiente de aprobación';
         } else {
             return 'Activo';
         }

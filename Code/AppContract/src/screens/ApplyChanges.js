@@ -7,11 +7,9 @@ import Boton from '../components/Boton.js';
 import { useAccount } from '../components/ContextoCuenta';
 
 const ContractAlertScreen = ({ route }) => {
-    const { contractDetails } = route.params;
+    const { oldContractDetails, newContractDetails } = route.params;
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
-
-
 
     const rejectChanges = async () => {
         try {
@@ -19,7 +17,7 @@ const ContractAlertScreen = ({ route }) => {
                 alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
                 return;
             }
-            await MyContract1.methods.rejectChange(contractDetails.tokenId).send({ from: selectedAccount });
+            await MyContract1.methods.rejectChange(newContractDetails.tokenId).send({ from: selectedAccount });
             navigation.navigate("Home1");
 
         } catch (error) {
@@ -35,13 +33,16 @@ const ContractAlertScreen = ({ route }) => {
                 return;
             }
 
-            await MyContract1.methods.applyChange(contractDetails.tokenId).send({ from: selectedAccount });
+            await MyContract1.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount });
             navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al aceptar los cambios:", error);
             alert('Error al aceptar los cambios.');
         }
     }
+
+    console.log(oldContractDetails);
+    console.log(newContractDetails);
 
     return (
         <ScrollView style={styles.scrollView}>
@@ -50,38 +51,83 @@ const ContractAlertScreen = ({ route }) => {
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Título del contrato</Text>
-                    <Text>{contractDetails.title}</Text>
+                    <Text>
+                        {newContractDetails.newTitle != oldContractDetails.title ? (
+                            <>
+                                <Text style={{ fontWeight: "bold", color: "green" }}>{newContractDetails.newTitle}</Text>
+                                <Text style={{ fontStyle: "italic", color: "gray" }}>    (antes: {oldContractDetails.title})</Text>
+                            </>
+                        ) : (
+                            newContractDetails.newTitle
+                        )}
+                    </Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Cuenta del empleador</Text>
-                    <Text>{contractDetails.employer}</Text>
+                    <Text>{newContractDetails.employer}</Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Cuenta del trabajador</Text>
-                    <Text>{contractDetails.worker}</Text>
+                    <Text>{newContractDetails.worker}</Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Salario</Text>
-                    <Text>{contractDetails.newSalary} ether</Text>
+                    <Text>
+                        {newContractDetails.newSalary != oldContractDetails.salary ? (
+                            <>
+                                <Text style={{ fontWeight: "bold", color: "green" }}>{newContractDetails.newSalary} ETH</Text>
+                                <Text style={{ fontStyle: "italic", color: "gray" }}>    (antes: {oldContractDetails.salary} ETH)</Text>
+                            </>
+                        ) : (
+                            newContractDetails.newSalary + " ETH"
+                        )}
+                    </Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Descripción</Text>
-                    <Text>{contractDetails.newDescription}</Text>
+                    <Text>
+                        {newContractDetails.newDescription != oldContractDetails.description ? (
+                            <View>
+                                <Text style={{ fontWeight: "bold", color: "green" }}>{newContractDetails.newDescription}</Text>
+                                <Text style={{ fontStyle: "italic", color: "gray" }}>(antes: {oldContractDetails.description})</Text>
+                            </View>
+                        ) : (
+                            newContractDetails.newDescription
+                        )}
+                    </Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Fechas del Contrato</Text>
-                    <Text>Inicio: {contractDetails.startDate}</Text>
-                    <Text>Fin: {contractDetails.newEndDate}</Text>
+                    <Text>Inicio: {newContractDetails.startDate}</Text>
+                    <Text>
+                        Fin: {newContractDetails.newEndDate != oldContractDetails.endDate ? (
+                            <>
+                                <Text style={{ fontWeight: "bold", color: "green" }}>{newContractDetails.newEndDate}</Text>
+                                <Text style={{ fontStyle: "italic", color: "gray" }}>    (antes: {oldContractDetails.endDate})</Text>
+                            </>
+                        ) : (
+                            newContractDetails.newEndDate
+                        )}
+                    </Text>
                 </View>
 
                 <View style={styles.block}>
                     <Text style={styles.title}>Estado del Contrato</Text>
-                    <Text>{contractDetails.isFinished ? 'Finalizado' : contractDetails.newIsPaused ? 'Pausado' : 'Activo'}</Text>
+                    <Text>
+                        {newContractDetails.newIsPaused != oldContractDetails.isPaused ? (
+                            <>
+                                <Text style={{ fontWeight: "bold", color: "green" }}>{newContractDetails.newIsPaused ? 'Pausado' : 'Activo'}</Text>
+                                <Text style={{ fontStyle: "italic", color: "gray" }}>    (antes: {oldContractDetails.isPaused ? 'Pausado' : 'Activo'})</Text>
+                            </>
+                        ) : (
+                            newContractDetails.newIsPaused ? 'Pausado' : 'Activo'
+                        )}
+                    </Text>
                 </View>
                 <View style={{ width: '85%', marginTop: 15, alignSelf: 'center' }}>
                     <>

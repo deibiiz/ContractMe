@@ -33,6 +33,16 @@ const ModifyContract = ({ route, navigation }) => {
         }
     };
 
+    const hasChanges = () => {
+        return (
+            title !== contractDetails.title ||
+            salary !== contractDetails.salary ||
+            duration !== contractDetails.duration ||
+            description !== contractDetails.description ||
+            isPaused !== contractDetails.isPaused
+        );
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.innerContainer}>
@@ -82,7 +92,13 @@ const ModifyContract = ({ route, navigation }) => {
 
                 <Boton
                     texto="Solicitar Cambios"
-                    onPress={sendProposal}
+                    onPress={() => {
+                        if (hasChanges()) {
+                            sendProposal();
+                        } else {
+                            alert("Modifica el contrato antes de enviar la solicitud de cambios");
+                        }
+                    }}
                     estiloBoton={{
                         borderRadius: 5,
                         marginTop: 20,
