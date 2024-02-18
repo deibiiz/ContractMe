@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract MyContract is ERC721 {
     uint256 tokenID;
     mapping(uint256 => mapping(address => bool)) public tokenManagers;
+    mapping(uint256 => address[]) private tokenManagersList;
     mapping(uint256 => ContractDetails) public contractDetails;
     mapping(address => uint256[]) private contractsOwner;
     mapping(address => uint256[]) private activeContractsOfWorker;
@@ -269,21 +270,33 @@ contract MyContract is ERC721 {
         uint256 _tokenId,
         address _newManager
     ) public {
-        require(
-            tokenManagers[_tokenId][msg.sender],
-            "Solo un manager de este contrato puede asignar otro manager"
-        );
-        tokenManagers[_tokenId][_newManager] = true;
-        contractsOwner[_newManager].push(_tokenId);
+        if (!tokenManagers[_tokenId][_newManager]) {
+            tokenManagers[_tokenId][_newManager] = true;
+            tokenManagersList[_tokenId].push(_newManager);
+            contractsOwner[_newManager].push(_tokenId);
+        }
     }
 
     function revokeManagerFromToken(uint256 _tokenId, address _manager) public {
-        require(
-            tokenManagers[_tokenId][msg.sender],
-            "Solo un manager de este contrato puede revocar otro manager"
-        );
+        for (uint256 i = 0; i < tokenManagersList[_tokenId].length; i++) {
+            if (tokenManagersList[_tokenId][i] == _manager) {
+                removeManagerFromList(_tokenId, i);
+                break;
+            }
+        }
         tokenManagers[_tokenId][_manager] = false;
+        removeContractFromOwner(_tokenId, _manager);
     }
+
+    function removeManagerFromList(uint256 _tokenId, uint256 _index) private {
+        tokenManagersList[_tokenId][_index] = tokenManagersList[_tokenId][tokenManagersList[_tokenId].length - 1];
+        tokenManagersList[_tokenId].pop();
+    }
+
+    function getManagersOfToken(uint256 _tokenId) public view returns (address[] memory) {
+        return tokenManagersList[_tokenId];
+    }
+
 
     function isManagerOfToken(
         uint256 _tokenId,
@@ -327,10 +340,6 @@ contract MyContract is ERC721 {
 
     //funcion para rechazar un cambio propuesto
     function rejectChange(uint256 _tokenID) public {
-        require(
-            changeProposals[_tokenID].isPending == true,
-            "No hay cambios propuestos"
-        );
         ChangeProposal memory proposedChange = changeProposals[_tokenID];
 
         if (proposedChange.newSalary > contractDetails[_tokenID].salary) {
@@ -345,10 +354,6 @@ contract MyContract is ERC721 {
 
     //Funcion para modificar un contrato que no haya sido firmado
     function applyChange(uint256 _tokenID) public payable {
-        require(
-            changeProposals[_tokenID].isPending == true,
-            "No hay cambios propuestos"
-        );
         ChangeProposal memory proposedChange = changeProposals[_tokenID];
 
         if (proposedChange.newSalary < contractDetails[_tokenID].salary) {

@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, TextInput, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import { MyContract1 } from "../ether/web3.js";
-import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SignContract() {
-    const [tokenId, setTokenId] = useState('');
-    const [signStatus, setSignStatus] = useState('');
     const { selectedAccount } = useAccount();
     const [unsignedContracts, setUnsignedContracts] = useState([]);
     navigation = useNavigation();
@@ -28,12 +26,11 @@ export default function SignContract() {
             }
         }
     };
-
-    useEffect(() => {
-        fetchUnsignedContracts();
-    }, [selectedAccount]);
-
-
+    useFocusEffect(
+        useCallback(() => {
+            fetchUnsignedContracts();
+        }, [selectedAccount])
+    );
 
     return (
         <View style={styles.fullContainer}>
@@ -41,6 +38,7 @@ export default function SignContract() {
             {
                 unsignedContracts.length === 0 && <Text style={styles.textoAviso} >No hay contratos pendientes de firma.</Text>
             }
+
             <FlatList
                 data={unsignedContracts}
                 keyExtractor={item => item.toString()}

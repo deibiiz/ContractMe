@@ -54,7 +54,12 @@ const ContractDetailsScreen = ({ route }) => {
             }
 
             MyContract1.methods.finalizeContract(tokenId).send({ from: selectedAccount });
-            navigation.navigate('ShowContract');
+
+            alert('Contrato finalizado con éxito.');
+            setContractDetails(prevState => ({
+                ...prevState,
+                isFinished: true
+            }));
         } catch (error) {
             console.error("Error al finalizar el contrato:", error);
             alert('Error al finalizar el contrato.');
@@ -71,7 +76,9 @@ const ContractDetailsScreen = ({ route }) => {
             console.log(contractId);
             console.log(tokenId)
             await MyContract1.methods.cancelContract(contractId).send({ from: selectedAccount });
-            navigation.navigate('Home1');
+            alert('Contrato cancelado con éxito.');
+
+            navigation.navigate('ShowContract');
         } catch (error) {
             console.error("Error al cancelar el contrato:", error);
             alert("Error al cancelar el contrato.");
@@ -93,7 +100,11 @@ const ContractDetailsScreen = ({ route }) => {
             await MyContract1.methods.signContract(tokenId)
                 .send({ from: selectedAccount, gas: 1000000 });
 
-            navigation.navigate('Home1');
+            alert('Contrato firmado con éxito.');
+            setContractDetails(prevState => ({
+                ...prevState,
+                isSigned: true
+            }));
         } catch (error) {
             console.error("Error al firmar el contrato:", error);
             setSignStatus("Error al firmar el contrato");
@@ -108,7 +119,11 @@ const ContractDetailsScreen = ({ route }) => {
             }
 
             MyContract1.methods.releaseSalary(tokenId).send({ from: selectedAccount });
-            navigation.navigate('ShowContract');
+            alert('Salario liberado con éxito.');
+            setContractDetails(prevState => ({
+                ...prevState,
+                salaryReleased: true
+            }));
         } catch (error) {
             console.error("Error al liberar el salario:", error);
             alert('Error al liberar el salario.');
@@ -139,7 +154,7 @@ const ContractDetailsScreen = ({ route }) => {
     return (
         <ScrollView style={styles.ScrollView} >
             <View style={styles.container}>
-                {selectedAccount === contractDetails.employer && (
+                {selectedAccount === contractDetails.employer && !contractDetails.isFinished && (
                     <>
                         <View style={{ width: "85%" }}>
                             <TouchableOpacity onPress={() => navigation.navigate('AddManager', { tokenId: tokenId })}>

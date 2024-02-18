@@ -5,6 +5,7 @@ import Web3 from "web3";
 import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
 
+
 export default function CreateContract() {
     const [title, setTitle] = useState('');
     const [recipient, setRecipient] = useState('');
@@ -111,6 +112,7 @@ const styles = StyleSheet.create({
         margin: 12,
         borderWidth: 1,
         padding: 10,
-        width: '80%'
+        width: '80%',
+        backgroundColor: "white",
     },
 });
