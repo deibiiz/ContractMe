@@ -6,20 +6,20 @@ A continuación se sintetizarán algunos conceptos teóricos relevantes para la 
 
 \section{Introducción a la Blockchain}
 
-La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas.
+La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto~\cite{dobleGasto} en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas.
 En 2008 una persona o grupo anónimo bajo el seudónimo de Satoshi Nakamoto publicó un documento técnico para crear una moneda digital para contabilizar y transferir valor. Así nació una tecnología que se fundamenta en una base de datos distribuida compuesta por bloques de información replicados y sincronizados en múltiples ordenadores.  
-Esta premisa hizo que en enero de 2009 entrará en funcionamiento la primera red basada en el protocolo Bitcoin.
+Esta premisa hizo que en enero de 2009 entrará en funcionamiento la primera red basada en el protocolo Bitcoin.~\cite{introducciónBitcoin}
 La BlockChain demostró su capacidad para contabilizar y transferir valor de manera segura sin la necesidad de intermediarios, transformando el sector financiero y encontrando aplicaciones en una variedad de industrias.
 
 
 \subsection{Tecnología subyacente}
 
-La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples ordenadores de manera que cada registro es inalterable e irreversible. Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena.
+La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples ordenadores de manera que cada registro es inalterable e irreversible. Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena. ~\cite{wiki:DTL}
 
 Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; el dato de la transacción, el hash del bloque anterior en la cadena (lo que asegura la continuidad de la cadena) y su propio hash único, generado a partir de la información contenida en el bloque.
-El hash es una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude.
+El hash es una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude. ~\cite{BlockchainFuncionamiento}
 
-El proceso de añadir un nuevo bloque a la cadena requiere de un consenso entre los nodos de la red, lo cual se logra mediante diferentes mecanismos, siendo el "Proof of Work" (Prueba de trabajo) uno de los más utilizados. 
+El proceso de añadir un nuevo bloque a la cadena requiere de un consenso entre los nodos de la red, lo cual se logra mediante diferentes mecanismos, siendo el "Proof of Work" (Prueba de trabajo) uno de los más utilizados ocupando alrededor del 60\% de la capitalización total. ~\cite{proofOfWork}
 Este mecanismo implica resolver un problema criptográfico complejo que requiere un gran poder de computo. Funciona como una competición, en la que el nodo más rápido en resolver el problema obtiene el derecho de añadir el nuevo bloque a la cadena y es recompensado, generalmente con criptomonedas.
 
 Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de computo.
@@ -27,9 +27,9 @@ Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la
 
 \subsection{Utilidades de la Blockchain}
 
-Su aplicación más reconocida ha sido Bitcoin, ha demostrado las capacidades de la Blockchain, permitiendo transacciones globales rápidas y seguras, caracterizadas por su alta liquidez, bajas comisiones y un nivel de anonimato que protege la privacidad del usuario.
+Su aplicación más reconocida ha sido Bitcoin, ha demostrado las capacidades de la Blockchain, permitiendo transacciones globales rápidas y seguras, caracterizadas por su alta liquidez, bajas comisiones y un nivel de anonimato que protege la privacidad del usuario. ~\cite{introducciónBitcoin}
 
-Más allá de las criptomonedas, esta tecnología se destaca por su naturaleza descentralizada, donde cada individuo en la red tiene acceso a una copia del registro completo de transacciones, lo cual garantiza una transparencia sin precedentes. Siendo así que la Blockchain cuenta con la capacidad para ofrecer la trazabilidad completa en las cadenas de suministro. Cada producto puede ser rastreado desde su origen hasta el consumidor final, asegurando la autenticidad y facilitando la detección de cualquier problema en el proceso.
+Más allá de las criptomonedas, esta tecnología se destaca por su naturaleza descentralizada, donde cada individuo en la red tiene acceso a una copia del registro completo de transacciones, lo cual garantiza una transparencia sin precedentes. Siendo así que la Blockchain cuenta con la capacidad para ofrecer la trazabilidad completa en las cadenas de suministro. Cada producto puede ser rastreado desde su origen hasta el consumidor final, asegurando la autenticidad y facilitando la detección de cualquier problema en el proceso.~\cite{introducciónBlockchain}
 
 La seguridad es otro de los pilares fundamentales de la Blockchain, ya que la inmutabilidad del registro asegura que una vez la información ha sido añadida a la cadena, esta no podrá ser alterada, reforzando así la confianza en el sistema. 
 
@@ -40,19 +40,19 @@ Este aspecto es crucial en sectores como el financiero, donde los contratos inte
 \subsection{Tipos de Blockchain}
 
 Existen diferentes tipos de redes, cada una diseña para satisfacer unas necesidades en cuanto a la privacidad, gobernanza y accesibilidad. 
-Se pueden clasificar en cuatro categorías principales:
+Se pueden clasificar en cuatro categorías principales: ~\cite{introducciónBlockchain}
 
 \begin{itemize}
 \item \textbf{Blockchains públicas:} Son completamente abiertas y cualquier persona puede unirse. Bitcoin y Ethereum son buenos ejemplos de Blockchains públicas, donde las transacciones y los datos son visibles para todos, manteniendo al mismo tiempo el anonimato de los usuarios. Han pavimentando el camino para un ecosistema de aplicaciones descentralizadas (dApps) y finanzas descentralizadas (DeFi).
 
 \item \textbf{Blockchains semiprivadas:} Son operadas por una única entidad con la posibilidad de restringir el acceso, ofreciendo un equilibrio entre el control y la descentralización. A diferencia de las redes privadas, las semiprivadas pueden permitir la participación de partes externas bajo ciertas condiciones, manteniendo un nivel significativo de control sobre la red.
-Este tipo de redes las ofrecen empresas como IBM (Hyperledger Fabric) utilizada en sectores como la salud y la financiación, permite a las organizaciones configurar redes donde los datos se comparten solo con los actores autorizados, mejorando la eficiencia y la seguridad. Ofreciendo opciones personalizables para empresas, equilibrando la privacidad con la innovación.
+Este tipo de redes las ofrecen empresas como IBM (Hyperledger Fabric) utilizada en sectores como la salud y la financiación, permite a las organizaciones configurar redes donde los datos se comparten solo con los actores autorizados, mejorando la eficiencia y la seguridad. Ofreciendo opciones personalizables para empresas, equilibrando la privacidad con la innovación. ~\cite{Hyperledger}
 
 \item \textbf{Blockchains privadas:} Son operadas por una única organización, permiten un control total sobre quién puede participar en la red. Estas redes limitan el principio de la descentralización pero ofrecen una solución eficaz para entornos empresariales que necesitan privacidad y eficiencia en procesos internos.
 Por ejemplo, para este proyecto se ha utilizado la herramienta Ganache, la cual simula una red privada, siendo de gran utilidad en la fase de desarrollo y pruebas.
 
 \item \textbf{Consorcio:} Representan un equilibrio entre los modelos públicos y privados, siendo operadas por un grupo de organizaciones en lugar de una única entidad. Esta posibilidad permite compartir la responsabilidad del mantenimiento de la red entre varios participantes, lo que las hace adecuadas para colaboraciones interempresariales. 
-Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras entre instituciones financieras, reduciendo costos y tiempos de procesamiento.
+Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras entre instituciones financieras, reduciendo costos y tiempos de procesamiento. ~\cite{R3Corda}
 
 \end{itemize} 
 
@@ -60,17 +60,51 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 
 \section{Contratos inteligentes}
 
+
+La idea fue conceptualizada por primera vez por Nick Szabo en 1993, visionando una nueva forma de establecer acuerdos digitales. Sin embargo, la falta de una plataforma adecuada mantuvo esta idea en teoría hasta la llegada de la Blockchain con Bitcoin en 2009, y mas notablemente con Ethereum en 2014, que los contratos inteligentes se materializaron prácticamente gracias a la infraestructura que esta tecnología proporciona. ~\cite{smartcontractHistoria}
+
 Un contrato inteligente es un código que ejecuta automáticamente los términos de un acuerdo entre partes. Los códigos, almacenados en la BlockChain, son ejecutados automáticamente, cuando se cumplen unas condiciones predefinidas, haciendo cumplir un acuerdo entre dos partes no confiables sin la necesidad de un tercero de confianza.
-
-La idea fue conceptualizada por primera vez por Nick Szabo en 1993, visionando una nueva forma de establecer acuerdos digitales. Sin embargo, la falta de una plataforma adecuada mantuvo esta idea en teoría hasta la llegada de la Blockchain con Bitcoin en 2009, y mas notablemente con Ethereum en 2014, que los contratos inteligentes se materializaron prácticamente gracias a la infraestructura que esta tecnología proporciona.
-
 Los contratos inteligentes utilizan la tecnología Blockchain para almacenar reglas, ejecutar automáticamente acciones cuando se cumplen esas reglas y almacenar los resultados en la blockchain. Debido a su naturaleza inmutable y distribuida, ofrecen un nivel de seguridad y confianza superior al de los sistemas tradicionales. Así mismo, al eliminar los intermediarios, ofrecen una reducción de costos y una mayor rapidez en la ejecución de acuerdos.
 
+Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesidad de recursos externos a la cadena de bloques, su naturaleza inmutable que dificulta la corrección de errores, problemas de escalabilidad y limitaciones del mecanismo de consenso. Las soluciones de Capa 2, como la Lightning Network y Ethereum Plasma, se diseñaron para abordar los desafíos de escalabilidad y eficiencia de las blockchain de Capa 1. Operan sobre la cadena principal para permitir transacciones más rápidas y con menores costos, manteniendo la seguridad y descentralización. ~\cite{AplicacionesDesafiosSmartcontract}
 
 \section{Ethereum}
 
 
 \section{Tokenización}
+
+La tokenización ~\cite{tokenización} es el proceso de convertir la información delicada o activos del mundo real en representaciones digitales denominadas "tokens", dentro del ecosistema Blockchain.
+Este procedimiento juega un papel crucial en la protección de datos confidenciales al reemplazar la información original con un token único, el cual no tiene valor fuera de su contexto específico de uso.
+
+La información sensible se almacena en la "bóveda de tokenización" ~\cite{bóvedaTokenización} una infraestructura de almacenamiento segura donde los datos originales se cifran y aíslan. El acceso a la bóveda es solo posible a través de rigurosos controles de seguridad y claves de descifrado especificas.
+A diferencia de los métodos de cifrado que utilizan un algoritmo matemático para transformar datos en un formato ilegible que puede ser revertido usando un clave concreta, la tokenizción no mantiene una relación algorítmica con los datos originales. En consecuencia, los tokens generados no pueden ser revertidos sin un acceso autorizado a la bóveda de tokenización, lo que proporciona una capa adicional de seguridad.
+Por lo tanto, mientras los datos originales se almacenan en una bóveda de tokens segura, los tokens se distribuyen en sistemas internos para su utilización diaria.
+
+Un elemento importante de los tokens es que, fuera de la relación financiera específica para la que fueron creados, carecen totalmente de valor. Ya que una función de los mismos es representar un valor específico en una relación determinada. Esta característica los distingue de las criptomonedas y otros activos digitales que pueden tener un valor en el mercado abierto.
+En el ámbito de los pagos y transacciones, los tokens permiten a las organizaciones procesar transacciones y almacenar información de clientes sin exponer los datos críticos a riesgos de seguridad.
+La generación de un token se realiza mediante contratos inteligentes en la Blockchain, que definen las reglas y la lógica para su emisión, transferencia y anulación. Los contratos inteligentes aseguran que el token sea único y esté vinculado de manera inmutable a los datos o activos correspondientes en la bóveda.
+
+En el ecosistema blockchain existen diversos tipos de tokens diseñados para propósitos específicos~\cite{tiposToken} :
+
+\begin{itemize}
+\item \textbf{Tokens de Seguridad:} Representa inversiones digitales en activos reales como acciones o bonos, respaldado por activos tangibles y regulado por entidades gubernamentales.
+\item \textbf{Tokens de Gobernanza:} Permiten a los poseedores participar en la toma de decisiones dentro de una plataforma o protocolo, votando en cambios o propuestas.
+\item \textbf{Tokens de Utilidad:} Proporciona acceso a productos o servicios dentro de una plataforma blockchain, sin ser considerado un valor financiero.
+\item \textbf{Tokens Comunitarios:} Recompensan la participación en una comunidad, ofreciendo beneficios como acceso exclusivo o descuentos a los miembros activos.
+\item \textbf{Tokens Vinculados a valores:} Son digitales pero están respaldados por activos físicos como metales preciosos, permitiendo a los inversores negociar activos reales de manera digital.
+
+\end{itemize}
+
+Todos los tipos de tokens existentes se pueden clasificar en dos grandes grupos, los tokens fungibles y los tokens no fungibles.
+
+
+\subsection{Tokens fungibles}
+
+Un activo fungible se caracteriza si cada unidad individual es idéntica y completamente intercambiable con otra unidad del mismo tipo. Es decir que se puede realizar un intercambio entre diferentes unidades sin que suponga una perdida de valor.
+Un claro ejemplo serían las monedas tradicionales, como los euros, que se pueden intercambiar monedas del mismo tipo sin que suponga una perdida de valor.
+
+\subsection{Tokens no fungibles (NFT)}
+
 
 
 \section{Nodo}
@@ -81,7 +115,6 @@ Los contratos inteligentes utilizan la tecnología Blockchain para almacenar reg
 
 \section{Referencias}
 
-Las referencias se incluyen en el texto usando cite~\cite{wiki:latex}. Para citar webs, artículos o libros~\cite{koza92}, si se desean citar más de uno en el mismo lugar~\cite{bortolot2005, koza92}.
 
 
 \section{Imágenes}
