@@ -37,16 +37,27 @@ contract MyContract is ERC721 {
         bool isPending;
     }
 
-    event ContractSigned(uint256 indexed tokenId, address worker);
-    event SalaryReleased(uint256 indexed tokenId, uint256 salary);
-    event TokenMinted(uint256 tokenId);
-    event ContractCancelled(uint256 indexed tokenId);
-    event ContractFinalized(uint256 indexed tokenId);
-    event Debug(
-        uint256 currentSalary,
-        uint256 newSalary,
-        uint256 salaryDifference,
-        uint256 msgValue
+    event ContractSigned(uint256 indexed tokenId, address indexed worker);
+    event SalaryReleased(
+        uint256 indexed tokenId,
+        uint256 salary,
+        address indexed worker
+    );
+    event TokenMinted(
+        uint256 tokenId,
+        address indexed employer,
+        uint256 salary
+    );
+    event ContractCancelled(
+        uint256 indexed tokenId,
+        address indexed employer,
+        uint256 salary
+    );
+    event ApprovalChanges(
+        uint256 indexed tokenId,
+        address indexed employer,
+        uint256 salary,
+        uint256 newSalary
     );
 
     constructor() ERC721("MyToken", "MTK") {}
@@ -88,7 +99,7 @@ contract MyContract is ERC721 {
         tokenManagers[tokenID][msg.sender] = true;
         contractsOwner[msg.sender].push(tokenID);
         unsignedContractsOfWorker[_to].push(tokenID);
-        emit TokenMinted(tokenID);
+        emit TokenMinted(tokenID, msg.sender, _salary);
 
         return tokenID;
     }
@@ -125,9 +136,6 @@ contract MyContract is ERC721 {
     }
 
     function releaseSalary(uint256 _tokenID) public payable {
-        try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
-        }
         require(
             contractDetails[_tokenID].isSigned,
             "El contrato no ha sido firmado"
@@ -153,13 +161,10 @@ contract MyContract is ERC721 {
         uint256 salary = contractDetails[_tokenID].salary;
         worker.transfer(salary);
         contractDetails[_tokenID].isReleased = true;
-        emit SalaryReleased(_tokenID, salary);
+        emit SalaryReleased(_tokenID, salary, worker);
     }
 
     function finalizeContract(uint256 _tokenID) public {
-        try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
-        }
         require(
             tokenManagers[_tokenID][msg.sender] == true,
             "Solo un manager puede finalizar un contrato"
@@ -178,13 +183,9 @@ contract MyContract is ERC721 {
         );
 
         contractDetails[_tokenID].isFinished = true;
-        emit ContractFinalized(_tokenID);
     }
 
     function pauseContract(uint256 _tokenID) public {
-        try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
-        }
         require(
             contractDetails[_tokenID].isSigned,
             "El contrato no ha sido firmado"
@@ -203,9 +204,6 @@ contract MyContract is ERC721 {
     }
 
     function unPauseContract(uint256 _tokenID) public {
-        try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
-        }
         require(
             contractDetails[_tokenID].isSigned,
             "El contrato no ha sido firmado"
@@ -228,9 +226,6 @@ contract MyContract is ERC721 {
     }
 
     function cancelContract(uint256 _tokenID) public {
-        try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); // he intentado hacerlo con _exists pero no me ha funcionado
-        }
         require(
             !contractDetails[_tokenID].isSigned,
             "El contrato ya ha sido firmado"
@@ -241,7 +236,7 @@ contract MyContract is ERC721 {
         owner.transfer(salary);
         removeContractFromOwner(_tokenID, owner);
         _burn(_tokenID);
-        emit ContractCancelled(_tokenID);
+        emit ContractCancelled(_tokenID, owner, salary);
     }
 
     function removeContractFromOwner(
@@ -289,14 +284,17 @@ contract MyContract is ERC721 {
     }
 
     function removeManagerFromList(uint256 _tokenId, uint256 _index) private {
-        tokenManagersList[_tokenId][_index] = tokenManagersList[_tokenId][tokenManagersList[_tokenId].length - 1];
+        tokenManagersList[_tokenId][_index] = tokenManagersList[_tokenId][
+            tokenManagersList[_tokenId].length - 1
+        ];
         tokenManagersList[_tokenId].pop();
     }
 
-    function getManagersOfToken(uint256 _tokenId) public view returns (address[] memory) {
+    function getManagersOfToken(
+        uint256 _tokenId
+    ) public view returns (address[] memory) {
         return tokenManagersList[_tokenId];
     }
-
 
     function isManagerOfToken(
         uint256 _tokenId,
@@ -355,10 +353,10 @@ contract MyContract is ERC721 {
     //Funcion para modificar un contrato que no haya sido firmado
     function applyChange(uint256 _tokenID) public payable {
         ChangeProposal memory proposedChange = changeProposals[_tokenID];
+        uint256 salary = contractDetails[_tokenID].salary;
 
-        if (proposedChange.newSalary < contractDetails[_tokenID].salary) {
-            uint256 refundAmount = contractDetails[_tokenID].salary -
-                proposedChange.newSalary;
+        if (proposedChange.newSalary < salary) {
+            uint256 refundAmount = salary - proposedChange.newSalary;
             address owner = ownerOf(_tokenID);
             payable(owner).transfer(refundAmount);
         }
@@ -377,6 +375,13 @@ contract MyContract is ERC721 {
         }
 
         changeProposals[_tokenID].isPending = false;
+
+        emit ApprovalChanges(
+            _tokenID,
+            ownerOf(_tokenID),
+            salary,
+            proposedChange.newSalary
+        );
     }
 
     function getContractsFromOwner(

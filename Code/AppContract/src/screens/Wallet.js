@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import { View, Text, StyleSheet, Picker, FlatList } from 'react-native';
 import Web3 from 'web3';
+import { MyContract1 } from '../ether/web3';
 import { useAccount } from '../components/ContextoCuenta';
 import Boton from '../components/Boton';
 
@@ -9,6 +10,7 @@ const CarteraScreen = () => {
     const [accountsList, setAccountsList] = useState([]);
     const { selectedAccount, setSelectedAccount } = useAccount();
     const [balance, setBalance] = useState(0);
+    const [events, setEvents] = useState([]);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -82,12 +84,120 @@ const CarteraScreen = () => {
         }
     };
 
+    /*
+        event ContractSigned(uint256 indexed tokenId, address indexed worker);
+    event SalaryReleased(
+        uint256 indexed tokenId,
+        uint256 salary,
+        address indexed worker
+    );
+    event TokenMinted(
+        uint256 tokenId,
+        address indexed employer,
+        uint256 salary
+    );
+    event ContractCancelled(
+        uint256 indexed tokenId,
+        address indexed employer,
+        uint256 salary
+    );
+    event ApprovalChanges(
+        uint256 indexed tokenId,
+        address indexed employer,
+        int256 salaryDiff
+    );
+    */
+
+    useEffect(() => {
+        if (selectedAccount) {
+            getAccountHistory(selectedAccount).then(events => {
+                setEvents(events);
+            }).catch(error => {
+                console.error("Error al obtener el historial de la cuenta", error);
+                alert("Error al obtener el historial de la cuenta");
+            });
+        }
+    }, [selectedAccount]);
+
+
+    const getAccountHistory = async (accoutAddress) => {
+
+        let allEvents = [];
+
+        const ContractSignedEvents = await MyContract1.getPastEvents("ContractSigned", {
+            filter: { worker: accoutAddress },
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        allEvents.push(...ContractSignedEvents.map(event => ({
+            type: 'ContractSigned',
+            tokenId: event.returnValues.tokenId.toString(),
+            salary: Web3.utils.fromWei(event.returnValues.salary.toString(), 'ether'),
+        })));
+
+        const SalaryReleasedEvents = await MyContract1.getPastEvents("SalaryReleased", {
+            filter: { worker: accoutAddress },
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        allEvents.push(...SalaryReleasedEvents.map(event => ({
+            type: 'SalaryReleased',
+            tokenId: event.returnValues.tokenId.toString(),
+            salary: Web3.utils.fromWei(event.returnValues.salary.toString(), 'ether'),
+        })));
+
+        const TokenMintedEvents = await MyContract1.getPastEvents("TokenMinted", {
+            filter: { employer: accoutAddress },
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        allEvents.push(...TokenMintedEvents.map(event => ({
+            type: 'TokenMinted',
+            tokenId: event.returnValues.tokenId.toString(),
+            salary: Web3.utils.fromWei(event.returnValues.salary.toString(), 'ether'),
+        })));
+
+        const ContractCancelledEvents = await MyContract1.getPastEvents("ContractCancelled", {
+            filter: { employer: accoutAddress },
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        allEvents.push(...ContractCancelledEvents.map(event => ({
+            type: 'ContractCancelled',
+            tokenId: event.returnValues.tokenId.toString(),
+            salary: Web3.utils.fromWei(event.returnValues.salary.toString(), 'ether'),
+        })));
+
+        const ApprovalChangesEvents = await MyContract1.getPastEvents("ApprovalChanges", {
+            filter: { employer: accoutAddress },
+            fromBlock: 0,
+            toBlock: 'latest'
+        });
+
+        allEvents.push(...ApprovalChangesEvents.map(event => ({
+            type: 'ApprovalChanges',
+            tokenId: event.returnValues.tokenId.toString(),
+            salary: Web3.utils.fromWei(event.returnValues.salary.toString(), 'ether'),
+            newSalary: Web3.utils.fromWei(event.returnValues.newSalary.toString(), 'ether'),
+        })));
+
+        allEvents.sort((a, b) => b.blockNumber - a.blockNumber);
+
+        return allEvents;
+    };
+
+
+
     const handleAccountChange = (newSelectedAccount) => {
         setSelectedAccount(newSelectedAccount);
     };
 
     return (
-        <View style={styles.container}>
+        <View style={styles.container} >
             {!selectedAccount ? (
                 <Boton
                     texto={loading ? "Conectando..." : "Conectar con MetaMask"}
@@ -111,11 +221,26 @@ const CarteraScreen = () => {
                             </Picker>
                         </View>
                     )}
-                    <Text style={styles.accountText}>Cuenta: {selectedAccount}</Text>
                     <Text style={styles.balanceText}>Balance: {balance} ETH</Text>
                 </View>
             )}
-        </View>
+            <View style={styles.card}>
+                <FlatList
+                    data={events}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.contractItem}>
+                            <Text>{item.type}</Text>
+                            <Text>Token ID: {item.tokenId}</Text>
+                            {item.type != "ApprovalChanges" && <Text>Salario: {item.salary} ETH</Text>}
+                            {item.type === "ApprovalChanges" && (
+                                <Text>Nuevo salario: {item.newSalary - item.salary} ETH</Text>)}
+                        </View>
+                    )}
+                    ListEmptyComponent={<Text>No hay eventos registrados para esta cuenta.</Text>}
+                />
+            </View>
+        </View >
     );
 };
 
@@ -130,6 +255,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: 'white',
+        width: '85%',
         padding: 20,
         borderRadius: 10,
         shadowColor: '#000',
@@ -164,7 +290,15 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 44,
         marginBottom: 20
+    },
+    contractItem: {
+        backgroundColor: '#f0f0f0',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 5,
+        textAlign: 'center'
     }
+
 });
 
 
