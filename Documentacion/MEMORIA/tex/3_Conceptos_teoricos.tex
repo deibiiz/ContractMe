@@ -57,6 +57,9 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 \end{itemize} 
 
 
+\section{Ethereum}
+
+
 
 \section{Contratos inteligentes}
 
@@ -68,7 +71,6 @@ Los contratos inteligentes utilizan la tecnología Blockchain para almacenar reg
 
 Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesidad de recursos externos a la cadena de bloques, su naturaleza inmutable que dificulta la corrección de errores, problemas de escalabilidad y limitaciones del mecanismo de consenso. Las soluciones de Capa 2, como la Lightning Network y Ethereum Plasma, se diseñaron para abordar los desafíos de escalabilidad y eficiencia de las blockchain de Capa 1. Operan sobre la cadena principal para permitir transacciones más rápidas y con menores costos, manteniendo la seguridad y descentralización. ~\cite{AplicacionesDesafiosSmartcontract}
 
-\section{Ethereum}
 
 
 \section{Tokenización}
@@ -100,10 +102,32 @@ Todos los tipos de tokens existentes se pueden clasificar en dos grandes grupos,
 
 \subsection{Tokens fungibles}
 
-Un activo fungible se caracteriza si cada unidad individual es idéntica y completamente intercambiable con otra unidad del mismo tipo. Es decir que se puede realizar un intercambio entre diferentes unidades sin que suponga una perdida de valor.
-Un claro ejemplo serían las monedas tradicionales, como los euros, que se pueden intercambiar monedas del mismo tipo sin que suponga una perdida de valor.
+La definición de fungibilidad es esencial para entender los aspectos fundamentales de un token fungible. Tomando como referencia una definición ofrecida por el Tesoro Público del Gobierno de España, la fungibilidad se describe como la "Propiedad de un conjunto de valores que los hace plenamente equivalentes entre sí a efectos legales". ~\cite{fungibilidadGob}.
+La fungibilidad es un concepto que nos rodea en la vida cotidiana, siendo el dinero uno de los mejores ejemplos. Cuando se intercambia un billete de cinco euros por otro billete de cinco euros, se entiende que ambos tienen el mismo valor y son aceptados de la misma manera.
+
+Este principio se puede extrapolar al mundo digital y a la Blockchain. Los token fungibles actúan de forma similar al dinero físico, siendo indistinguibles y equivalentes entre unidades del mismo tipo.
+El ejemplo más conocido es Bitcoin, convirtiéndolo en una herramienta poderosa para las transacciones digitales.
+
 
 \subsection{Tokens no fungibles (NFT)}
+
+Los NFT han emergido como una innovación disruptiva en el ámbito del comercio electrónico, especialmente en el mundo del arte digital.
+A diferencia de los tokens fungibles, cada NFT es una certificación criptográfica que contiene información y códigos de identificación únicos que los hacen irremplazables e intercambiables.
+Esta característica los hace particularmente adecuados para representar activos digitales únicos y derechos de propiedad en el mundo digital.
+En el contexto de los contratos laborales, los NFT pueden ser utilizados para tokenizar y asegurar la autenticidad de contratos individuales, garantizando que los términos acordados sean únicos y vinculados inequívocamente a las partes involucradas.~\cite{NFTintroducción}
+
+
+\subsubsection{ERC-721}
+
+ERC-721 es un estándar propuesto por el desarrollador Dieter Shirley a finales de 2017 que introdujo el concepto de tokens no fungibles en la red Ethereum. ~\cite{ERC721Introducción}
+Abriendo las puertas a una nueva dimensión de activos digitales únicos, a diferencia de los tokens fungibles basados en el estándar ERC-20.
+
+La creación del estándar ERC-721 fue motivada por la creciente demanda de tokens digitales que pudieran representar de manera única activos individuales.
+La singularidad de los tokens ERC-721 les dota de gran utilidad en aplicaciones donde el ámbito de autenticidad y la propiedad exclusiva son cruciales.
+Su uso mas popular se enfoca en el mundo del arte, asegurando la autenticidad y unicidad de diferentes obras, aunque también ha tomado gran relevancia en el ámbito legal. 
+Poniendo de ejemplo este proyecto, con el uso del estándar ERC-721 se puede tokenizar y autenticar contratos laborales, asegurando la transparencia y la inmutabilidad de los términos acordados, verificando el cumplimiento de los acuerdos.
+
+Este estándar cuenta con una serie de propiedades técnicas que lo hacen versátil. Algunas de estas propiedades son la asignación de un nombre, la definición de un balance de tokens dentro de una dirección y la implementación de funciones que permiten la transferencia segura de la propiedad.
 
 
 
