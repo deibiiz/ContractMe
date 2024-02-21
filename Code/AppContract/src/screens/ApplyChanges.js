@@ -33,7 +33,7 @@ const ContractAlertScreen = ({ route }) => {
                 return;
             }
 
-            await MyContract1.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount });
+            await MyContract1.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount, gas: 1000000 });
             navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al aceptar los cambios:", error);

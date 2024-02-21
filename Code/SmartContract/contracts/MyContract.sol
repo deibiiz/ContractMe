@@ -37,27 +37,30 @@ contract MyContract is ERC721 {
         bool isPending;
     }
 
-    event ContractSigned(uint256 indexed tokenId, address indexed worker);
     event SalaryReleased(
         uint256 indexed tokenId,
         uint256 salary,
-        address indexed worker
+        address indexed worker,
+        uint256 timestamp
     );
     event TokenMinted(
         uint256 tokenId,
         address indexed employer,
-        uint256 salary
+        uint256 salary,
+        uint256 timestamp
     );
     event ContractCancelled(
         uint256 indexed tokenId,
         address indexed employer,
-        uint256 salary
+        uint256 salary,
+        uint256 timestamp
     );
     event ApprovalChanges(
         uint256 indexed tokenId,
         address indexed employer,
         uint256 salary,
-        uint256 newSalary
+        uint256 newSalary,
+        uint256 timestamp
     );
 
     constructor() ERC721("MyToken", "MTK") {}
@@ -99,7 +102,7 @@ contract MyContract is ERC721 {
         tokenManagers[tokenID][msg.sender] = true;
         contractsOwner[msg.sender].push(tokenID);
         unsignedContractsOfWorker[_to].push(tokenID);
-        emit TokenMinted(tokenID, msg.sender, _salary);
+        emit TokenMinted(tokenID, msg.sender, _salary, block.timestamp);
 
         return tokenID;
     }
@@ -132,7 +135,6 @@ contract MyContract is ERC721 {
         contractDetails[_tokenID].isSigned = true;
         contractDetails[_tokenID].worker = msg.sender;
         activeContractsOfWorker[msg.sender].push(_tokenID);
-        emit ContractSigned(_tokenID, msg.sender);
     }
 
     function releaseSalary(uint256 _tokenID) public payable {
@@ -161,7 +163,7 @@ contract MyContract is ERC721 {
         uint256 salary = contractDetails[_tokenID].salary;
         worker.transfer(salary);
         contractDetails[_tokenID].isReleased = true;
-        emit SalaryReleased(_tokenID, salary, worker);
+        emit SalaryReleased(_tokenID, salary, worker, block.timestamp);
     }
 
     function finalizeContract(uint256 _tokenID) public {
@@ -212,15 +214,12 @@ contract MyContract is ERC721 {
             contractDetails[_tokenID].isPaused,
             "El contrato no esta pausado"
         );
-        require(
-            isContractFinished(_tokenID) == false,
-            "El contrato ha expirado"
-        );
 
-        contractDetails[_tokenID].pauseDuration =
-            block.timestamp -
+        uint256 pauseDuration = block.timestamp -
             contractDetails[_tokenID].pauseTime;
 
+        contractDetails[_tokenID].duration += pauseDuration;
+        contractDetails[_tokenID].pauseDuration += pauseDuration;
         contractDetails[_tokenID].pauseTime = 0;
         contractDetails[_tokenID].isPaused = false;
     }
@@ -236,7 +235,7 @@ contract MyContract is ERC721 {
         owner.transfer(salary);
         removeContractFromOwner(_tokenID, owner);
         _burn(_tokenID);
-        emit ContractCancelled(_tokenID, owner, salary);
+        emit ContractCancelled(_tokenID, owner, salary, block.timestamp);
     }
 
     function removeContractFromOwner(
@@ -380,7 +379,8 @@ contract MyContract is ERC721 {
             _tokenID,
             ownerOf(_tokenID),
             salary,
-            proposedChange.newSalary
+            proposedChange.newSalary,
+            block.timestamp
         );
     }
 

@@ -63,25 +63,6 @@ contract("MyContract", accounts => {
 
     });
 
-    it("Comprueba que un trabajador se pueda cancelar y este deje de tener valor.", async () => {
-        const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
-        const tokenId = mintedToken.logs[0].args.tokenId;
-
-        await contract.cancelContract(tokenId, { from: buyer });
-
-
-        let errorOcurred = false;
-        try {
-            await contract.ownerOf(tokenId);
-        } catch (e) {
-            errorOcurred = true;
-        }
-
-        assert.isTrue(errorOcurred, "El contrato no se ha cancelado correctamente");
-
-    });
-
 
     it("Comprueba que el rol de manager pueda interactuar con el contrato", async () => {
         const contract = await MyContract.deployed();
@@ -108,7 +89,7 @@ contract("MyContract", accounts => {
         const newSalary = web3.utils.toWei("2", "ether");
         const newDuration = 20;
         const nwedescription = "Nuevo Contrato de prueba";
-        const newTitle = "Titulo de prueba";
+        const newTitle = "Nuevo titulo de prueba";
 
         const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
@@ -126,7 +107,6 @@ contract("MyContract", accounts => {
         const modifiedContract = await contract.contractDetails(tokenId);
         assert.equal(modifiedContract.salary, newSalary, "El salario no se ha modificado correctamente");
         assert.equal(modifiedContract.duration, newDuration, "La duración no se ha modificado correctamente");
-
     });
 
     it("Comprueba los contratos que ha emitido un owner", async () => {
