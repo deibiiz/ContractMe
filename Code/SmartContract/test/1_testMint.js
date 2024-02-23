@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("MyContract");
+const MyContract = artifacts.require("MyContractAux");
 
 contract("MyContract", accounts => {
 

@@ -19,8 +19,14 @@ export default function SignContract() {
         if (selectedAccount) {
             try {
                 const contractIds = await MyContract1.methods.getUnsignedContractsOfWorker(selectedAccount).call();
-                const formattedIds = contractIds.map(id => id.toString());
-                setUnsignedContracts(formattedIds);
+                const contractActive = contractIds.map(async (id) => {
+                    const isFinished = await MyContract1.methods.isContractFinished(id).call();
+                    return isFinished ? null : id.toString();
+                });
+
+                const contracts = await Promise.all(contractActive);
+                const filteredContracts = contracts.filter(contract => contract !== null);
+                setUnsignedContracts(filteredContracts);
             } catch (error) {
                 console.error("Error al obtener contratos sin firmar:", error);
             }

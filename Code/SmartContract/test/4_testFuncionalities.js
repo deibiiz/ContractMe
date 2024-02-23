@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("MyContract");
+const MyContract = artifacts.require("MyContractAux");
 
 contract("MyContract", accounts => {
     const [owner, buyer, owner2, owner3, buyer2] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
