@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import "./MyContractManagement.sol";
 import "./MyContractChanges.sol";
 
-contract MyContractAux is MyContractChanges {
-
+contract MyContractAux is MyContractManagement, MyContractChanges{
 
     function getManagersOfToken(
         uint256 _tokenId
@@ -12,13 +12,14 @@ contract MyContractAux is MyContractChanges {
         return tokenManagersList[_tokenId];
     }
 
-
+    /*
     function isManagerOfToken(
         uint256 _tokenId,
         address _manager
     ) public view returns (bool) {
         return tokenManagers[_tokenId][_manager];
     }
+    */
 
 
     function getContractsFromOwner(
@@ -27,11 +28,13 @@ contract MyContractAux is MyContractChanges {
         return contractsOwner[_address];
     }
 
+
     function getContractsOfWorker(
         address _address
     ) public view returns (uint256[] memory) {
         return activeContractsOfWorker[_address];
     }
+
 
     function getUnsignedContractsOfWorker(
         address worker
@@ -67,9 +70,11 @@ contract MyContractAux is MyContractChanges {
         }
     }
 
+
     function isContractSigned(uint256 _tokenID) public view returns (bool) {
         return contractDetails[_tokenID].isSigned;
     }
+
 
     function getOwnerOfContract(
         uint256 _tokenID

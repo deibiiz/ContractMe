@@ -278,19 +278,35 @@ const ContractDetailsScreen = ({ route }) => {
                             )}
 
                             {!contractDetails.isSigned && (
-                                <Boton
-                                    texto="Cancelar contrato"
-                                    onPress={() => { cancelarContrato(contractDetails.tokenId) }}
-                                    estiloBoton={{
-                                        width: "100%",
-                                        borderRadius: 8,
-                                        backgroundColor: "#F84343",
-                                    }}
-                                    estiloTexto={{
-                                        fontSize: 16,
-                                        fontWeight: "bold",
-                                    }}
-                                />
+                                <>
+                                    <Boton
+                                        texto="Mostrar código QR"
+                                        onPress={() => { navigation.navigate('ShowQR', { tokenId: tokenId }) }}
+                                        estiloBoton={{
+                                            width: "100%",
+                                            borderRadius: 8,
+                                            marginBottom: 5,
+                                        }}
+                                        estiloTexto={{
+                                            fontSize: 16,
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+
+                                    <Boton
+                                        texto="Cancelar contrato"
+                                        onPress={() => { cancelarContrato(contractDetails.tokenId) }}
+                                        estiloBoton={{
+                                            width: "100%",
+                                            borderRadius: 8,
+                                            backgroundColor: "#F84343",
+                                        }}
+                                        estiloTexto={{
+                                            fontSize: 16,
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                </>
                             )}
 
                         </>

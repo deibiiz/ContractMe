@@ -1,21 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./MyContractManagement.sol";
+import "./MyContract.sol";
 
-contract MyContractChanges is MyContractManagement {
-
-        struct ChangeProposal {
-            string newTitle;
-            uint256 newSalary;
-            uint256 newDuration;
-            string newDescription;
-            bool isPaused;
-            bool isPending;
-    }
-
-    mapping(uint256 => address[]) public tokenManagersList;
-    mapping(uint256 => ChangeProposal) public changeProposals;
+contract MyContractChanges is MyContract {
 
     event ApprovalChanges(
         uint256 indexed tokenId,
@@ -25,37 +13,31 @@ contract MyContractChanges is MyContractManagement {
         uint256 timestamp
     );
 
+    event RejectChanges(
+        uint256 indexed tokenId,
+        address indexed employer,
+        uint256 timestamp
+    );
 
-        function pauseContract(uint256 _tokenID) public {
-        require(
-            contractDetails[_tokenID].isSigned,
-            "El contrato no ha sido firmado"
-        );
-        require(
-            isContractFinished(_tokenID) == false,
-            "El contrato ha expirado"
-        );
+
+    function pauseContract(uint256 _tokenID) public {
         require(
             !contractDetails[_tokenID].isPaused,
-            "El contrato ya esta pausado"
+            "Error: condiciones no cumplidas."
         );
-
+    
         contractDetails[_tokenID].isPaused = true;
         contractDetails[_tokenID].pauseTime = block.timestamp;
     }
 
+
     function unPauseContract(uint256 _tokenID) public {
         require(
-            contractDetails[_tokenID].isSigned,
-            "El contrato no ha sido firmado"
-        );
-        require(
             contractDetails[_tokenID].isPaused,
-            "El contrato no esta pausado"
+            "Error: condiciones no cumplidas."
         );
 
-        uint256 pauseDuration = block.timestamp -
-            contractDetails[_tokenID].pauseTime;
+        uint256 pauseDuration = block.timestamp - contractDetails[_tokenID].pauseTime;
 
         contractDetails[_tokenID].duration += pauseDuration;
         contractDetails[_tokenID].pauseDuration += pauseDuration;
@@ -63,36 +45,49 @@ contract MyContractChanges is MyContractManagement {
         contractDetails[_tokenID].isPaused = false;
     }
 
-    function assignManagerToToken(
-        uint256 _tokenId,
-        address _newManager
-    ) public {
-        if (!tokenManagers[_tokenId][_newManager]) {
-            tokenManagers[_tokenId][_newManager] = true;
-            tokenManagersList[_tokenId].push(_newManager);
-            contractsOwner[_newManager].push(_tokenId);
+
+    function assignManagerToToken(uint256 _tokenID, address _newManager) public {
+        require(
+            msg.sender == ownerOf(_tokenID) &&
+            !tokenManagers[_tokenID][_newManager] &&
+            _newManager != ownerOf(_tokenID),
+            "Error: condiciones no cumplidas."
+        );
+
+        if (!tokenManagers[_tokenID][_newManager]) {
+            tokenManagers[_tokenID][_newManager] = true;
+            tokenManagersList[_tokenID].push(_newManager);
+            contractsOwner[_newManager].push(_tokenID);
         }
     }
 
+
     function revokeManagerFromToken(uint256 _tokenId, address _manager) public {
+        require(
+            msg.sender == ownerOf(_tokenId) &&
+            tokenManagers[_tokenId][_manager],
+            "Error: condiciones no cumplidas."
+        );
+
         for (uint256 i = 0; i < tokenManagersList[_tokenId].length; i++) {
             if (tokenManagersList[_tokenId][i] == _manager) {
                 removeManagerFromList(_tokenId, i);
                 break;
             }
         }
+
         tokenManagers[_tokenId][_manager] = false;
         removeContractFromOwner(_tokenId, _manager);
     }
 
+
     function removeManagerFromList(uint256 _tokenId, uint256 _index) private {
-        tokenManagersList[_tokenId][_index] = tokenManagersList[_tokenId][
-            tokenManagersList[_tokenId].length - 1
-        ];
+        tokenManagersList[_tokenId][_index] = tokenManagersList[_tokenId][tokenManagersList[_tokenId].length - 1];
         tokenManagersList[_tokenId].pop();
     }
 
-function proposeChange(
+
+    function proposeChange(
         uint256 _tokenID,
         string memory _newTitle,
         uint256 _newSalary,
@@ -100,6 +95,14 @@ function proposeChange(
         string memory _newDescription,
         bool _isPaused
     ) public payable {
+        require(
+            contractDetails[_tokenID].isSigned &&
+            !isContractFinished(_tokenID) &&
+            !changeProposals[_tokenID].isPending &&
+            tokenManagers[_tokenID][msg.sender],
+            "Error: condiciones no cumplidas."
+        );
+
         uint256 currentSalary = contractDetails[_tokenID].salary;
         if (_newSalary > currentSalary) {
             uint256 salaryDifference = _newSalary - currentSalary;
@@ -126,6 +129,12 @@ function proposeChange(
 
     
     function rejectChange(uint256 _tokenID) public {
+        require(
+            changeProposals[_tokenID].isPending &&
+            !isContractFinished(_tokenID),
+            "Error: condiciones no cumplidas."
+        );
+
         ChangeProposal memory proposedChange = changeProposals[_tokenID];
 
         if (proposedChange.newSalary > contractDetails[_tokenID].salary) {
@@ -136,10 +145,17 @@ function proposeChange(
         }
 
         changeProposals[_tokenID].isPending = false;
+        emit RejectChanges(_tokenID, ownerOf(_tokenID), block.timestamp);
     }
 
     
     function applyChange(uint256 _tokenID) public payable {
+        require(
+            changeProposals[_tokenID].isPending &&
+            !isContractFinished(_tokenID),
+            "Error: condiciones no cumplidas."
+        );
+
         ChangeProposal memory proposedChange = changeProposals[_tokenID];
         uint256 salary = contractDetails[_tokenID].salary;
 

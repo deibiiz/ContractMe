@@ -17,6 +17,7 @@ import ShowContract from './screens/ShowContracts';
 import ModifyContract from './screens/ModifyContract';
 import ApplyChanges from './screens/ApplyChanges';
 import AddManager from './screens/AddManager';
+import ShowQR from './screens/ShowQR';
 
 
 const HomeStackNavigator = createNativeStackNavigator();
@@ -70,7 +71,7 @@ function MyStack() {
                 name='ShowContract'
                 component={ShowContract}
                 options={{
-                    title: 'Ver Contratos',
+                    title: 'Mis Contratos',
                     headerStyle: {
                         backgroundColor: '#9BBEC8',
                     },
@@ -101,6 +102,16 @@ function MyStack() {
                 component={AddManager}
                 options={{
                     title: 'Agregar Administrador',
+                    headerStyle: {
+                        backgroundColor: '#9BBEC8',
+                    },
+                }}
+            />
+            <HomeStackNavigator.Screen
+                name="ShowQR"
+                component={ShowQR}
+                options={{
+                    title: 'Código QR',
                     headerStyle: {
                         backgroundColor: '#9BBEC8',
                     },

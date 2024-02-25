@@ -35,7 +35,7 @@ const Home = () => {
                 }
             />
             <Boton
-                texto="Ver Contratos"
+                texto="Mis Contratos"
                 onPress={() => navigation.navigate('ShowContract')}
                 estiloBoton={
                     {

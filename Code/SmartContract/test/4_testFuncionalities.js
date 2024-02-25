@@ -70,9 +70,6 @@ contract("MyContract", accounts => {
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.assignManagerToToken(mintedToken.logs[0].args.tokenId, owner2);
 
-        const isOwner2Manager = await contract.isManagerOfToken(tokenId, owner2);
-        assert(isOwner2Manager, "El rol de manager no se ha asignado correctamente");
-
         await contract.cancelContract(tokenId, { from: owner2 });
         let errorOcurred = false;
         try {
