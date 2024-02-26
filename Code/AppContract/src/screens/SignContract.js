@@ -4,11 +4,15 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native
 import { MyContract1 } from "../ether/web3.js";
 import { useAccount } from "../components/ContextoCuenta";
 import { useNavigation } from "@react-navigation/native";
+import { Boton } from "../components/Boton";
+//import QRCodeScanner from "react-native-qrcode-scanner";
+
 
 export default function SignContract() {
     const { selectedAccount } = useAccount();
     const [unsignedContracts, setUnsignedContracts] = useState([]);
-    navigation = useNavigation();
+    const [isScannerVisible, setIsScannerVisible] = useState(false);
+    const navigation = useNavigation();
 
     if (!selectedAccount) {
         alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
@@ -38,6 +42,31 @@ export default function SignContract() {
         }, [selectedAccount])
     );
 
+
+    /*
+    const signTheContract = async tokenId => {
+        if (!tokenId) {
+            alert('Falta ID del contrato.');
+            return;
+        }
+        try {
+            await MyContract1.methods.signContract(tokenId).send({ from: selectedAccount, gas: 1000000 });
+    
+            alert('Contrato firmado con éxito.');
+        } catch (error) {
+            console.error("Error al firmar el contrato:", error);
+            setSignStatus("Error al firmar el contrato");
+        }
+    };
+    
+    
+    const handleQRScanned = i => {
+        const tokenId = i.data;
+        signTheContract(tokenId);
+        setIsScannerVisible(false);
+    };
+    */
+
     return (
         <View style={styles.fullContainer}>
             <Text style={styles.title}>Contratos pendintes de firma</Text>
@@ -59,6 +88,30 @@ export default function SignContract() {
                     );
                 }}
             />
+            {/*
+            <Boton
+                title="Escanear código QR"
+                onPress={() => setIsScannerVisible(true)}
+            />
+
+            {isScannerVisible && (
+                <QRCodeScanner
+                    onRead={handleQRScanned}
+                    topContent={<Text style={styles.title}>Escanea el código QR del contrato</Text>}
+                    reactivate={true}
+                    reactivateTimeout={3000}
+                    showMarker={true}
+                    bottomContent={
+                        <TouchableOpacity
+                            style={styles.buttonTouchable}
+                            onPress={() => setIsScannerVisible(false)}
+                        >
+                            <Text style={styles.buttonText}>Cancelar</Text>
+                        </TouchableOpacity>
+                    }
+                />
+            )}
+            */}
         </View>
     );
 }
@@ -97,6 +150,13 @@ const styles = StyleSheet.create({
         fontStyle: "italic",
         textAlign: "center",
         paddingHorizontal: 10,
+    },
+    buttonTouchable: {
+        padding: 16,
+    },
+    buttonText: {
+        fontSize: 21,
+        color: 'rgb(0,122,255)',
     },
 
 });

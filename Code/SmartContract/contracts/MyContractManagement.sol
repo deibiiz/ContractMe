@@ -46,6 +46,7 @@ contract MyContractManagement is MyContract{
     function mint(
         address _to,
         uint256 _salary,
+        uint256 _start,
         uint256 _duration,
         string memory _description,
         string memory _title
@@ -63,7 +64,7 @@ contract MyContractManagement is MyContract{
 
         ContractDetails memory newContract = ContractDetails({
             salary: _salary,
-            startDate: block.timestamp,
+            startDate: _start + block.timestamp,
             duration: _duration,
             title: _title,
             description: _description,

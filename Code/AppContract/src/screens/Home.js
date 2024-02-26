@@ -35,6 +35,17 @@ const Home = () => {
                 }
             />
             <Boton
+                texto="Buscar Contratos"
+                onPress={() => navigation.navigate('SearchContract')}
+                estiloBoton={
+                    {
+                        borderRadius: 5,
+                        marginTop: 10,
+                        width: 300,
+                    }
+                }
+            />
+            <Boton
                 texto="Mis Contratos"
                 onPress={() => navigation.navigate('ShowContract')}
                 estiloBoton={

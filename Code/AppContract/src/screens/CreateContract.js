@@ -10,6 +10,7 @@ export default function CreateContract() {
     const [title, setTitle] = useState('');
     const [recipient, setRecipient] = useState('');
     const [salary, setSalary] = useState('');
+    const [start, setStart] = useState('');
     const [duration, setDuration] = useState('');
     const [description, setDescription] = useState('');
     const [mintStatus, setMintStatus] = useState('');
@@ -20,7 +21,7 @@ export default function CreateContract() {
     }
 
     const mintContract = async () => {
-        if (!recipient || !salary || !duration || !description || !title) {
+        if (!salary || !start || !duration || !description || !title) {
             alert('Por favor, introduce todos los datos.');
             return;
         }
@@ -34,8 +35,15 @@ export default function CreateContract() {
 
             const accounts = await web3.eth.getAccounts();
             const parsedSalary = web3.utils.toWei(salary, 'ether');
+            const parsedStart = Number(start);
             const parsedDuration = Number(duration);
-            const result = await MyContract1.methods.mint(recipient, parsedSalary, parsedDuration, description, title)
+            const recipientAdress = recipient || "0x0000000000000000000000000000000000000000";
+            if (recipientAdress.length !== 42 || recipientAdress === selectedAccount) {
+                alert('Dirección de destinatario inválida');
+                return;
+            }
+
+            const result = await MyContract1.methods.mint(recipientAdress, parsedSalary, parsedStart, parsedDuration, description, title)
                 .send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
             setMintStatus(`Contrato creado con el ID: ${result.events.Transfer.returnValues.tokenId}`);
         } catch (error) {
@@ -51,14 +59,14 @@ export default function CreateContract() {
                 onChangeText={setTitle}
                 value={title}
                 placeholder="Introduce el título del contrato"
-                maxLength={35}
+                maxLength={50}
             />
 
             <TextInput
                 style={styles.input}
                 onChangeText={setRecipient}
                 value={recipient}
-                placeholder="Introduce la dirección del destinatario"
+                placeholder="Introduce la dirección del destinatario (OPCIONAL)"
                 maxLength={42}
             />
             <TextInput
@@ -66,6 +74,14 @@ export default function CreateContract() {
                 onChangeText={setSalary}
                 value={salary}
                 placeholder="Introduce el salario"
+                keyboardType="numeric"
+                maxLength={8}
+            />
+            <TextInput
+                style={styles.input}
+                onChangeText={setStart}
+                value={start}
+                placeholder="Introduce el comienzo del contrato"
                 keyboardType="numeric"
                 maxLength={8}
             />

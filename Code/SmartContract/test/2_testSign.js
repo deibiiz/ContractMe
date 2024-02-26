@@ -3,6 +3,7 @@ const MyContract = artifacts.require("MyContractAux");
 contract("MyContract", accounts => {
     const [owner, buyer, buer2] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
     const salary = web3.utils.toWei("1", "ether");
+    const start = 0;
     const duration = 5;
     const description = "Contrato de prueba para firmar";
     const title = "Titulo de prueba";
@@ -12,7 +13,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         try {
             await contract.signContract(tokenId, { from: owner });
@@ -27,7 +28,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         try {
             await contract.signContract(tokenId, { from: buyer2 });
@@ -42,7 +43,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
@@ -59,7 +60,7 @@ contract("MyContract", accounts => {
         const contract = await MyContract.deployed();
         let errorOcurred = false;
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         // Avanza el tiempo
         await new Promise((resolve, reject) => {

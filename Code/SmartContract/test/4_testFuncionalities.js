@@ -3,13 +3,14 @@ const MyContract = artifacts.require("MyContractAux");
 contract("MyContract", accounts => {
     const [owner, buyer, owner2, owner3, buyer2] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
     const salary = web3.utils.toWei("1", "ether");
+    const start = 0;
     const duration = 10;
     const description = "Contrato de prueba para firmar";
     const title = "Titulo de prueba";
 
     it("Comprueba que un contrato se pause de forma correcta", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
@@ -26,7 +27,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que el contrato se despause de forma correcta", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
         await contract.pauseContract(tokenId, { from: owner });
@@ -44,9 +45,9 @@ contract("MyContract", accounts => {
 
     it("Comprueba que un dueño se pueda cancelar y este deje de tener valor.", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
-        const mintedToken1 = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
-        const mintedToken2 = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
+        const mintedToken1 = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
+        const mintedToken2 = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId2 = mintedToken2.logs[0].args.tokenId;
 
         await contract.cancelContract(tokenId2, { from: owner });
@@ -66,7 +67,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que el rol de manager pueda interactuar con el contrato", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.assignManagerToToken(mintedToken.logs[0].args.tokenId, owner2);
 
@@ -88,7 +89,7 @@ contract("MyContract", accounts => {
         const nwedescription = "Nuevo Contrato de prueba";
         const newTitle = "Nuevo titulo de prueba";
 
-        const mintedToken = await contract.mint(buyer, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
         const tokenId = mintedToken.logs[0].args.tokenId;
         await contract.signContract(tokenId, { from: buyer });
 
@@ -108,9 +109,9 @@ contract("MyContract", accounts => {
 
     it("Comprueba los contratos que ha emitido un owner", async () => {
         const contract = await MyContract.deployed();
-        const mintedToken = await contract.mint(buyer2, salary, duration, description, title, { from: owner3, value: salary });
-        const mintedToken2 = await contract.mint(buyer2, salary, duration, description, title, { from: owner3, value: salary });
-        const mintedToken3 = await contract.mint(buyer2, salary, duration, description, title, { from: owner, value: salary });
+        const mintedToken = await contract.mint(buyer2, salary, start, duration, description, title, { from: owner3, value: salary });
+        const mintedToken2 = await contract.mint(buyer2, salary, start, duration, description, title, { from: owner3, value: salary });
+        const mintedToken3 = await contract.mint(buyer2, salary, start, duration, description, title, { from: owner, value: salary });
         await contract.signContract(mintedToken.logs[0].args.tokenId, { from: buyer2 });
         await contract.signContract(mintedToken2.logs[0].args.tokenId, { from: buyer2 });
         await contract.signContract(mintedToken3.logs[0].args.tokenId, { from: buyer2 });
