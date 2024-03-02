@@ -6,7 +6,7 @@ A continuación se sintetizarán algunos conceptos teóricos relevantes para la 
 
 \section{Introducción a la Blockchain}
 
-La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto~\cite{dobleGasto} en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas.
+La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto~\cite{dobleGasto} en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas, el cual consiste en la posibilidad de gastar una misma moneda digital más de una vez. Esto ocurre debido a la falsificación o duplicación de archivos digitales que representan la moneda.
 En 2008 una persona o grupo anónimo bajo el seudónimo de Satoshi Nakamoto publicó un documento técnico para crear una moneda digital para contabilizar y transferir valor. Así nació una tecnología que se fundamenta en una base de datos descentralizada compuesta por bloques de información replicados y sincronizados en múltiples ordenadores.  
 Esta premisa hizo que en enero de 2009 entrará en funcionamiento la primera red basada en el protocolo Bitcoin~\cite{introducciónBitcoin}.
 La BlockChain demostró su capacidad para contabilizar y transferir valor de manera segura sin la necesidad de intermediarios, transformando el sector financiero y encontrando aplicaciones en una variedad de industrias.
@@ -14,17 +14,59 @@ La BlockChain demostró su capacidad para contabilizar y transferir valor de man
 \imagen{BCdescentralizada}{Diferencias entre una red centralidad y descentralizada}{.8}
 
 
+
 \subsection{Tecnología subyacente}
 
-La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples ordenadores de manera que cada registro es inalterable e irreversible. Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena ~\cite{wiki:DTL}.
+La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples ordenadores de manera que cada registro es inalterable e irreversible. 
+Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena ~\cite{wiki:DTL}.
+Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de computo~\cite{BlockchainFuncionamiento}.
 
-Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; el dato de la transacción, el hash del bloque anterior en la cadena (lo que asegura la continuidad de la cadena) y su propio hash único, generado a partir de la información contenida en el bloque.
-El hash es una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude ~\cite{BlockchainFuncionamiento}.
+\imagen{DTL}{Proceso de actualización del libro mayor}{.6}
 
-El proceso de añadir un nuevo bloque a la cadena requiere de un consenso entre los nodos de la red, lo cual se logra mediante diferentes mecanismos, siendo el "Proof of Work" (Prueba de trabajo) uno de los más utilizados ocupando alrededor del 60\% de la capitalización total. ~\cite{proofOfWork}
-Este mecanismo implica resolver un problema criptográfico complejo que requiere un gran poder de computo. Funciona como una competición, en la que el nodo más rápido en resolver el problema obtiene el derecho de añadir el nuevo bloque a la cadena y es recompensado, generalmente con criptomonedas.
 
-Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de computo.
+\subsubsection{Encadenamiento de bloques}
+
+Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; los datos de las transacciones, el hash del bloque anterior en la cadena  y su propio hash único, generado a partir de la información contenida en el bloque.
+Los bloques se enlazan mediante el hash formado por los datos del bloque anterior.
+El algoritmo hash más usado en la Blockchain es "SHA-256"~\cite{sha256} desarrollado por la Agencia de Seguridad Nacional (NAS) en el año 1997. Es conocido por ser lento en comparación con otras funciones hash, pero a pesar de esto destaca por su seguridad por lo que lo hace adecuado para aplicaciones financieras.
+El hash consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude.
+
+\imagen{enlaceBloques}{Encadenamiento de bloques en la Blockchain}{.6}
+
+
+\subsubsection{Transacciones}
+
+Para iniciar una transacción en la Blockchain se debe de emplear una "wallet" o monedero electrónico, este es un software que permite almacenar y intercambiar activos digitales.
+Este monedero genera una y almacena un par de claves criptográficas, una clave pública que actúa como una dirección a la cual otros pueden enviar activos, y una clave privada, que se utiliza para firmar digitalmente las transacciones, asegurando que solo el propietario de la clave privada pueda autorizar la transferencia de sus activos.
+
+Por tanto, cuando se desea realizar una transacción, el monedero electrónico firma la transacción utilizando su clave privada. Esta firma digital, generada a través de algoritmos de criptografía asimétrica como el RSA, es esencialmente un hash criptográfico de la transacción encriptado con la clave privada del monedero.
+Seguidamente, los nodos de la red al recibir la transacción, emplean la clave pública del firmante para descifrar la firma digital. Este proceso no solo autentifica que la transacción fue creada por el poseedor de la clave privada correspondiente, sino que también asegura que la transacción no haya sido modificada, ya que cualquier cambio en los datos de la transacción resultaría en una discrepancia al verificar la firma con la clave pública.
+
+\imagen{firmaDigital}{Transacción encriptada con con firma digital}{.6}
+
+A diferencia de los sistemas financieros tradicionales, la Blockchain no registra los saldos de las cuentas de manera directa. En su lugar, mantiene un registro detallado de todas las transacciones que han sido verificadas y aprobadas en la red.
+Por tanto para determinar el saldo de una wallet, es necesario analizar y verificar todas las transacciones asociadas a ella desde la creación de la red. Este enfoque asegura que la información sea transparente y auditada constantemente por todos los nodos de la red, lo que refuerza la seguridad y la integridad del sistema.
+
+Por tanto si un usuario quiere generar una transacción para enviar un activo, este debe generar una solicitud que incluya unas referencias llamadas "inputs", a transacciones entrantes previas que sumen la cantidad deseada. Los nodos de la red verifican estos inputs para asegurarse que no hayan sido gastados previamente.
+Por ende, una vez los inputs hayan sido referenciados, estos son invalidados para transacciones futuras, evitando el doble gasto de activos digitales.
+
+
+\subsubsection{Consenso}
+
+El mecanismo de consenso en una blockchain es fundamental para mantener la integridad y la seguridad de la red. Este proceso permite que todos los nodos de la red se pongan de acuerdo sobre el estado actual del libro mayor digital.
+
+Actualmente existen dos categorías amplias de protocolos de consenso, los de finalidad probabilística, representada fundamentalmente por \textbf{Proof of work} (PoW), implica que la confirmación de una transacción se vuelve más segura a medida que se van confirmando bloques sucesivos.
+Por otro lado, los protocolos con finalidad absoluta, como \textbf{Proof of Stake} (PoS) aseguran la finalización de las transacciones de manera definitiva una vez se agregan a la Blockchain.
+
+El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las Blockchains. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complej, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado "nonce" que cuando se combina con los datos del bloque y se procesa a través de una función hash produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del hash.
+Este proceso, conocido como minería, garantiza que alterar un bloque ya minado sea computacionalmente inviable, proporcionando así seguridad e inmutabilidad a la cadena de bloques. A su vez la dificultad de este problema se ajusta periódicamente para mantener un tiempo objetivo entre la creación de bloques consecutivos, asegurando la estabilidad y previsibilidad de la generación de nuevos bloques.
+La labor de los mineros en la Blockchain no es altruista, este poder de computo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas.
+
+A pesar de su amplia adopción y probada seguridad, La minería de criptomonedas requiere de grandes granjas de minado que conlleva un elevado consumo energético teniendo un gran impacto ambiental. 
+Este aspecto ha impulsado la búsqueda de alternativas más eficientes y sostenibles como el Proof of Stake (PoS) que reduce el consumo eléctrico. Este protocolo se basa en seleccionar a los validadores en proporción a la cantidad de criptomonedas que poseen y están dispuestos a "bloquear" como garantía.
+La adopción de PoS por parte de proyectos líderes como Ethereum, con su transición a Ethereum 2.0, marca un hito importante y podría incentivar a otras criptomonedas a seguir un camino similar.
+
+
 
 
 \subsection{Utilidades de la Blockchain}
