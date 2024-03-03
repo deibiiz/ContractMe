@@ -2,8 +2,6 @@
 
 A continuación se sintetizarán algunos conceptos teóricos relevantes para la correcta compresión del proyecto.
 
-
-
 \section{Introducción a la Blockchain}
 
 La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto~\cite{dobleGasto} en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas, el cual consiste en la posibilidad de gastar una misma moneda digital más de una vez. Esto ocurre debido a la falsificación o duplicación de archivos digitales que representan la moneda.
@@ -11,30 +9,68 @@ En 2008 una persona o grupo anónimo bajo el seudónimo de Satoshi Nakamoto publ
 Esta premisa hizo que en enero de 2009 entrará en funcionamiento la primera red basada en el protocolo Bitcoin~\cite{introducciónBitcoin}.
 La BlockChain demostró su capacidad para contabilizar y transferir valor de manera segura sin la necesidad de intermediarios, transformando el sector financiero y encontrando aplicaciones en una variedad de industrias.
 
-\imagen{BCdescentralizada}{Diferencias entre una red centralidad y descentralizada}{.8}
 
 
+\section{Tecnología subyacente}
 
-\subsection{Tecnología subyacente}
 
-La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples ordenadores de manera que cada registro es inalterable e irreversible. 
+\subsection{Nodo}
+
+Los nodos en Blockchain son dispositivos, generalmente computadoras, que participan en una red Blockchain. Estos dispositivos ejecutan el software del protocolo Blockchain, lo que les permite ayudar a validar transacciones y mantener la seguridad de la red ~\cite{IntroducciónNodo}.
+
+Para lograr esto, los nodos se comunican entre sí por medio de protocolos peer-to-peer(P2P). En un sistema P2P, cada nodo se conecta directamente a otros nodos sin necesidad de intermediarios. Cada nodo actúa tanto como cliente como servidor, compartiendo la carga de procesamiento de datos y la transmisión de información.
+Esta arquitectura permite desarrollar un red robusta y descentralizada donde cada nodo contribuye al mantenimiento y seguridad de la red. Siendo extremadamente difícil censurar o bloquear el acceso a la red, ya que no hay un punto central de control.
+
+\imagen{BCdescentralizada}{Diferencias entre una red centralidad y descentralizada}{.7}
+
+Resulta fundamental comprender los distintos tipos de nodos que conviven en una red y el papel específico que cada uno desempeña. A continuación, se calificaran los tipos de nodos, destacando sus características y funciones únicas ~\cite{tiposNodos}.
+
+\begin{itemize}
+\item \textbf{Nodos completos:} Estos nodos albergan una copia completa del libro mayor de la Blockchain. Al contener el registro completo de todas las transacciones, los nodos pueden verificar de forma independiente cualquier transacción sin necesidad de recurrir a información externa.
+
+\item \textbf{Nodos ligeros:} Han sido diseñados para dispositivos con recursos limitados, los nodos ligeros no almacenan el registro completo, sino que confían en los nodos completos para obtener dicha información.
+
+\item \textbf{Nodos mineros:} Son utilizados en las redes que utilizan el algoritmo de consenso Proof of Work(PoW), los nodos mineros compiten para agregar nuevos bloques a la Blockchain para obtener un recompensa por ello.
+
+\item \textbf{Nodos completos podados:} Estos nodos almacenan una versión recortada del registro, eliminando datos antiguos para ahorrar espacio pero a diferencia de los nodos ligeros estos pueden seguir verificando de forma independiente cualquier transacción. 
+
+\item \textbf{Nodos completos de archivo:} Almacenan todo el libro mayor del Blockchain, desde el principio de los tiempos. Los Nodos Completos de Archivo son la única fuente valiosa y fiable para verificar los datos de transacciones anteriores en la historia de una Blockchain, ya que no están afectados por el límite de tiempo o almacenamiento.
+A diferencia de los nodos completos, los nodos de archivo vas más allá al almacenar cada cambio de estado en la Blockchain.
+
+\item \textbf{Nodos de autoridad:} Utilizados en Blockchains con mecanismos de consenso como Proof of Authority(PoA), estos nodos son operados por entidades verificadas y de confianza dentro de la red. A diferencia de PoW, tienen el poder de validar bloques sin necesidad de competir entre ellos.
+
+\item \textbf{Nodos maestros:} Ofrecen funcionalidades adicionales como la ejecución de contratos inteligentes. Requieren de una garantía o "stake" para operar y suelen recibir incentivos por ofrecer servicios especializados.
+
+\item \textbf{Nodos de estaca:} Utilizados en Blockchains que funcionan con el algoritmo de consenso Proof of Stake(PoS) donde los nodos participan en la validación de bloques apostando una cierta cantidad de criptomonedas como garantía para operar.
+
+\item \textbf{Nodos Lightning:} Específicos de las soluciones de segunda capa como Lightning Network, estos nodos facilitan transacciones rápidas y de bajo costo fuera de la cadena principal, ayudando a reducir la congestión.
+
+\item \textbf{Supernodos:} Son nodos con capacidades y responsabilidades adicionales, a menudo relacionadas con la gobernanza de la red, se crean bajo demanda para realizar tareas especializadas, como implementar cambios de protocolo o gestionar protocolos.
+\end{itemize}
+
+Para este proyecto se ha utilizado Ethereum la cual utiliza una gran variedad de nodos para satisfacer las necesidades específicas de su ecosistema, incluyendo nodos completos, nodos ligeros, y nodos de archivo. A partir de la evolución de Ethereum 2.0 y su progresiva migración se han introducido los nodos estaca, que poco ha poco van remplazando a los nodos mineros utilizados en Ethereum 1.0.
+
+
+\subsubsection{Libro mayor digital}
+
+La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples nodos de manera que cada registro es inalterable e irreversible. 
 Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena ~\cite{wiki:DTL}.
 Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de computo~\cite{BlockchainFuncionamiento}.
 
-\imagen{DTL}{Proceso de actualización del libro mayor}{.6}
+\imagen{DTL}{Proceso de actualización del libro mayor}{1}
 
 
-\subsubsection{Encadenamiento de bloques}
+\subsection{Encadenamiento de bloques}
 
 Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; los datos de las transacciones, el hash del bloque anterior en la cadena  y su propio hash único, generado a partir de la información contenida en el bloque.
 Los bloques se enlazan mediante el hash formado por los datos del bloque anterior.
 El algoritmo hash más usado en la Blockchain es "SHA-256"~\cite{sha256} desarrollado por la Agencia de Seguridad Nacional (NAS) en el año 1997. Es conocido por ser lento en comparación con otras funciones hash, pero a pesar de esto destaca por su seguridad por lo que lo hace adecuado para aplicaciones financieras.
 El hash consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude.
 
-\imagen{enlaceBloques}{Encadenamiento de bloques en la Blockchain}{.6}
+\imagen{enlaceBloques}{Encadenamiento de bloques en la Blockchain}{1}
 
 
-\subsubsection{Transacciones}
+\subsection{Wallet y transacciones}
 
 Para iniciar una transacción en la Blockchain se debe de emplear una "wallet" o monedero electrónico, este es un software que permite almacenar y intercambiar activos digitales.
 Este monedero genera una y almacena un par de claves criptográficas, una clave pública que actúa como una dirección a la cual otros pueden enviar activos, y una clave privada, que se utiliza para firmar digitalmente las transacciones, asegurando que solo el propietario de la clave privada pueda autorizar la transferencia de sus activos.
@@ -42,7 +78,7 @@ Este monedero genera una y almacena un par de claves criptográficas, una clave 
 Por tanto, cuando se desea realizar una transacción, el monedero electrónico firma la transacción utilizando su clave privada. Esta firma digital, generada a través de algoritmos de criptografía asimétrica como el RSA, es esencialmente un hash criptográfico de la transacción encriptado con la clave privada del monedero.
 Seguidamente, los nodos de la red al recibir la transacción, emplean la clave pública del firmante para descifrar la firma digital. Este proceso no solo autentifica que la transacción fue creada por el poseedor de la clave privada correspondiente, sino que también asegura que la transacción no haya sido modificada, ya que cualquier cambio en los datos de la transacción resultaría en una discrepancia al verificar la firma con la clave pública.
 
-\imagen{firmaDigital}{Transacción encriptada con con firma digital}{.6}
+\imagen{firmaDigital}{Transacción encriptada con firma digital}{1}
 
 A diferencia de los sistemas financieros tradicionales, la Blockchain no registra los saldos de las cuentas de manera directa. En su lugar, mantiene un registro detallado de todas las transacciones que han sido verificadas y aprobadas en la red.
 Por tanto para determinar el saldo de una wallet, es necesario analizar y verificar todas las transacciones asociadas a ella desde la creación de la red. Este enfoque asegura que la información sea transparente y auditada constantemente por todos los nodos de la red, lo que refuerza la seguridad y la integridad del sistema.
@@ -51,7 +87,7 @@ Por tanto si un usuario quiere generar una transacción para enviar un activo, e
 Por ende, una vez los inputs hayan sido referenciados, estos son invalidados para transacciones futuras, evitando el doble gasto de activos digitales.
 
 
-\subsubsection{Consenso}
+\subsection{Consenso}
 
 El mecanismo de consenso en una blockchain es fundamental para mantener la integridad y la seguridad de la red. Este proceso permite que todos los nodos de la red se pongan de acuerdo sobre el estado actual del libro mayor digital.
 
@@ -60,28 +96,19 @@ Por otro lado, los protocolos con finalidad absoluta, como \textbf{Proof of Stak
 
 El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las Blockchains. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complej, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado "nonce" que cuando se combina con los datos del bloque y se procesa a través de una función hash produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del hash.
 Este proceso, conocido como minería, garantiza que alterar un bloque ya minado sea computacionalmente inviable, proporcionando así seguridad e inmutabilidad a la cadena de bloques. A su vez la dificultad de este problema se ajusta periódicamente para mantener un tiempo objetivo entre la creación de bloques consecutivos, asegurando la estabilidad y previsibilidad de la generación de nuevos bloques.
-La labor de los mineros en la Blockchain no es altruista, este poder de computo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas.
+La labor de los mineros en la Blockchain no es altruista, este poder de computo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas ~\cite{PoW}.
 
 A pesar de su amplia adopción y probada seguridad, La minería de criptomonedas requiere de grandes granjas de minado que conlleva un elevado consumo energético teniendo un gran impacto ambiental. 
 Este aspecto ha impulsado la búsqueda de alternativas más eficientes y sostenibles como el Proof of Stake (PoS) que reduce el consumo eléctrico. Este protocolo se basa en seleccionar a los validadores en proporción a la cantidad de criptomonedas que poseen y están dispuestos a "bloquear" como garantía.
 La adopción de PoS por parte de proyectos líderes como Ethereum, con su transición a Ethereum 2.0, marca un hito importante y podría incentivar a otras criptomonedas a seguir un camino similar.
 
 
+\section{Inmutabilidad de la Blockchain}
 
 
-\subsection{Utilidades de la Blockchain}
-
-Su aplicación más reconocida ha sido Bitcoin, ha demostrado las capacidades de la Blockchain, permitiendo transacciones globales rápidas y seguras, caracterizadas por su alta liquidez, bajas comisiones y un nivel de anonimato que protege la privacidad del usuario ~\cite{introducciónBitcoin}.
-
-Más allá de las criptomonedas, esta tecnología se destaca por su naturaleza descentralizada, donde cada individuo en la red tiene acceso a una copia del registro completo de transacciones, lo cual garantiza una transparencia sin precedentes. Siendo así que la Blockchain cuenta con la capacidad para ofrecer la trazabilidad completa en las cadenas de suministro. Cada producto puede ser rastreado desde su origen hasta el consumidor final, asegurando la autenticidad y facilitando la detección de cualquier problema en el proceso~\cite{introducciónBlockchain}.
-
-La seguridad es otro de los pilares fundamentales de la Blockchain, ya que la inmutabilidad del registro asegura que una vez la información ha sido añadida a la cadena, esta no podrá ser alterada, reforzando así la confianza en el sistema. 
-
-Desde el punto de vista operativo, la Blockchain ofrece eficiencias significativas al eliminar los intermediarios, reduciendo tanto los tiempos de procesamiento como los costos asociados, a parte de minimizar las posibilidades de error.
-Este aspecto es crucial en sectores como el financiero, donde los contratos inteligentes automatizan y aseguran la ejecución de acuerdos sin necesidad de intermediación.
 
 
-\subsection{Tipos de Blockchain}
+\section{Tipos de Blockchain}
 
 Existen diferentes tipos de redes, cada una diseña para satisfacer unas necesidades en cuanto a la privacidad, gobernanza y accesibilidad. 
 Se pueden clasificar en cuatro categorías principales ~\cite{introducciónBlockchain}:
@@ -101,9 +128,73 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 \end{itemize} 
 
 
+\begin{table}
+\small
+\begin{centering}
+		\begin{tabular}{@{}p{3.3cm} p{2cm} p{2.5cm} p{2.5cm} p{2.5cm}@{}}
+		\toprule
+		\textbf{Característica} & \textbf{Pública} & \textbf{Privada} & \textbf{Consorcio} & \textbf{Semiprivada} \\ 
+		\midrule
+		\textbf{Acceso} & Abierto a todos & Restringido & Restringido a organizaciones & Control selectivo \\\\
+		\textbf{Descentralización} & Completa & Mínima & Parcial & Variable \\\\
+		\textbf{Mecanismo de Consenso} & PoW, PoS & Permisionados & Permisionados, personalizados & Combinación \\\\
+		\textbf{Transparencia} & Total & Limitada & Limitada a miembros & Configurable \\\\
+		\textbf{Privacidad} & Baja & Alta & Moderada & Alta en privado \\\\
+		\textbf{Velocidad y Escalabilidad} & Variable & Alta & Moderada & Configurable \\\\
+		\textbf{Casos de Uso} & DApps & Registros internos & Cadena de suministro, DeFi & Compartimentos privados \\
+		\bottomrule
+		\end{tabular}
+\end{centering}
+\caption{Resumen de Tipos de Blockchain y sus Características.}
+\label{tabla_blockchain_caracteristicas}	
+\end{table}
+
+\section{Web3 y DApps}
+
+Web3 emerge como una propuesta revolucionaria en la evolución de Internet, promoviendo una arquitectura descentralizada que contrasta con las fases anteriores de la web.
+Desde los comienzos de Internet con Web 1.0, caracterizada por páginas estáticas y un flujo unidireccional de información, hasta la aparición de Web 2.0, que se permitía a los usuarios interactuar con el contenido en linea y entre ellos. 
+Sin embargo estas etapas se han caracterizado por su centralización del poder y los datos en mano de unas pocas plataformas dominantes, lo que a menudo cuestiona preocupaciones sobre la privacidad, seguridad y monopolizción de la información ~\cite{Web3}. 
+
+En este contexto nace Web3 como una solución prometedora para abordar estas preocupaciones centrándose en descentralización. Web3 a diferencia de sus antecesoras no se limita a ser un medio para compartir y crear contenido sino que pretende redefinir las dinámicas de poder en el espacio digital mediante la implementación de tecnologías Blockchain.
+
+La aplicación de la Blockchain más reconocida a nivel mundial ha sido Bitcoin. Esta criptomoneda ha demostrado las capacidades de la Blockchain, permitiendo transacciones globales rápidas y seguras, caracterizadas por su alta liquidez, bajas comisiones y un nivel de anonimato que protege la privacidad del usuario~\cite{introducciónBitcoin}.
+
+Más allá de las criptomonedas, esta tecnología se destaca por su naturaleza descentralizada, donde cada individuo en la red tiene acceso a una copia del registro completo de transacciones, lo cual garantiza una transparencia sin precedentes. Siendo así que la Blockchain cuenta con la capacidad para ofrecer la trazabilidad completa en las cadenas de suministro. Cada producto puede ser rastreado desde su origen hasta el consumidor final, asegurando la autenticidad y facilitando la detección de cualquier problema en el proceso~\cite{introducciónBlockchain}.
+
+La seguridad es otro de los pilares fundamentales de la Blockchain, ya que la inmutabilidad del registro asegura que una vez la información ha sido añadida a la cadena, esta no podrá ser alterada, reforzando así la confianza en el sistema. 
+
+Desde el punto de vista operativo, la Blockchain ofrece eficiencias significativas al eliminar los intermediarios, reduciendo tanto los tiempos de procesamiento como los costos asociados, a parte de minimizar las posibilidades de error.
+Este aspecto es crucial en sectores como el financiero, donde los contratos inteligentes facilitan la ejecución automatizada y segura de acuerdos sin la necesidad de intermediarios, redefiniendo las prácticas comerciales y financieras en la era digital.
+
+Dentro de este entorno de Web3, las aplicaciones descentralizadas(DApps) se presentan como un componente esencial, ofreciendo una alternativa a las aplicaciones centralizadas tradicionales. 
+Aunque el concepto de DApp parece moderno, sus raíces se remontan a más de 20 años. Las primeras aplicaciones en este ámbito fueron las aplicaciones de redes P2P, siendo algunas tan conocidas como eMule o BitTorrent, las cuales democratizaron el acceso a la información al distribuirla a través de una red de nodos(ordenadores) en lugar de centralizarla en servidores únicos~\cite{DApps}.
+
+\imagen{DAPP}{Estructura de las DApps}{1}
+
+El mercado de las DApps ha experimentado un crecimiento impresionante en los últimos años, escalando de un valor de mercado de 10.5 mil millones de dolares en 2019 a más de 25 mil millones en 2022, este proyecto se proyecta a continuar a un ritmo acelerado, esperándose alcanzar una capitalización de 368 mil millones en 2027. Estas cifras subrayan la la creciente importancia y potencial económico de las DApps en el ecosistema digital ~\cite{DAppsEconomía}.
+
+Hoy en día las DApps adquieren una nueva dimensión, ejecutándose en redes descentralizadas y apoyandose en la tecnología de contratos inteligentes para automatizar procesos y garantizar la ejecución de acuerdos sin intermediarios.
+Las Dapps destacan por su libertad y soberanía digital de los usuarios, ya que la ausencia de un punto central de control hace prácticamente imposible que se impongan restricciones arbitrarias por parte de entidades externas. A su vez, esta distribución de los datos a través de la red dificulta los ataques y manipulaciones.
+Adicionalmente, el carácter de código abierto de muchas DApps fomenta la continua revisión por parte de la comunidad e incrementa la seguridad y la confianza en estas aplicaciones.
+
+Las DApps se pueden clasificar en tres niveles distintos: las de primer nivel se alojan en su propia Blockchain; las de segundo nivel se alojan en Blockchains ajenas; y finalmente las de tercer nivel, las cuales dependen de Dapps de segundo nivel para funcionar.
+Este proyecto se enmarca en las DApps de segundo nivel, ya que se opta por desarrollar la DApp sobre la blockchain de Ethereum, dada su amplia aceptación y su papel predominante en el ecosistema de las aplicaciones descentralizadas.
+
+
 \section{Ethereum}
 
-
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
 
 \section{Contratos inteligentes}
 
@@ -173,71 +264,3 @@ Poniendo de ejemplo este proyecto, con el uso del estándar ERC-721 se puede tok
 
 Este estándar cuenta con una serie de propiedades técnicas que lo hacen versátil. Algunas de estas propiedades son la asignación de un nombre, la definición de un balance de tokens dentro de una dirección y la implementación de funciones que permiten la transferencia segura de la propiedad.
 
-
-
-\section{Nodo}
-
-
-\section{Wallet}
-
-
-\section{Referencias}
-
-
-
-
-
-
-\section{Listas de items}
-
-Existen tres posibilidades:
-
-\begin{itemize}
-	\item primer item.
-	\item segundo item.
-\end{itemize}
-
-\begin{enumerate}
-	\item primer item.
-	\item segundo item.
-\end{enumerate}
-
-\begin{description}
-	\item[Primer item] más información sobre el primer item.
-	\item[Segundo item] más información sobre el segundo item.
-\end{description}
-	
-\begin{itemize}
-\item 
-\end{itemize}
-
-\section{Tablas}
-
-Igualmente se pueden usar los comandos específicos de \LaTeX o bien usar alguno de los comandos de la plantilla.
-
-\tablaSmall{Herramientas y tecnologías utilizadas en cada parte del proyecto}{l c c c c}{herramientasportipodeuso}
-{ \multicolumn{1}{l}{Herramientas} & App AngularJS & API REST & BD & Memoria \\}{ 
-HTML5 & X & & &\\
-CSS3 & X & & &\\
-BOOTSTRAP & X & & &\\
-JavaScript & X & & &\\
-AngularJS & X & & &\\
-Bower & X & & &\\
-PHP & & X & &\\
-Karma + Jasmine & X & & &\\
-Slim framework & & X & &\\
-Idiorm & & X & &\\
-Composer & & X & &\\
-JSON & X & X & &\\
-PhpStorm & X & X & &\\
-MySQL & & & X &\\
-PhpMyAdmin & & & X &\\
-Git + BitBucket & X & X & X & X\\
-Mik\TeX{} & & & & X\\
-\TeX{}Maker & & & & X\\
-Astah & & & & X\\
-Balsamiq Mockups & X & & &\\
-VersionOne & X & X & X & X\\
-} 
-
-Algunos conceptos teóricos de \LaTeX{} \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.
