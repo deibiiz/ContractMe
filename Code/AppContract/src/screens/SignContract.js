@@ -4,20 +4,17 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native
 import { MyContract1 } from "../ether/web3.js";
 import { useAccount } from "../components/ContextoCuenta";
 import { useNavigation } from "@react-navigation/native";
-import { Boton } from "../components/Boton";
-//import QRCodeScanner from "react-native-qrcode-scanner";
 
 
 export default function SignContract() {
     const { selectedAccount } = useAccount();
     const [unsignedContracts, setUnsignedContracts] = useState([]);
-    const [isScannerVisible, setIsScannerVisible] = useState(false);
     const navigation = useNavigation();
 
     if (!selectedAccount) {
-        alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+        alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
+        return;
     }
-
 
     const fetchUnsignedContracts = async () => {
         if (selectedAccount) {
@@ -36,39 +33,22 @@ export default function SignContract() {
             }
         }
     };
+
     useFocusEffect(
         useCallback(() => {
             fetchUnsignedContracts();
         }, [selectedAccount])
     );
 
-
-    /*
-    const signTheContract = async tokenId => {
-        if (!tokenId) {
-            alert('Falta ID del contrato.');
-            return;
-        }
-        try {
-            await MyContract1.methods.signContract(tokenId).send({ from: selectedAccount, gas: 1000000 });
-    
-            alert('Contrato firmado con éxito.');
-        } catch (error) {
-            console.error("Error al firmar el contrato:", error);
-            setSignStatus("Error al firmar el contrato");
-        }
-    };
-    
-    
-    const handleQRScanned = i => {
-        const tokenId = i.data;
-        signTheContract(tokenId);
-        setIsScannerVisible(false);
-    };
-    */
-
     return (
         <View style={styles.fullContainer}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("QR")}
+            >
+                <Text style={styles.textoLink}>Escanear código QR</Text>
+            </TouchableOpacity>
+
+
             <Text style={styles.title}>Contratos pendintes de firma</Text>
             {
                 unsignedContracts.length === 0 && <Text style={styles.textoAviso} >No hay contratos pendientes de firma.</Text>
@@ -81,37 +61,13 @@ export default function SignContract() {
                     return (
                         <TouchableOpacity
                             style={styles.contractItem}
-                            onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: true })}
+                            onPress={() => navigation.navigate("infoContract", { tokenId: item, fromWorkerSection: true })}
                         >
                             <Text>Contrato ID: {item}</Text>
                         </TouchableOpacity>
                     );
                 }}
             />
-            {/*
-            <Boton
-                title="Escanear código QR"
-                onPress={() => setIsScannerVisible(true)}
-            />
-
-            {isScannerVisible && (
-                <QRCodeScanner
-                    onRead={handleQRScanned}
-                    topContent={<Text style={styles.title}>Escanea el código QR del contrato</Text>}
-                    reactivate={true}
-                    reactivateTimeout={3000}
-                    showMarker={true}
-                    bottomContent={
-                        <TouchableOpacity
-                            style={styles.buttonTouchable}
-                            onPress={() => setIsScannerVisible(false)}
-                        >
-                            <Text style={styles.buttonText}>Cancelar</Text>
-                        </TouchableOpacity>
-                    }
-                />
-            )}
-            */}
         </View>
     );
 }
@@ -120,10 +76,9 @@ const styles = StyleSheet.create({
 
     fullContainer: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
         width: '100%',
-        alignItems: 'stretch',
     },
     contractItem: {
         padding: 10,
@@ -158,5 +113,15 @@ const styles = StyleSheet.create({
         fontSize: 21,
         color: 'rgb(0,122,255)',
     },
-
+    textoLink: {
+        fontSize: 16,
+        color: "#164863",
+        textAlign: "right",
+        fontWeight: "bold",
+        marginBottom: 10,
+        marginTop: 10,
+        marginRight: 15,
+        fontStyle: "italic",
+        textDecorationLine: "underline",
+    }
 });

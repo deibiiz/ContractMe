@@ -104,31 +104,31 @@ export default function Alertas() {
         }
     };
 
+    const renderHeader = () => (
+        <View>
+            {pendingContracts.length > 0 ? (
+                <Text style={styles.title}>Solicitud de modificación del contrato</Text>
+            ) : (
+                <Text style={styles.textoAviso}>No tienes ninguna notificación</Text>
+            )}
+        </View>
+    );
+
     return (
-        <ScrollView style={styles.scrollView}>
-            <View style={styles.container}>
-                {pendingContracts.length > 0 && (
-                    <Text style={styles.title}>Solicitud de modificación del contrato</Text>
-                )}
-                {pendingContracts.length == 0 && (
-                    <Text style={styles.textoAviso}>No tienes ninguna notificación</Text>
-                )}
 
-
-                <FlatList
-                    data={pendingContracts}
-                    keyExtractor={(item) => item}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => { selectContract(item) }}
-                        >
-                            <Text>Contrato ID: {item}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
-            </View >
-        </ScrollView>
+        <FlatList
+            data={pendingContracts}
+            keyExtractor={(item) => item}
+            ListHeaderComponentStyle={renderHeader}
+            renderItem={({ item }) => (
+                <TouchableOpacity
+                    style={styles.contractItem}
+                    onPress={() => { selectContract(item) }}
+                >
+                    <Text>Contrato ID: {item}</Text>
+                </TouchableOpacity>
+            )}
+        />
     );
 }
 

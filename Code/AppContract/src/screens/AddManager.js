@@ -73,7 +73,7 @@ const AssignManagerScreen = ({ route }) => {
                 estiloBoton={{
                     borderRadius: 5,
                     marginTop: 10,
-                    width: "60%",
+                    width: "80%",
                 }
                 }
             />
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         marginBottom: 6,
         borderWidth: 1,
         padding: 10,
-        width: '80%',
+        width: '95%',
         backgroundColor: "white",
     },
     subTitle: {

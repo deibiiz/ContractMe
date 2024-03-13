@@ -7,6 +7,8 @@ import { firebaseAuth } from './firebaseConfig';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 
+
+
 const { width, height } = Dimensions.get("window")
 
 export default function Register({ AutenticarConHuella, AutenticarDirecto }) {

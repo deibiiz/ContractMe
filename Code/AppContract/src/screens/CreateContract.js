@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
-import { MyContract1 } from "../ether/web3.js";
-import Web3 from "web3";
+import { StyleSheet, Text, View, TextInput } from "react-native";
+import { web3, MyContract1 } from "../ether/web3.js";
 import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
 
@@ -17,7 +16,8 @@ export default function CreateContract() {
     const { selectedAccount } = useAccount();
 
     if (!selectedAccount) {
-        alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+        alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
+        return;
     }
 
     const mintContract = async () => {
@@ -27,13 +27,12 @@ export default function CreateContract() {
         }
 
         try {
-            const web3 = new Web3(window.ethereum);
+
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 
-            const accounts = await web3.eth.getAccounts();
             const parsedSalary = web3.utils.toWei(salary, 'ether');
             const parsedStart = Number(start);
             const parsedDuration = Number(duration);
@@ -45,9 +44,12 @@ export default function CreateContract() {
 
             const result = await MyContract1.methods.mint(recipientAdress, parsedSalary, parsedStart, parsedDuration, description, title)
                 .send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
-            setMintStatus(`Contrato creado con el ID: ${result.events.Transfer.returnValues.tokenId}`);
+
+            alert(`Contrato "${title}" creado. `);
+            setMintStatus(`Contrato "${title}" creado. `);
         } catch (error) {
             console.error("Error al interactuar con el contrato:", error);
+            alert("Error al crear el contrato");
             setMintStatus("Error al crear el contrato");
         }
     };
@@ -111,8 +113,8 @@ export default function CreateContract() {
                     }
                 }
             />
-            <Text>{mintStatus}</Text>
-        </View>
+            <Text style={styles.textoAviso}>{mintStatus}</Text>
+        </View >
     );
 }
 
@@ -130,5 +132,14 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '80%',
         backgroundColor: "white",
+    },
+    textoAviso: {
+        fontSize: 17,
+        color: "#586069",
+        marginBottom: 20,
+        marginTop: 20,
+        fontStyle: "italic",
+        textAlign: "center",
+        paddingHorizontal: 10,
     },
 });

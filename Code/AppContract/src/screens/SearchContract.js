@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
     },
     contractItem: {
-        padding: 10,
+        padding: 6,
         marginTop: 10,
         borderRadius: 5,
         borderBottomWidth: 2,

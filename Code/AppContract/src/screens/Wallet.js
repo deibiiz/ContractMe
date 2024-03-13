@@ -1,88 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Picker, FlatList } from 'react-native';
-import Web3 from 'web3';
-import { MyContract1 } from '../ether/web3';
-import { useAccount } from '../components/ContextoCuenta';
-import Boton from '../components/Boton';
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import Web3 from "web3";
+import { web3, MyContract1 } from "../ether/web3";
+import { useAccount } from "../components/ContextoCuenta";
+import { Picker } from "@react-native-picker/picker";
+
 
 const CarteraScreen = () => {
-    const [loading, setLoading] = useState(false);
-    const [accountsList, setAccountsList] = useState([]);
     const { selectedAccount, setSelectedAccount } = useAccount();
     const [balance, setBalance] = useState(0);
     const [events, setEvents] = useState([]);
+    const [availableAccounts, setAvailableAccounts] = useState([]);
+
 
     useEffect(() => {
-        if (window.ethereum) {
-            const web3 = new Web3(window.ethereum);
-            const updateAccounts = async () => {
-                try {
-                    await window.ethereum.request({ method: "eth_requestAccounts" });
-                    const accounts = await web3.eth.getAccounts();
-                    setAccountsList(accounts);
-                    if (accounts.length > 0 && !selectedAccount) {
-                        setSelectedAccount(accounts[0]);
-                    }
-                } catch (error) {
-                    console.error("El usuario rechazó la conexión a la cuenta", error);
-                }
-                setLoading(false);
-            };
-
-            updateAccounts();
-
-            window.ethereum.on("accountsChanged", (newAccounts) => {
-                setAccountsList(newAccounts);
-                if (newAccounts.length > 0) {
-                    setSelectedAccount(newAccounts[0]);
-                } else {
-                    setSelectedAccount("");
-                }
-            });
-        } else {
-            console.log("MetaMask no está instalado");
-        }
-    }, [setSelectedAccount]);
-
-    useEffect(() => {
-        const fetchBalance = async () => {
-            if (selectedAccount) {
-                const web3 = new Web3(window.ethereum);
-                const balanceInWei = await web3.eth.getBalance(selectedAccount);
+        const fetchAccounts = async () => {
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length > 0) {
+                setAvailableAccounts(accounts);
+                setSelectedAccount(accounts[0]);
+                const balanceInWei = await web3.eth.getBalance(accounts[0]);
                 const balanceInEther = web3.utils.fromWei(balanceInWei, "ether");
                 setBalance(balanceInEther);
             }
         };
 
+        fetchAccounts();
+    }, []);
+
+    useEffect(() => {
+        const fetchBalance = async () => {
+            if (selectedAccount) {
+                console.log("selectedAccount", selectedAccount);
+                const balanceInWei = await web3.eth.getBalance(selectedAccount);
+                console.log("balance:", balanceInWei);
+                const balanceInEther = web3.utils.fromWei(balanceInWei, "ether");
+                setBalance(balanceInEther);
+            }
+        };
         fetchBalance();
     }, [selectedAccount]);
-
-    const connectToMetaMask = async () => {
-        if (loading) {
-            console.log("Ya hay una solicitud en curso.");
-            return;
-        }
-
-        if (window.ethereum) {
-            const web3 = new Web3(window.ethereum);
-            setLoading(true);
-            try {
-                await window.ethereum.request({ method: "eth_requestAccounts" });
-                const accounts = await web3.eth.getAccounts();
-                setAccountsList(accounts);
-                if (accounts.length > 0) {
-                    setSelectedAccount(accounts[0]);
-                } else {
-                    console.log("MetaMask está instalado, pero no hay cuentas conectadas.");
-                }
-            } catch (error) {
-                console.error("El usuario rechazó la conexión con la cuenta", error);
-            }
-            setLoading(false);
-        } else {
-            console.log("MetaMask no está instalado");
-        }
-    };
 
 
     useEffect(() => {
@@ -95,6 +52,7 @@ const CarteraScreen = () => {
             });
         }
     }, [selectedAccount]);
+
 
 
     const getAccountHistory = async (accoutAddress) => {
@@ -181,32 +139,21 @@ const CarteraScreen = () => {
 
     return (
         <View style={styles.container} >
-            {!selectedAccount ? (
-                <Boton
-                    texto={loading ? "Conectando..." : "Conectar con MetaMask"}
-                    estiloBoton={styles.boton}
-                    onPress={connectToMetaMask}
-                    disabled={loading}
-                />
-            ) : (
-                <View style={styles.card}>
-                    {accountsList.length > 1 && (
-                        <View>
-                            <Text style={styles.title}>Selecciona una cuenta:</Text>
-                            <Picker
-                                selectedValue={selectedAccount}
-                                onValueChange={handleAccountChange}
-                                style={styles.picker}
-                            >
-                                {accountsList.map(acc => (
-                                    <Picker.Item key={acc} label={acc} value={acc} />
-                                ))}
-                            </Picker>
-                        </View>
-                    )}
-                    <Text style={styles.balanceText}>Balance: {balance} ETH</Text>
-                </View>
-            )}
+            <View style={styles.card}>
+                <Picker
+                    selectedValue={selectedAccount}
+                    onValueChange={(itemValue, itemIndex) => handleAccountChange(itemValue)}
+                    style={styles.picker}
+                >
+                    {availableAccounts.map((account, index) => (
+                        <Picker.Item key={index} label={account} value={account} />
+                    ))}
+
+                </Picker>
+
+                <Text style={styles.balanceText}>Balance: {balance} ETH</Text>
+            </View>
+
             <View style={[styles.card, styles.eventsContainer]}>
                 <FlatList
                     data={events}
@@ -281,7 +228,7 @@ const styles = StyleSheet.create({
     },
     card: {
         backgroundColor: "white",
-        width: "85%",
+        width: "100%",
         padding: 20,
         borderRadius: 10,
         shadowColor: "#000",

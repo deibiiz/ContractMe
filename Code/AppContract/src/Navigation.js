@@ -19,6 +19,7 @@ import ApplyChanges from './screens/ApplyChanges';
 import AddManager from './screens/AddManager';
 import ShowQR from './screens/ShowQR';
 import SearchContract from './screens/SearchContract';
+import QR from "./components/CamaraQR";
 
 
 const HomeStackNavigator = createNativeStackNavigator();
@@ -123,6 +124,16 @@ function MyStack() {
                 component={SearchContract}
                 options={{
                     title: 'Buscar Contratos',
+                    headerStyle: {
+                        backgroundColor: '#9BBEC8',
+                    },
+                }}
+            />
+            <HomeStackNavigator.Screen
+                name="QR"
+                component={QR}
+                options={{
+                    title: 'Escanear Código QR',
                     headerStyle: {
                         backgroundColor: '#9BBEC8',
                     },

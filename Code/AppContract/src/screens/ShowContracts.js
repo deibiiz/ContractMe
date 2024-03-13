@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Dimensions, Text, FlatList, ScrollView } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { MyContract1 } from '../ether/web3.js';
 import { useAccount } from '../components/ContextoCuenta';
@@ -13,47 +13,44 @@ const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedCon
     const navigation = useNavigation();
 
     return (
+        <View style={styles.container}>
+            <FlatList
+                data={contracts}
+                keyExtractor={item => item}
+                renderItem={({ item }) => {
+                    return (
+                        <TouchableOpacity
+                            style={styles.contractItem}
+                            onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
+                        >
+                            <Text>Contrato ID: {item}</Text>
+                        </TouchableOpacity>
+                    );
+                }}
+            />
 
-        <ScrollView>
-            <View style={styles.container}>
+            <TouchableOpacity
+                onPress={() => setShowFinalizedContracts(!showFinalizedContracts)}
+                style={styles.desplegable}
+            >
+                <Text style={styles.textoBoton} >Mostrar Contratos Finalizados</Text>
+            </TouchableOpacity>
+
+            {showFinalizedContracts && (
                 <FlatList
-                    data={contracts}
+                    data={finalizedOwnerContracts}
                     keyExtractor={item => item}
-                    renderItem={({ item }) => {
-                        return (
-                            <TouchableOpacity
-                                style={styles.contractItem}
-                                onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
-                            >
-                                <Text>Contrato ID: {item}</Text>
-                            </TouchableOpacity>
-                        );
-                    }}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            style={styles.contractItem}
+                            onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
+                        >
+                            <Text>Contrato ID: {item}</Text>
+                        </TouchableOpacity>
+                    )}
                 />
-
-                <TouchableOpacity
-                    onPress={() => setShowFinalizedContracts(!showFinalizedContracts)}
-                    style={styles.desplegable}
-                >
-                    <Text style={styles.textoBoton} >Mostrar Contratos Finalizados</Text>
-                </TouchableOpacity>
-
-                {showFinalizedContracts && (
-                    <FlatList
-                        data={finalizedOwnerContracts}
-                        keyExtractor={item => item}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={styles.contractItem}
-                                onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: false })}
-                            >
-                                <Text>Contrato ID: {item}</Text>
-                            </TouchableOpacity>
-                        )}
-                    />
-                )}
-            </View>
-        </ScrollView>
+            )}
+        </View>
     );
 };
 
@@ -61,10 +58,30 @@ const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContr
     const navigation = useNavigation();
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
+        <View style={styles.container}>
+            <FlatList
+                data={contracts}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={styles.contractItem}
+                        onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: true })}
+                    >
+                        <Text>Contrato ID: {item}</Text>
+                    </TouchableOpacity>
+                )}
+            />
+
+            <TouchableOpacity
+                onPress={() => setShowFinalizedContracts(!showFinalizedContracts)}
+                style={styles.desplegable}
+            >
+                <Text style={styles.textoBoton}>Mostrar Contratos Finalizados</Text>
+            </TouchableOpacity>
+
+            {showFinalizedContracts && (
                 <FlatList
-                    data={contracts}
+                    data={finalizedWorkerContracts}
+                    keyExtractor={item => item}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             style={styles.contractItem}
@@ -74,30 +91,8 @@ const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContr
                         </TouchableOpacity>
                     )}
                 />
-
-                <TouchableOpacity
-                    onPress={() => setShowFinalizedContracts(!showFinalizedContracts)}
-                    style={styles.desplegable}
-                >
-                    <Text style={styles.textoBoton}>Mostrar Contratos Finalizados</Text>
-                </TouchableOpacity>
-
-                {showFinalizedContracts && (
-                    <FlatList
-                        data={finalizedWorkerContracts}
-                        keyExtractor={item => item}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                style={styles.contractItem}
-                                onPress={() => navigation.navigate('infoContract', { tokenId: item, fromWorkerSection: true })}
-                            >
-                                <Text>Contrato ID: {item}</Text>
-                            </TouchableOpacity>
-                        )}
-                    />
-                )}
-            </View>
-        </ScrollView>
+            )}
+        </View>
     );
 };
 
@@ -135,7 +130,8 @@ export default function OwnerContracts() {
         }
 
         if (!selectedAccount) {
-            alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+            alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
+            return;
         }
     };
 
@@ -254,7 +250,7 @@ export default function OwnerContracts() {
     );
 
     return (
-        <View style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
@@ -262,7 +258,7 @@ export default function OwnerContracts() {
                 initialLayout={initialLayout}
                 renderTabBar={renderTabBar}
             />
-        </View>
+        </GestureHandlerRootView>
     );
 }
 
@@ -278,7 +274,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     indicator: {
-        backgroundColor: '#164863',
+        backgroundColor: 'black',
     },
     barText: {
         fontWeight: 'bold',
@@ -297,7 +293,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#164863',
         padding: 10,
         borderRadius: 5,
-        marginTop: 70,
+        marginTop: 30,
+        marginBottom: 15,
         width: '85%',
         alignSelf: 'center',
         alignItems: 'center'

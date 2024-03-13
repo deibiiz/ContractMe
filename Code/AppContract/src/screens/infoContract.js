@@ -49,7 +49,7 @@ const ContractDetailsScreen = ({ route }) => {
     const finalizeContract = async () => {
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 
@@ -69,7 +69,7 @@ const ContractDetailsScreen = ({ route }) => {
     const cancelarContrato = async (contractId) => {
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 
@@ -93,7 +93,7 @@ const ContractDetailsScreen = ({ route }) => {
 
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 
@@ -114,7 +114,7 @@ const ContractDetailsScreen = ({ route }) => {
     const releaseSalary = async () => {
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 
@@ -312,7 +312,7 @@ const ContractDetailsScreen = ({ route }) => {
                         </>
                     )}
 
-                    {!contractDetails.isSigned && fromWorkerSection && (
+                    {!contractDetails.isSigned && fromWorkerSection && contractDetails.employer !== selectedAccount && (
                         <Boton
                             texto="Firmar contrato"
                             onPress={() => { signTheContract(contractDetails.tokenId) }}
@@ -378,6 +378,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 7,
         fontStyle: "italic",
+        textDecorationLine: "underline",
     }
 
 });

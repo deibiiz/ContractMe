@@ -20,7 +20,7 @@ const ModifyContract = ({ route, navigation }) => {
     const sendProposal = async () => {
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
 

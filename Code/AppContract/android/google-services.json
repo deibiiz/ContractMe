@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "945220126444",
+    "project_id": "contractme2-28503",
+    "storage_bucket": "contractme2-28503.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945220126444:android:3510337e0b6958f2bb87c9",
+        "android_client_info": {
+          "package_name": "com.anonymous.AppContract"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzwI_OHQdULbskWBti4D5Kla0WoPdsJn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

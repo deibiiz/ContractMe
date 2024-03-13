@@ -14,7 +14,7 @@ const ContractAlertScreen = ({ route }) => {
     const rejectChanges = async () => {
         try {
             if (!selectedAccount) {
-                alert('Por favor, inicia sesión en MetaMask y selecciona una cuenta.');
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
                 return;
             }
             await MyContract1.methods.rejectChange(newContractDetails.tokenId).send({ from: selectedAccount });

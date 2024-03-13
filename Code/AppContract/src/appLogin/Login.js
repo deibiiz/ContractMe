@@ -4,11 +4,13 @@ import Svg, { Path } from "react-native-svg";
 import Boton from '../components/Boton';
 import { firebaseAuth } from './firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useAuth } from '../components/AuthContext';
 
 const { width, height } = Dimensions.get("window")
 
-export default function Login({ AutenticarDirecto, AutenticarConHuella, navigation }) {
+export default function Login({ navigation }) {
 
+  const { AutenticarConHuella, AutenticarDirecto } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
