@@ -25,13 +25,22 @@ export default function CamaraQR() {
 
     const handleBarCodeScanned = async ({ type, data }) => {
         try {
+            const dataParsed = JSON.parse(data);
+            const { tokenId, worker } = dataParsed;
+            if (worker !== selectedAccount && worker !== "0x0000000000000000000000000000000000000000") {
+                alert("El contrato no es para esta cuenta.");
+                console.log(worker);
+                navigation.goBack();
+                return;
+
+            }
             setScanned(true);
-            await MyContract1.methods.signContract(data).send({ from: selectedAccount, gas: 1000000 });
-            alert(`Contrato ${data} Firmado con éxito.`);
-            navigation.navigate("Home");
+            await MyContract1.methods.signContract(tokenId).send({ from: selectedAccount, gas: 1000000 });
+            alert(`Contrato ${tokenId} Firmado con éxito.`);
+            navigation.navigate("Home1");
         } catch (error) {
             console.error("Error al firmar el contrato:", error);
-            alert("Error al firmar el contrato");
+            alert("El contrato no se ha podido firmar. Inténtalo de nuevo.");
         }
     };
 

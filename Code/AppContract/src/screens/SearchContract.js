@@ -57,7 +57,7 @@ export default function SearchContracts() {
                     return (
                         <TouchableOpacity
                             style={styles.contractItem}
-                            onPress={() => navigation.navigate('infoContract', { tokenId: item.id, fromWorkerSection: true })}
+                            onPress={() => navigation.navigate('infoContract', { tokenId: item.id.toString(), fromWorkerSection: true })}
                         >
                             <Text style={styles.title}> {item.title}</Text>
                             <Text style={styles.textoInfo}> Salario: {item.salaryInEther} ETH</Text>

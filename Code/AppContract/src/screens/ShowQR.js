@@ -4,14 +4,20 @@ import QRcode from 'react-native-qrcode-svg';
 
 function ShowQR({ route }) {
 
-  const { tokenId } = route.params;
+  const { tokenId, worker } = route.params;
+
+  //json
+  value = JSON.stringify({
+    "tokenId": tokenId,
+    "worker": worker
+  });
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Escanea este código QR</Text>
       <Text style={styles.instructions}>Al escanear este código QR, se procederá a firmar el contrato con ID: {tokenId} automáticamente.</Text>
       <QRcode
-        value={tokenId}
+        value={value}
         size={300}
         Color="black"
         backgroundColor="white"

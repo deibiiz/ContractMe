@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { MyContract1 } from '../ether/web3.js';
 import web3 from 'web3';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
 import { useAccount } from '../components/ContextoCuenta.js';
 
@@ -14,7 +14,10 @@ const ContractDetailsScreen = ({ route }) => {
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
 
-    useEffect(() => {
+
+
+
+    const fetchContractDetailsCallback = React.useCallback(() => {
         const fetchContractDetails = async () => {
             const details = await MyContract1.methods.contractDetails(tokenId).call();
             const employer = await MyContract1.methods.getOwnerOfContract(tokenId).call();
@@ -45,6 +48,7 @@ const ContractDetailsScreen = ({ route }) => {
 
         fetchContractDetails();
     }, [tokenId]);
+    useFocusEffect(fetchContractDetailsCallback);
 
     const finalizeContract = async () => {
         try {
@@ -105,6 +109,8 @@ const ContractDetailsScreen = ({ route }) => {
                 ...prevState,
                 isSigned: true
             }));
+
+            fetchContractDetailsCallback();
         } catch (error) {
             console.error("Error al firmar el contrato:", error);
             setSignStatus("Error al firmar el contrato");
@@ -281,7 +287,7 @@ const ContractDetailsScreen = ({ route }) => {
                                 <>
                                     <Boton
                                         texto="Mostrar código QR"
-                                        onPress={() => { navigation.navigate('ShowQR', { tokenId: tokenId }) }}
+                                        onPress={() => { navigation.navigate('ShowQR', { tokenId: tokenId, worker: contractDetails.worker }) }}
                                         estiloBoton={{
                                             width: "100%",
                                             borderRadius: 8,

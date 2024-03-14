@@ -3,8 +3,7 @@ pragma solidity ^0.8.20;
 
 import "./MyContract.sol";
 
-contract MyContractManagement is MyContract{
-
+contract MyContractManagement is MyContract {
     event SalaryReleased(
         uint256 indexed tokenId,
         uint256 salary,
@@ -41,7 +40,6 @@ contract MyContractManagement is MyContract{
         address indexed worker,
         uint256 timestamp
     );
-
 
     function mint(
         address _to,
@@ -86,17 +84,15 @@ contract MyContractManagement is MyContract{
         return tokenID;
     }
 
-
     function signContract(uint256 _tokenID) public {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
         require(
             tokenManagers[_tokenID][msg.sender] == false &&
-            msg.sender == contractDetails[_tokenID].worker &&
-            !contractDetails[_tokenID].isSigned &&
-            contractDetails[_tokenID].isFinished == false &&
-            isContractFinished(_tokenID) == false,
+                !contractDetails[_tokenID].isSigned &&
+                contractDetails[_tokenID].isFinished == false &&
+                isContractFinished(_tokenID) == false,
             "Error: condiciones no cumplidas."
         );
 
@@ -104,19 +100,23 @@ contract MyContractManagement is MyContract{
         contractDetails[_tokenID].worker = msg.sender;
         activeContractsOfWorker[msg.sender].push(_tokenID);
 
-        emit ContractSigned(_tokenID, ownerOf(_tokenID), msg.sender, block.timestamp);
+        emit ContractSigned(
+            _tokenID,
+            ownerOf(_tokenID),
+            msg.sender,
+            block.timestamp
+        );
     }
-
 
     function releaseSalary(uint256 _tokenID) public payable {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
         require(
             contractDetails[_tokenID].isSigned &&
-            contractDetails[_tokenID].isReleased == false &&
-            tokenManagers[_tokenID][msg.sender] == true &&
-            isContractFinished(_tokenID) == true,
+                contractDetails[_tokenID].isReleased == false &&
+                tokenManagers[_tokenID][msg.sender] == true &&
+                isContractFinished(_tokenID) == true,
             "Error: condiciones no cumplidas."
         );
 
@@ -125,35 +125,44 @@ contract MyContractManagement is MyContract{
         worker.transfer(salary);
         contractDetails[_tokenID].isReleased = true;
 
-        emit SalaryReleased(_tokenID, salary, msg.sender, worker, block.timestamp);
+        emit SalaryReleased(
+            _tokenID,
+            salary,
+            msg.sender,
+            worker,
+            block.timestamp
+        );
     }
-
 
     function finalizeContract(uint256 _tokenID) public {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
         require(
             tokenManagers[_tokenID][msg.sender] == true &&
-            contractDetails[_tokenID].isSigned &&
-            contractDetails[_tokenID].isFinished == false &&
-            isContractFinished(_tokenID) == false,
+                contractDetails[_tokenID].isSigned &&
+                contractDetails[_tokenID].isFinished == false &&
+                isContractFinished(_tokenID) == false,
             "Error: condiciones no cumplidas."
         );
 
         contractDetails[_tokenID].isFinished = true;
-        emit ContractFinalized(_tokenID, ownerOf(_tokenID), contractDetails[_tokenID].worker, block.timestamp);
+        emit ContractFinalized(
+            _tokenID,
+            ownerOf(_tokenID),
+            contractDetails[_tokenID].worker,
+            block.timestamp
+        );
     }
-
 
     function cancelContract(uint256 _tokenID) public {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
         require(
             tokenManagers[_tokenID][msg.sender] == true &&
-            !contractDetails[_tokenID].isSigned &&
-            contractDetails[_tokenID].isFinished == false,
+                !contractDetails[_tokenID].isSigned &&
+                contractDetails[_tokenID].isFinished == false,
             "Error: condiciones no cumplidas."
         );
 
@@ -163,7 +172,12 @@ contract MyContractManagement is MyContract{
         removeContractFromOwner(_tokenID, owner);
         _burn(_tokenID);
 
-        emit ContractCancelled(_tokenID, owner, contractDetails[_tokenID].worker ,salary, block.timestamp);
+        emit ContractCancelled(
+            _tokenID,
+            owner,
+            contractDetails[_tokenID].worker,
+            salary,
+            block.timestamp
+        );
     }
-
 }
