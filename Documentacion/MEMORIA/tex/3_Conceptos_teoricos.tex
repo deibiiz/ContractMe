@@ -149,6 +149,8 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 \label{tabla_blockchain_caracteristicas}	
 \end{table}
 
+
+
 \section{Web3 y DApps}
 
 Web3 emerge como una propuesta revolucionaria en la evolución de Internet, promoviendo una arquitectura descentralizada que contrasta con las fases anteriores de la web.
@@ -183,28 +185,97 @@ Este proyecto se enmarca en las DApps de segundo nivel, ya que se opta por desar
 
 \section{Ethereum}
 
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
-.
+Ethereum actualmente es la segunda red más grande, solo por detrás de Bitcoin y aunque normalmente se les compara, Ethereum y Bitcoin son dos proyectos totalmente distintos.
+Bitcoin introdujo una forma descentralizada de dinero electrónico, permitiendo realizar transferencias en una red segura y sin intermediarios.
+Ethereum por otro lado, lanzado en 2015 basándose el la base establecida por Bitcoin, expandió su funcionalidad.
 
-\section{Contratos inteligentes}
+La ambición de Ethereum no solo se limita a simplificar las transacciones financieras, su propósito es ampliar el alcance de las aplicaciones descentralizadas (Dapps) al proporcionar una infraestructura programable.
+A diferencia de Bitcoin, no cuenta con un suministro limitado de monedas para preservar su valor, además cuenta con tiempos de minado de bloques significativamente menores, por lo que puede ofrecer una experiencia más ágil y confirmaciones de transacciones más rápidas.
+Ethereum de esta manera se constituye como la columna vertebral de un Internet descentralizado(Web3) \cite{QueEsEthereum}.
 
+\subsection{Ether}
+
+El Ether(ETH) es la criptomoneda que alimenta la red Ethereum, desempeña un papel fundamental tanto como activo digital como en la funcionaldiad de la red.
+
+Similar a como ocurre con otras criptomonedas, ETH se puede enviar y recibir asegurando transacciones a cualquier parte del mundo y sin intermediarios.
+A su vez, cada operación que cambie el estado de la red, supone el pago de una pequeña tarifa en ETH. Desde una simple transferencia hasta la ejecución de complejos contratos inteligentes requieren computación y almacenamiento, siendo utilizado el ETH para pagar estas denominadas "Tarifas de gas".
+Finalmente como se introdujo el apartado mecanismos de consenso, Ethereum esta implementando el mecanismo de consenso Proof of Stake(PoS) y el ETH constituye el activo que los participantes de la red pueden bloquear(stake) con el objetivo de dar seguridad a la red a cambio de recompensas en esta misma moneda.
+
+Aunque ETH no tiene un suminsitro máximo fijo como Bitcoin, las políticas de emisión estan diseñadas para asegurar que el suminsitro de ETH crezca a un ritmo predecible y decreciente, lo que contribuye a la escasez y valor a largo plazo.
+El valor de ETH no se basa solo en su escasez digital como en el resto de criptomonedas, también adquiere un valor adicional al permitir a los usuario pagar las tarifas de gas y más recientemente ETH se ha vuelto valiso para los usuario de aplicaciones financieras descentralizadas(DEFI) al poder usarse como garantía para prestamos criptográficos o como sistema de pago \cite{QueEsETH}.
+
+
+\subsection{Ethereum Virtual Machine}
+
+La Ethereum Virtual Machine(EVM) constituye el nucleo de la red Ethereum, proporcionando un entorno de ejecución aislado y seguro para los contratos inteligentes y las aplicaciones descentralizadas. 
+La EVM es una maquina virtual Turing completa que facilita la ejecución de código en el contexto de la blockchain.
+La EVM funciona como una máquina de pila, con una profundidad de 1024 items, cada item es una palabra de 256 bits, seleccionado para su utilización con la criptografía de 256 bits.
+Se ejecuta a través de códigos de operación, que realizan operaciones estándar de pila como XOR, AND, ADD, SUB, etc \cite{QueEsEVM}.
+
+La EVM funciona mediante la ejecución de bytecode, un conjunto de intrucciones de bajo nivel que la máquina es capaz de interpreta y ejecutar directamente.
+El bytecode se obtiene de la compilación de contratos inteligentes escritos en lenguajes de alto nivel. 
+La EVM es capaz de ejecutar código en un entorno completamente aislado, por lo que los contratos pueden oprar sin comprometer la seguridad de la red. Manejando el acceso a los recursos de los computadores y limitando sus acciones en un ambiente controlado.
+Esta seguridad se ve reforzada por su naturaleza descentralizada y distribuida, por lo que cualquier intento de manipulación mediante un código malicioso deberá enfrentarse al consenso de la red.
+De esta forma, Ethereum funciona como un ordenador mundial descentralizado de una general en una red entre pares.
+
+La EVM cuenta con gran flexibilidad en cuanto a su capacidad para soportartar una variedad de lenaguejes de programación, facilitando así la adaptabilidad del sistema Ethereum.
+Además, la EVM permite que cualquier persona con acceso a Ethereum pueda desplegar sus propios contratos inteligentes, democratizando el acceso a la tecnología blockchain y creando una gran comunidad de desarrolladores \cite{ComoFuncionaEVM}.
+
+
+\subsection{Gas}
+
+El gas es una unidad que mide la cantidad de esfuerzo computacional requerida para ejecutar operaciones en la red Ethereum.
+La tarifa de gas es la cantidad de gas usado para hacer alguna operación, multiplicado por el coste unitario del gas.
+Es un mecanismo no solo de prevención contra ataques de spam, sino tambien que facilita una economía alrededor, estableciendo un sistema de compensación para los mineros que procesan y confirman las transacciones.
+El precio del gas suele expresarse en gwei, cada gwei equivale a \(0,000000001\) ETH o \(10^{-9}\) ETH.
+
+Desde 2021 con la actualización "London" se introdujo el mecanismo EIP-1559, que hizo que el calculo de la tarifa de gas fuera más previsible, introduciendo los conceptos de tarifa 
+base y tarifa prioritaria.
+
+\textbf{La tarifa base} indica la cantidad mínima de gas a pagar para que la transacción se considere como valida para tramitar.
+La tarifa base se ajusta dinámicamente bloque a bloque basándose en la ocupación del bloque anterior. El sistema, calcula cuanto gas se utilizó en total para todas las transacciones en el bloque anterior y lo compara con el tamaño de bloque previamente definido por el protocolo. Este tamaño de bloque previamente definido es una medida de cuánto gas se espera que consuman las transacciones en un bloque ideal, cada bloque en la red Ethereum tiene un tamaño esperado de 15 millones de gas.
+Si el bloque anterior consumió más gas del tamaño previamente definido, la tarifa base aumentará para el siguiente bloque hasta un máximo de 12,5\%. 
+El crecimiento exponencial en el costo de las transacciones cuando los bloques están constantemente sobreocupados actúa como un freno contra la congestión y alcanzando el tamaño un tamaño de equilibrio de 15 millones de gas de media por bloque , ya que solo las transacciones prioritarias de aquellos que estén dispuestos a pagar más serán ejecutadas.
+
+\begin{table}
+\normalsize
+\begin{centering}
+	\begin{tabular}{@{}p{4em} p{5em} p{6em} p{6em}@{}}
+		\toprule
+		\textbf{Bloque} & \textbf{Total Gas} & \textbf{Incremento Tarifa (\%)} & \textbf{Tarifa Base (gwei)}\\ 
+		\midrule
+		1 & 15 M & 0\% & 100 gwei \\
+		2 & 30 M & 0\% & 100 gwei\\
+		3 & 30 M & 12,5\% & 112,5 gwei\\
+		4 & 30 M & 12,5\% & 126,6 gwei\\
+		5 & 30 M & 12,5\% & 142,4 gwei\\
+		6 & 30 M & 12,5\% & 160,2 gwei\\
+		7 & 30 M & 12,5\% & 180,2 gwei\\
+		8 & 30 M & 12,5\% & 202,7 gwei\\
+		\bottomrule
+	\end{tabular}
+\caption[Ajuste de la Tarifa Base Bajo Demanda]{Evolución de la Tarifa Base en Ethereum.}
+\label{tabla:ajuste_tarifa_base}
+\end{centering}
+\end{table}
+
+
+Por otro lado, \textbf{la tarifa prioritaria} establece una propina que se añade a la tarifa base para que los validadores vean la transacción más atractiva para incluirla en el siguiente bloque, ya que es esta propina la que adquirirán en recompensa a su trabajo, a su vez la tarifa base es consumida y por lo tanto eliminada.
+Por lo general la tarifa base por si sola es insuficiente para que un validador se interese por ella, por lo que la elección de una transacción por parte del validador depende de la tarifa prioritaria, la cual se tiene que ajustar su precio en base al uso de la red en el momento de enviar la transacción.
+
+Existe otro tipo de tarifa que se puede incluir de manera opcional en las transacciones, esta es la tarifa máxima, que es la que se ha usado para las transacciones dentro de este proyecto.
+Este parámetro opcional recoge la cantidad máxima que el usuario esta dispuesto a pagar por la validación de una transacción, por lo que dependiendo de la importancia de la transacción se puede consentir pagar más a cambio de una mayor velocidad de validación.
+La tarifa total constituye la suma de la tarifa base y la tarifa prioritaria \cite{gasEthereum}.
+
+
+\subsection{Contratos inteligentes}
 
 La idea fue conceptualizada por primera vez por Nick Szabo en 1993, visionando una nueva forma de establecer acuerdos digitales. Sin embargo, la falta de una plataforma adecuada mantuvo esta idea en teoría hasta la llegada de la Blockchain con Bitcoin en 2009, y mas notablemente con Ethereum en 2014, que los contratos inteligentes se materializaron prácticamente gracias a la infraestructura que esta tecnología proporciona ~\cite{smartcontractHistoria}.
 
 Un contrato inteligente es un código que ejecuta automáticamente los términos de un acuerdo entre partes. Los códigos, almacenados en la BlockChain, son ejecutados automáticamente, cuando se cumplen unas condiciones predefinidas, haciendo cumplir un acuerdo entre dos partes no confiables sin la necesidad de un tercero de confianza.
 Los contratos inteligentes utilizan la tecnología Blockchain para almacenar reglas, ejecutar automáticamente acciones cuando se cumplen esas reglas y almacenar los resultados en la blockchain. Debido a su naturaleza inmutable y distribuida, ofrecen un nivel de seguridad y confianza superior al de los sistemas tradicionales. Así mismo, al eliminar los intermediarios, ofrecen una reducción de costos y una mayor rapidez en la ejecución de acuerdos.
 
-Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesidad de recursos externos a la cadena de bloques, su naturaleza inmutable que dificulta la corrección de errores, problemas de escalabilidad y limitaciones del mecanismo de consenso. Las soluciones de Capa 2, como la Lightning Network y Ethereum Plasma, se diseñaron para abordar los desafíos de escalabilidad y eficiencia de las blockchain de Capa 1. Operan sobre la cadena principal para permitir transacciones más rápidas y con menores costos, manteniendo la seguridad y descentralización ~\cite{AplicacionesDesafiosSmartcontract}. 
+Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesidad de recursos externos a la cadena de bloques, su naturaleza inmutable que dificulta la corrección de errores, problemas de escalabilidad y limitaciones del mecanismo de consenso. Las soluciones de Capa 2, como la Lightning Network y Ethereum Plasma, se diseñaron para abordar los desafíos de escalabilidad y eficiencia de las blockchain de Capa 1. Operan sobre la cadena principal para permitir transacciones más rápidas y con menores costos, manteniendo la seguridad y descentralización ~\cite{AplicacionesDesafiosSmartcontract}.
 
 
 
