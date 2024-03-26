@@ -22,7 +22,7 @@ const providerMetadata = {
     },
 };
 
-const CarteraScreenn = () => {
+const CarteraScreen = () => {
     const Url = "https://sepolia.infura.io/v3/d2fa416c31e348ef82c706d0a1e24fc8";
     const web3 = new Web3(new Web3.providers.HttpProvider(Url));
 
@@ -167,4 +167,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default CarteraScreenn;
+export default CarteraScreen;

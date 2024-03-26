@@ -65,7 +65,7 @@ Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la
 Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; los datos de las transacciones, el hash del bloque anterior en la cadena  y su propio hash único, generado a partir de la información contenida en el bloque.
 Los bloques se enlazan mediante el hash formado por los datos del bloque anterior.
 El algoritmo hash más usado en la Blockchain es "SHA-256"~\cite{sha256} desarrollado por la Agencia de Seguridad Nacional (NAS) en el año 1997. Es conocido por ser lento en comparación con otras funciones hash, pero a pesar de esto destaca por su seguridad por lo que lo hace adecuado para aplicaciones financieras.
-El hash consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable, cualquier cambio en la información del bloque alteraría drásticamente su hash, evidenciando cualquier intento de fraude.
+El hash consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable. Cualquier cambio en el contenido de un bloque anterior requeriría recalcular todos los hashes subsiguientes, lo cual es computacionalmente costoso y prácticamente imposible de realizar sin ser detectado
 
 \imagen{enlaceBloques}{Encadenamiento de bloques en la Blockchain}{1}
 
@@ -89,7 +89,7 @@ Por ende, una vez los inputs hayan sido referenciados, estos son invalidados par
 
 \subsection{Consenso}
 
-El mecanismo de consenso en una blockchain es fundamental para mantener la integridad y la seguridad de la red. Este proceso permite que todos los nodos de la red se pongan de acuerdo sobre el estado actual del libro mayor digital.
+El mecanismo de consenso en una blockchain es fundamental para mantener la integridad y la seguridad de la red. Este proceso permite que todos los nodos de la red se pongan de acuerdo sobre el estado actual del libro mayor digital, lo que significa que cualquier cambio en el blockchain debe ser validado y aceptado por más del 50\% de los nodos de la red.
 
 Actualmente existen dos categorías amplias de protocolos de consenso, los de finalidad probabilística, representada fundamentalmente por \textbf{Proof of work} (PoW), implica que la confirmación de una transacción se vuelve más segura a medida que se van confirmando bloques sucesivos.
 Por otro lado, los protocolos con finalidad absoluta, como \textbf{Proof of Stake} (PoS) aseguran la finalización de las transacciones de manera definitiva una vez se agregan a la Blockchain.
@@ -102,8 +102,9 @@ A pesar de su amplia adopción y probada seguridad, La minería de criptomonedas
 Este aspecto ha impulsado la búsqueda de alternativas más eficientes y sostenibles como el Proof of Stake (PoS) que reduce el consumo eléctrico. Este protocolo se basa en seleccionar a los validadores en proporción a la cantidad de criptomonedas que poseen y están dispuestos a "bloquear" como garantía.
 La adopción de PoS por parte de proyectos líderes como Ethereum, con su transición a Ethereum 2.0, marca un hito importante y podría incentivar a otras criptomonedas a seguir un camino similar.
 
-
-\section{Inmutabilidad de la Blockchain}
+Hay que destacar que estos mecanismos de consenso únicamente son seguros en redes de una cierta magnitud ya que en contra pueden ser victimas del ataque del 51\%.
+El ataque del 51\% es una vulnerabilidad en la que un único minero o grupo de mineros controla más del 50\% del poder de cómputo de la red. De tal forma que les permite influir en las confirmaciones de las transacciones, permitiendo de esta forma el fenómeno del doble gasto.
+Es por esto que los mecanismos de consenso únicamente son efectivos en redes grandes, donde el tamaño de la Blockchain es equivalente a la inversión necesaria para logar un control del 51\%.
 
 
 

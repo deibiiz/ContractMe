@@ -4,23 +4,19 @@ pragma solidity ^0.8.20;
 import "./MyContractManagement.sol";
 import "./MyContractChanges.sol";
 
-contract MyContractAux is MyContractManagement, MyContractChanges{
-
+contract MyContractAux is MyContractManagement, MyContractChanges {
     function getManagersOfToken(
         uint256 _tokenId
     ) public view returns (address[] memory) {
         return tokenManagersList[_tokenId];
     }
 
-    /*
     function isManagerOfToken(
         uint256 _tokenId,
         address _manager
     ) public view returns (bool) {
         return tokenManagers[_tokenId][_manager];
     }
-    */
-
 
     function getContractsFromOwner(
         address _address
@@ -28,13 +24,11 @@ contract MyContractAux is MyContractManagement, MyContractChanges{
         return contractsOwner[_address];
     }
 
-
     function getContractsOfWorker(
         address _address
     ) public view returns (uint256[] memory) {
         return activeContractsOfWorker[_address];
     }
-
 
     function getUnsignedContractsOfWorker(
         address worker
@@ -61,7 +55,6 @@ contract MyContractAux is MyContractManagement, MyContractChanges{
         return result;
     }
 
-
     function tokenExists(uint256 _tokenId) public view returns (bool) {
         try this.ownerOf(_tokenId) {
             return true;
@@ -70,11 +63,9 @@ contract MyContractAux is MyContractManagement, MyContractChanges{
         }
     }
 
-
     function isContractSigned(uint256 _tokenID) public view returns (bool) {
         return contractDetails[_tokenID].isSigned;
     }
-
 
     function getOwnerOfContract(
         uint256 _tokenID
