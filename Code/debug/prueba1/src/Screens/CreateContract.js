@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
-import { Mycontract, ABI, contractAddress } from "../ether/web3";
 import { ethers } from "ethers";
 import Boton from "../components/Boton.js";
 import { useAccount, useContractWrite } from "wagmi";
+import ABI from "../ContractConexion/MyContractAux.json";
 
 
 
@@ -19,27 +19,24 @@ export default function CreateContract() {
     const { address } = useAccount();
 
     if (!address) {
-        alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-        return;
+        alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
     }
 
     const { writeAsync } = useContractWrite({
-        address: contractAddress,
+        address: "0x3eA2717cf5AE3ccc89d868fB317aE938b6aC8EBc",
         abi: ABI,
-        functionName: 'mint',
     })
 
     const mintContract = async () => {
         if (!salary || !start || !duration || !_description || !_title) {
-            alert('Por favor, introduce todos los datos.');
+            alert("Por favor, introduce todos los datos.");
             return;
         }
 
         try {
 
             if (!address) {
-                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-                return;
+                alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
             }
 
             const parsedSalary = ethers.utils.parseEther(salary);
@@ -48,11 +45,11 @@ export default function CreateContract() {
             const _duration = Number(duration);
             const _to = recipient || "0x0000000000000000000000000000000000000000";
             if (!ethers.utils.isAddress(_to) || _to === address) {
-                alert('Dirección de destinatario inválida');
-                return;
+                alert("Dirección de destinatario inválida");
             }
 
             const tx = await writeAsync({
+                fuctionName: "signContract",
                 args: [
                     _to,
                     _salaryNumber,
