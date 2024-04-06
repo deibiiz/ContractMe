@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native
 import { useNavigation } from "@react-navigation/native";
 import { useAccount, useContractWrite } from "wagmi";
 import { EtherProvider } from "../ContractConexion/EtherProvider";
-import { ethers } from "ethers";
 
 
 export default function SignContract() {

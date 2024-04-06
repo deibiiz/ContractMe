@@ -1,16 +1,10 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React from 'react';
 import '@walletconnect/react-native-compat'
 import { WagmiConfig } from 'wagmi'
 import { sepolia } from 'viem/chains'
 import { createWeb3Modal, defaultWagmiConfig, Web3Modal } from '@web3modal/wagmi-react-native'
-import { useWeb3Modal } from '@web3modal/wagmi-react-native'
-import { useAccount, useDisconnect, useContractWrite } from 'wagmi'
 import "react-native-get-random-values"
 import "@ethersproject/shims"
-import { ethers } from "ethers";
-import ABI from './src/ContractConexion/MyContractAux.json'
-import Home from './src/Screens/Wallet'
 import Navigation from './src/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
 

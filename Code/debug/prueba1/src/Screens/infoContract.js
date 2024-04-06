@@ -18,7 +18,6 @@ const ContractDetailsScreen = ({ route }) => {
     const { writeAsync } = useContractWrite({
         address: contractAddress,
         abi: ABI,
-        functionName: 'signContract',
     })
 
     const fetchContractDetailsCallback = React.useCallback(() => {
@@ -58,16 +57,22 @@ const ContractDetailsScreen = ({ route }) => {
         try {
             if (!address) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-                return;
+            } else {
+
+                const tx = await writeAsync({
+                    functionName: 'finalizeContract',
+                    args: [
+                        tokenId,
+                    ],
+                });
+                console.log(tx);
+
+                alert('Contrato finalizado con éxito.');
+                setContractDetails(prevState => ({
+                    ...prevState,
+                    isFinished: true
+                }));
             }
-
-            contract.finalizeContract(tokenId).send({ from: address });
-
-            alert('Contrato finalizado con éxito.');
-            setContractDetails(prevState => ({
-                ...prevState,
-                isFinished: true
-            }));
         } catch (error) {
             console.error("Error al finalizar el contrato:", error);
             alert('Error al finalizar el contrato.');
@@ -78,15 +83,22 @@ const ContractDetailsScreen = ({ route }) => {
         try {
             if (!address) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-                return;
+            } else {
+
+                console.log(contractId);
+                console.log(tokenId)
+                await contract.cancelContract(contractId).send({ from: address });
+                const tx = await writeAsync({
+                    functionName: 'cancelContract',
+                    args: [
+                        contractId,
+                    ],
+                });
+                console.log(tx);
+
+                alert('Contrato cancelado con éxito.');
+                navigation.navigate('ShowContract');
             }
-
-            console.log(contractId);
-            console.log(tokenId)
-            await contract.cancelContract(contractId).send({ from: address });
-            alert('Contrato cancelado con éxito.');
-
-            navigation.navigate('ShowContract');
         } catch (error) {
             console.error("Error al cancelar el contrato:", error);
             alert("Error al cancelar el contrato.");
@@ -96,30 +108,28 @@ const ContractDetailsScreen = ({ route }) => {
     const signTheContract = async () => {
         if (!tokenId) {
             alert('Falta ID del contrato.');
-            return;
         }
 
         try {
             if (!address) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-                return;
+            } else {
+                const tx = await writeAsync({
+                    functionName: 'signContract',
+                    args: [
+                        tokenId,
+                    ],
+                });
+                console.log(tx);
+
+                alert('Contrato firmado con éxito.');
+                setContractDetails(prevState => ({
+                    ...prevState,
+                    isSigned: true
+                }));
+
+                fetchContractDetailsCallback();
             }
-
-            const tx = await writeAsync({
-                args: [
-                    tokenId,
-                ],
-            });
-
-            console.log(tx);
-
-            alert('Contrato firmado con éxito.');
-            setContractDetails(prevState => ({
-                ...prevState,
-                isSigned: true
-            }));
-
-            fetchContractDetailsCallback();
         } catch (error) {
             console.error("Error al firmar el contrato:", error);
             setSignStatus("Error al firmar el contrato");
@@ -130,15 +140,21 @@ const ContractDetailsScreen = ({ route }) => {
         try {
             if (!address) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-                return;
-            }
+            } else {
+                const tx = await writeAsync({
+                    functionName: 'releaseSalary',
+                    args: [
+                        tokenId,
+                    ],
+                });
+                console.log(tx);
 
-            contract.releaseSalary(tokenId).send({ from: address });
-            alert('Salario liberado con éxito.');
-            setContractDetails(prevState => ({
-                ...prevState,
-                salaryReleased: true
-            }));
+                alert('Salario liberado con éxito.');
+                setContractDetails(prevState => ({
+                    ...prevState,
+                    salaryReleased: true
+                }));
+            }
         } catch (error) {
             console.error("Error al liberar el salario:", error);
             alert('Error al liberar el salario.');

@@ -15,14 +15,11 @@ import ShowContract from './Screens/ShowContracts';
 import CreateContract from './Screens/CreateContract';
 import SearchContract from './Screens/SearchContract';
 import infoContract from './Screens/infoContract';
-
-/*
+import AddManager from './Screens/AddManager';
 import ModifyContract from './Screens/ModifyContract';
 import ApplyChanges from './Screens/ApplyChanges';
-import AddManager from './Screens/AddManager';
 import ShowQR from './Screens/ShowQR';
 import QR from "./components/CamaraQR";
-*/
 
 
 const HomeStackNavigator = createNativeStackNavigator();
@@ -93,7 +90,16 @@ function MyStack() {
                     },
                 }}
             />
-            {/*
+            <HomeStackNavigator.Screen
+                name="AddManager"
+                component={AddManager}
+                options={{
+                    title: 'Agregar Administrador',
+                    headerStyle: {
+                        backgroundColor: '#9BBEC8',
+                    },
+                }}
+            />
             <HomeStackNavigator.Screen
                 name="ModifyContract"
                 component={ModifyContract}
@@ -114,16 +120,9 @@ function MyStack() {
                     },
                 }}
             />
-            <HomeStackNavigator.Screen
-                name="AddManager"
-                component={AddManager}
-                options={{
-                    title: 'Agregar Administrador',
-                    headerStyle: {
-                        backgroundColor: '#9BBEC8',
-                    },
-                }}
-            />
+
+
+
             <HomeStackNavigator.Screen
                 name="ShowQR"
                 component={ShowQR}
@@ -134,7 +133,6 @@ function MyStack() {
                     },
                 }}
             />
-
             <HomeStackNavigator.Screen
                 name="QR"
                 component={QR}
@@ -145,7 +143,7 @@ function MyStack() {
                     },
                 }}
             />
-            */}
+
         </HomeStackNavigator.Navigator>
     );
 }

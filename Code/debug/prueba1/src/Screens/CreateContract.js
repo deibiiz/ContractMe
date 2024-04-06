@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput } from "react-native";
 import { ethers } from "ethers";
 import Boton from "../components/Boton.js";
 import { useAccount, useContractWrite } from "wagmi";
-import ABI from "../ContractConexion/MyContractAux.json";
+import { EtherProvider } from "../ContractConexion/EtherProvider";
 
 
 
@@ -17,13 +17,14 @@ export default function CreateContract() {
     const [_description, setDescription] = useState('');
     const [mintStatus, setMintStatus] = useState('');
     const { address } = useAccount();
+    const { contractAddress, ABI } = EtherProvider();
 
     if (!address) {
         alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
     }
 
     const { writeAsync } = useContractWrite({
-        address: "0x3eA2717cf5AE3ccc89d868fB317aE938b6aC8EBc",
+        address: contractAddress,
         abi: ABI,
     })
 
