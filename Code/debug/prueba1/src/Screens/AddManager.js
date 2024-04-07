@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, FlatList } from 'react-native';
 import Boton from '../components/Boton.js';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { EtherProvider } from "../ContractConexion/EtherProvider";
 import { useAccount, useContractWrite } from "wagmi";
 
 const AssignManagerScreen = ({ route }) => {
     const { tokenId } = route.params;
+    const navigation = useNavigation();
     const [newManagerAddress, setNewManagerAddress] = useState('');
     const [managers, setManagers] = useState([]);
     const { address } = useAccount();
@@ -55,6 +57,7 @@ const AssignManagerScreen = ({ route }) => {
                 const updatedManagers = await contract.getManagersOfToken(tokenId);
                 setManagers(updatedManagers);
                 setNewManagerAddress("");
+                navigation.navigate("Home1");
             }
         } catch (error) {
             console.error("Error al asignar manager:", error);
@@ -67,6 +70,7 @@ const AssignManagerScreen = ({ route }) => {
             if (!address) {
                 alert("Por favor, conecta tu wallet.");
             } else {
+                console.log(address);
                 const tx = await writeAsync({
                     functionName: 'revokeManagerFromToken',
                     args: [
@@ -165,6 +169,8 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
         flexDirection: "row",
+        flexWrap: 'wrap', // Permite que los elementos se ajusten en líneas múltiples.
+        justifyContent: 'space-between',
     },
 
 });

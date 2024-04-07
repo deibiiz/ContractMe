@@ -14,7 +14,6 @@ export default function LoginWallet() {
     const { open } = useWeb3Modal()
     const { disconnect } = useDisconnect()
     const { isConnected, address } = useAccount()
-    const [TxHash, setTxHash] = useState('');
     const [balance, setBalance] = useState(0);
     const [events, setEvents] = useState([]);
     const { contract, provider, contractAddress, ABI } = EtherProvider();
@@ -43,7 +42,7 @@ export default function LoginWallet() {
         const _description = "Description of the minted item2"; // Descripción
         const _title = "Title of the minted item2"; // Título
 
-        const tx = await writeAsync({
+        await writeAsync({
             args: [
                 _to,
                 _salaryNumber,
@@ -54,12 +53,14 @@ export default function LoginWallet() {
             ],
             value: _salaryNumber,
         });
-
-        console.log(tx);
-        setTxHash(tx.hash);
     }
 
-
+    useEffect(() => {
+        if (!isConnected) {
+            setBalance(0);
+            setEvents([""]);
+        }
+    }, [isConnected]);
 
 
 
@@ -119,7 +120,8 @@ export default function LoginWallet() {
         addEvents(ContractCancelledEvents, "ContractCancelled");
         addEvents(ApprovalChangesEvents, "ApprovalChanges");
 
-        allEvents.sort((a, b) => b.date - a.date);
+        allEvents.sort((a, b) => a.date - b.date);
+        allEvents.reverse();
 
         return allEvents;
     };
@@ -143,11 +145,6 @@ export default function LoginWallet() {
     return (
         <View style={styles.container} >
             <View style={styles.card}>
-                {TxHash &&
-                    <Text>
-                        Transaction: {TxHash}
-                    </Text>
-                }
                 <Boton
                     onPress={writeToContract}
                     texto={"write"}
@@ -173,70 +170,72 @@ export default function LoginWallet() {
                 {isConnected && (
                     <>
                         <Text style={styles.text}>{address}</Text>
+                        <Text style={styles.balanceText}> {balance} ETH</Text>
                     </>
                 )}
-                <Text style={styles.balanceText}> {balance} ETH</Text>
+
             </View>
+            {isConnected && (
+                <View style={[styles.card, styles.eventsContainer]}>
+                    <FlatList
+                        data={events}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) => {
+                            if (item.type !== "ApprovalChanges" || (item.type === "ApprovalChanges" && item.salary !== item.newSalary)) {
+                                return (
+                                    <View style={styles.contractItem}>
 
-            <View style={[styles.card, styles.eventsContainer]}>
-                <FlatList
-                    data={events}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => {
-                        if (item.type !== "ApprovalChanges" || (item.type === "ApprovalChanges" && item.salary !== item.newSalary)) {
-                            return (
-                                <View style={styles.contractItem}>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <Text>{eventToText(item.type)}</Text>
+                                            <Text>  ID: {item.tokenId}</Text>
+                                        </View>
 
-                                    <View style={{ flexDirection: "row" }}>
-                                        <Text>{eventToText(item.type)}</Text>
-                                        <Text>  ID: {item.tokenId}</Text>
+                                        {item.type === "TokenMinted" && (
+                                            <View>
+                                                <Text style={styles.lossesText}>-{item.salary} ETH</Text>
+                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                            </View>)}
+
+                                        {item.type === "ContractCancelled" && (
+                                            <View>
+                                                <Text style={styles.profitText}>+{item.salary} ETH</Text>
+                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                            </View>)}
+
+
+                                        {item.type === "ApprovalChanges" && (
+                                            <View>
+                                                {item.newSalary < item.salary ? (
+                                                    <>
+                                                        <Text style={styles.profitText}>+{item.salary - item.newSalary} ETH</Text>
+                                                        <Text style={styles.textoFecha}>{item.date} </Text>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Text style={styles.lossesText}>-{item.newSalary - item.salary} ETH</Text>
+                                                        <Text style={styles.textoFecha}>{item.date} </Text>
+                                                    </>
+                                                )}
+                                            </View>
+                                        )}
+
+                                        {item.type === "SalaryReleased" && (
+                                            <View>
+                                                <Text style={styles.profitText}>+{item.salary} ETH</Text>
+                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                            </View>
+                                        )}
+
                                     </View>
-
-                                    {item.type === "TokenMinted" && (
-                                        <View>
-                                            <Text style={styles.lossesText}>-{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.date} </Text>
-                                        </View>)}
-
-                                    {item.type === "ContractCancelled" && (
-                                        <View>
-                                            <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.date} </Text>
-                                        </View>)}
-
-
-                                    {item.type === "ApprovalChanges" && (
-                                        <View>
-                                            {item.newSalary < item.salary ? (
-                                                <>
-                                                    <Text style={styles.profitText}>+{item.salary - item.newSalary} ETH</Text>
-                                                    <Text style={styles.textoFecha}>{item.date} </Text>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Text style={styles.lossesText}>-{item.newSalary - item.salary} ETH</Text>
-                                                    <Text style={styles.textoFecha}>{item.date} </Text>
-                                                </>
-                                            )}
-                                        </View>
-                                    )}
-
-                                    {item.type === "SalaryReleased" && (
-                                        <View>
-                                            <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.date} </Text>
-                                        </View>
-                                    )}
-
-                                </View>
-                            );
-                        } else {
-                            return null;
-                        }
-                    }}
-                    ListEmptyComponent={<Text style={styles.textoAviso}>No hay eventos registrados para esta cuenta.</Text>}
-                />
-            </View>
+                                );
+                            } else {
+                                return null;
+                            }
+                        }}
+                        ListEmptyComponent={<Text style={styles.textoAviso}>No hay eventos registrados para esta cuenta.</Text>}
+                    />
+                </View>
+            )}
         </View >
     );
 };

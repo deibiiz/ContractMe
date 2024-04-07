@@ -5,8 +5,8 @@ A continuación se sintetizarán algunos conceptos teóricos relevantes para la 
 \section{Introducción a la Blockchain}
 
 La Blockchain proporcionando un registro inmutable y en tiempo real de transacciones, emergió como una solución al problema de doble gasto~\cite{dobleGasto} en transacciones digitales, un desafío que había eludido a los criptógrafos durante décadas, el cual consiste en la posibilidad de gastar una misma moneda digital más de una vez. Esto ocurre debido a la falsificación o duplicación de archivos digitales que representan la moneda.
-En 2008 una persona o grupo anónimo bajo el seudónimo de Satoshi Nakamoto publicó un documento técnico para crear una moneda digital para contabilizar y transferir valor. Así nació una tecnología que se fundamenta en una base de datos descentralizada compuesta por bloques de información replicados y sincronizados en múltiples ordenadores.  
-Esta premisa hizo que en enero de 2009 entrará en funcionamiento la primera red basada en el protocolo Bitcoin~\cite{introducciónBitcoin}.
+En 2008 una persona o grupo anónimo, bajo el seudónimo de Satoshi Nakamoto, publicó un documento técnico para crear una moneda digital para contabilizar y transferir valor. Así nació una tecnología que se fundamenta en una base de datos descentralizada compuesta por bloques de información replicados y sincronizados en múltiples ordenadores.  
+Esta premisa hizo que en enero de 2009 entrara en funcionamiento la primera red basada en el protocolo Bitcoin~\cite{introducciónBitcoin}.
 La BlockChain demostró su capacidad para contabilizar y transferir valor de manera segura sin la necesidad de intermediarios, transformando el sector financiero y encontrando aplicaciones en una variedad de industrias.
 
 
@@ -23,7 +23,7 @@ Esta arquitectura permite desarrollar un red robusta y descentralizada donde cad
 
 \imagen{BCdescentralizada}{Diferencias entre una red centralidad y descentralizada}{.7}
 
-Resulta fundamental comprender los distintos tipos de nodos que conviven en una red y el papel específico que cada uno desempeña. A continuación, se calificaran los tipos de nodos, destacando sus características y funciones únicas ~\cite{tiposNodos}.
+Resulta fundamental comprender los distintos tipos de nodos que conviven en una red y el papel específico que cada uno desempeña. A continuación, se enumerarán los tipos de nodos, destacando sus características y funciones únicas ~\cite{tiposNodos}.
 
 \begin{itemize}
 \item \textbf{Nodos completos:} Estos nodos albergan una copia completa del libro mayor de la Blockchain. Al contener el registro completo de todas las transacciones, los nodos pueden verificar de forma independiente cualquier transacción sin necesidad de recurrir a información externa.
@@ -32,7 +32,7 @@ Resulta fundamental comprender los distintos tipos de nodos que conviven en una 
 
 \item \textbf{Nodos mineros:} Son utilizados en las redes que utilizan el algoritmo de consenso Proof of Work(PoW), los nodos mineros compiten para agregar nuevos bloques a la Blockchain para obtener un recompensa por ello.
 
-\item \textbf{Nodos completos podados:} Estos nodos almacenan una versión recortada del registro, eliminando datos antiguos para ahorrar espacio pero a diferencia de los nodos ligeros estos pueden seguir verificando de forma independiente cualquier transacción. 
+\item \textbf{Nodos completos podados:} Estos nodos almacenan una versión recortada del registro, eliminando datos antiguos para ahorrar espacio, pero a diferencia de los nodos ligeros estos pueden seguir verificando de forma independiente cualquier transacción. 
 
 \item \textbf{Nodos completos de archivo:} Almacenan todo el libro mayor del Blockchain, desde el principio de los tiempos. Los Nodos Completos de Archivo son la única fuente valiosa y fiable para verificar los datos de transacciones anteriores en la historia de una Blockchain, ya que no están afectados por el límite de tiempo o almacenamiento.
 A diferencia de los nodos completos, los nodos de archivo vas más allá al almacenar cada cambio de estado en la Blockchain.
@@ -55,14 +55,14 @@ Para este proyecto se ha utilizado Ethereum la cual utiliza una gran variedad de
 
 La tecnología Blockchain funciona como un libro mayor digital (DTL) que registra transacciones en múltiples nodos de manera que cada registro es inalterable e irreversible. 
 Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena ~\cite{wiki:DTL}.
-Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de computo~\cite{BlockchainFuncionamiento}.
+Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de cómputo~\cite{BlockchainFuncionamiento}.
 
 \imagen{DTL}{Proceso de actualización del libro mayor}{1}
 
 
 \subsection{Encadenamiento de bloques}
 
-Cada bloque contiene un numero determinado de transacciones y esta formado por tres elementos principales; los datos de las transacciones, el hash del bloque anterior en la cadena  y su propio hash único, generado a partir de la información contenida en el bloque.
+Cada bloque contiene un numero determinado de transacciones y está formado por tres elementos principales; los datos de las transacciones, el hash del bloque anterior en la cadena  y su propio hash único, generado a partir de la información contenida en el bloque.
 Los bloques se enlazan mediante el hash formado por los datos del bloque anterior.
 El algoritmo hash más usado en la Blockchain es "SHA-256"~\cite{sha256} desarrollado por la Agencia de Seguridad Nacional (NAS) en el año 1997. Es conocido por ser lento en comparación con otras funciones hash, pero a pesar de esto destaca por su seguridad por lo que lo hace adecuado para aplicaciones financieras.
 El hash consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable. Cualquier cambio en el contenido de un bloque anterior requeriría recalcular todos los hashes subsiguientes, lo cual es computacionalmente costoso y prácticamente imposible de realizar sin ser detectado
@@ -81,7 +81,7 @@ Seguidamente, los nodos de la red al recibir la transacción, emplean la clave p
 \imagen{firmaDigital}{Transacción encriptada con firma digital}{1}
 
 A diferencia de los sistemas financieros tradicionales, la Blockchain no registra los saldos de las cuentas de manera directa. En su lugar, mantiene un registro detallado de todas las transacciones que han sido verificadas y aprobadas en la red.
-Por tanto para determinar el saldo de una wallet, es necesario analizar y verificar todas las transacciones asociadas a ella desde la creación de la red. Este enfoque asegura que la información sea transparente y auditada constantemente por todos los nodos de la red, lo que refuerza la seguridad y la integridad del sistema.
+Por tanto, para determinar el saldo de una wallet, es necesario analizar y verificar todas las transacciones asociadas a ella desde la creación de la red. Este enfoque asegura que la información sea transparente y auditada constantemente por todos los nodos de la red, lo que refuerza la seguridad y la integridad del sistema.
 
 Por tanto si un usuario quiere generar una transacción para enviar un activo, este debe generar una solicitud que incluya unas referencias llamadas "inputs", a transacciones entrantes previas que sumen la cantidad deseada. Los nodos de la red verifican estos inputs para asegurarse que no hayan sido gastados previamente.
 Por ende, una vez los inputs hayan sido referenciados, estos son invalidados para transacciones futuras, evitando el doble gasto de activos digitales.
@@ -91,15 +91,15 @@ Por ende, una vez los inputs hayan sido referenciados, estos son invalidados par
 
 El mecanismo de consenso en una blockchain es fundamental para mantener la integridad y la seguridad de la red. Este proceso permite que todos los nodos de la red se pongan de acuerdo sobre el estado actual del libro mayor digital, lo que significa que cualquier cambio en el blockchain debe ser validado y aceptado por más del 50\% de los nodos de la red.
 
-Actualmente existen dos categorías amplias de protocolos de consenso, los de finalidad probabilística, representada fundamentalmente por \textbf{Proof of work} (PoW), implica que la confirmación de una transacción se vuelve más segura a medida que se van confirmando bloques sucesivos.
+Actualmente existen dos categorías amplias de protocolos de consenso, los de finalidad probabilística, representados fundamentalmente por \textbf{Proof of work} (PoW), implica que la confirmación de una transacción se vuelve más segura a medida que se van confirmando bloques sucesivos.
 Por otro lado, los protocolos con finalidad absoluta, como \textbf{Proof of Stake} (PoS) aseguran la finalización de las transacciones de manera definitiva una vez se agregan a la Blockchain.
 
-El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las Blockchains. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complej, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado "nonce" que cuando se combina con los datos del bloque y se procesa a través de una función hash produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del hash.
-Este proceso, conocido como minería, garantiza que alterar un bloque ya minado sea computacionalmente inviable, proporcionando así seguridad e inmutabilidad a la cadena de bloques. A su vez la dificultad de este problema se ajusta periódicamente para mantener un tiempo objetivo entre la creación de bloques consecutivos, asegurando la estabilidad y previsibilidad de la generación de nuevos bloques.
-La labor de los mineros en la Blockchain no es altruista, este poder de computo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas ~\cite{PoW}.
+El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las Blockchains. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complejo, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado "nonce" que cuando se combina con los datos del bloque y se procesa a través de una función hash produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del hash.
+Este proceso, conocido como minería, garantiza que alterar un bloque ya minado sea computacionalmente inviable, proporcionando así seguridad e inmutabilidad a la cadena de bloques. A su vez, la dificultad de este problema se ajusta periódicamente para mantener un tiempo objetivo entre la creación de bloques consecutivos, asegurando la estabilidad y previsibilidad de la generación de nuevos bloques.
+La labor de los mineros en la Blockchain no es altruista, este poder de cómputo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas ~\cite{PoW}.
 
-A pesar de su amplia adopción y probada seguridad, La minería de criptomonedas requiere de grandes granjas de minado que conlleva un elevado consumo energético teniendo un gran impacto ambiental. 
-Este aspecto ha impulsado la búsqueda de alternativas más eficientes y sostenibles como el Proof of Stake (PoS) que reduce el consumo eléctrico. Este protocolo se basa en seleccionar a los validadores en proporción a la cantidad de criptomonedas que poseen y están dispuestos a "bloquear" como garantía.
+A pesar de su amplia adopción y probada seguridad, La minería de criptomonedas requiere de grandes granjas de minado que conllevan un elevado consumo energético teniendo un gran impacto ambiental. 
+Este aspecto ha impulsado la búsqueda de alternativas más eficientes y sostenibles como el Proof of Stake (PoS) que reduce el consumo eléctrico. Este protocolo se basa en seleccionar a los validadores en proporción a la cantidad de criptomonedas que poseen y están dispuestos a \"bloquear\" como garantía.
 La adopción de PoS por parte de proyectos líderes como Ethereum, con su transición a Ethereum 2.0, marca un hito importante y podría incentivar a otras criptomonedas a seguir un camino similar.
 
 Hay que destacar que estos mecanismos de consenso únicamente son seguros en redes de una cierta magnitud ya que en contra pueden ser victimas del ataque del 51\%.
@@ -111,7 +111,7 @@ Es por esto que los mecanismos de consenso únicamente son efectivos en redes gr
 
 \section{Tipos de Blockchain}
 
-Existen diferentes tipos de redes, cada una diseña para satisfacer unas necesidades en cuanto a la privacidad, gobernanza y accesibilidad. 
+Existen diferentes tipos de redes, cada una diseñada para satisfacer unas necesidades en cuanto a la privacidad, gobernanza y accesibilidad. 
 Se pueden clasificar en cuatro categorías principales ~\cite{introducciónBlockchain}:
 
 \begin{itemize}
@@ -120,7 +120,7 @@ Se pueden clasificar en cuatro categorías principales ~\cite{introducciónBlock
 \item \textbf{Blockchains semiprivadas:} Son operadas por una única entidad con la posibilidad de restringir el acceso, ofreciendo un equilibrio entre el control y la descentralización. A diferencia de las redes privadas, las semiprivadas pueden permitir la participación de partes externas bajo ciertas condiciones, manteniendo un nivel significativo de control sobre la red.
 Este tipo de redes las ofrecen empresas como IBM (Hyperledger Fabric) utilizada en sectores como la salud y la financiación, permite a las organizaciones configurar redes donde los datos se comparten solo con los actores autorizados, mejorando la eficiencia y la seguridad. Ofreciendo opciones personalizables para empresas, equilibrando la privacidad con la innovación ~\cite{Hyperledger}.
 
-\item \textbf{Blockchains privadas:} Son operadas por una única organización, permiten un control total sobre quién puede participar en la red. Estas redes limitan el principio de la descentralización pero ofrecen una solución eficaz para entornos empresariales que necesitan privacidad y eficiencia en procesos internos.
+\item \textbf{Blockchains privadas:} Son operadas por una única organización, permiten un control total sobre quién puede participar en la red. Estas redes limitan el principio de la descentralización, pero ofrecen una solución eficaz para entornos empresariales que necesitan privacidad y eficiencia en procesos internos.
 Por ejemplo, para este proyecto se ha utilizado la herramienta Ganache, la cual simula una red privada, siendo de gran utilidad en la fase de desarrollo y pruebas.
 
 \item \textbf{Consorcio:} Representan un equilibrio entre los modelos públicos y privados, siendo operadas por un grupo de organizaciones en lugar de una única entidad. Esta posibilidad permite compartir la responsabilidad del mantenimiento de la red entre varios participantes, lo que las hace adecuadas para colaboraciones interempresariales. 
@@ -155,8 +155,8 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 \section{Web3 y DApps}
 
 Web3 emerge como una propuesta revolucionaria en la evolución de Internet, promoviendo una arquitectura descentralizada que contrasta con las fases anteriores de la web.
-Desde los comienzos de Internet con Web 1.0, caracterizada por páginas estáticas y un flujo unidireccional de información, hasta la aparición de Web 2.0, que se permitía a los usuarios interactuar con el contenido en linea y entre ellos. 
-Sin embargo estas etapas se han caracterizado por su centralización del poder y los datos en mano de unas pocas plataformas dominantes, lo que a menudo cuestiona preocupaciones sobre la privacidad, seguridad y monopolizción de la información ~\cite{Web3}. 
+Desde los comienzos de Internet con Web 1.0, caracterizada por páginas estáticas y un flujo unidireccional de información, hasta la aparición de Web 2.0, que permitía a los usuarios interactuar con el contenido en línea y entre ellos. 
+Sin embargo, estas etapas se han caracterizado por su centralización del poder y los datos en mano de unas pocas plataformas dominantes, lo que a menudo cuestiona preocupaciones sobre la privacidad, seguridad y monopolizción de la información ~\cite{Web3}. 
 
 En este contexto nace Web3 como una solución prometedora para abordar estas preocupaciones centrándose en descentralización. Web3 a diferencia de sus antecesoras no se limita a ser un medio para compartir y crear contenido sino que pretende redefinir las dinámicas de poder en el espacio digital mediante la implementación de tecnologías Blockchain.
 
@@ -174,9 +174,9 @@ Aunque el concepto de DApp parece moderno, sus raíces se remontan a más de 20 
 
 \imagen{DAPP}{Estructura de las DApps}{1}
 
-El mercado de las DApps ha experimentado un crecimiento impresionante en los últimos años, escalando de un valor de mercado de 10.5 mil millones de dolares en 2019 a más de 25 mil millones en 2022, este proyecto se proyecta a continuar a un ritmo acelerado, esperándose alcanzar una capitalización de 368 mil millones en 2027. Estas cifras subrayan la la creciente importancia y potencial económico de las DApps en el ecosistema digital ~\cite{DAppsEconomía}.
+El mercado de las DApps ha experimentado un crecimiento impresionante en los últimos años, escalando de un valor de mercado de 10.5 mil millones de dolares en 2019 a más de 25 mil millones en 2022, este proyecto se proyecta a continuar a un ritmo acelerado, esperándose alcanzar una capitalización de 368 mil millones en 2027. Estas cifras subrayan la creciente importancia y potencial económico de las DApps en el ecosistema digital ~\cite{DAppsEconomía}.
 
-Hoy en día las DApps adquieren una nueva dimensión, ejecutándose en redes descentralizadas y apoyandose en la tecnología de contratos inteligentes para automatizar procesos y garantizar la ejecución de acuerdos sin intermediarios.
+Hoy en día las DApps adquieren una nueva dimensión, ejecutándose en redes descentralizadas y apoyándose en la tecnología de contratos inteligentes para automatizar procesos y garantizar la ejecución de acuerdos sin intermediarios.
 Las Dapps destacan por su libertad y soberanía digital de los usuarios, ya que la ausencia de un punto central de control hace prácticamente imposible que se impongan restricciones arbitrarias por parte de entidades externas. A su vez, esta distribución de los datos a través de la red dificulta los ataques y manipulaciones.
 Adicionalmente, el carácter de código abierto de muchas DApps fomenta la continua revisión por parte de la comunidad e incrementa la seguridad y la confianza en estas aplicaciones.
 
@@ -188,7 +188,7 @@ Este proyecto se enmarca en las DApps de segundo nivel, ya que se opta por desar
 
 Ethereum actualmente es la segunda red más grande, solo por detrás de Bitcoin y aunque normalmente se les compara, Ethereum y Bitcoin son dos proyectos totalmente distintos.
 Bitcoin introdujo una forma descentralizada de dinero electrónico, permitiendo realizar transferencias en una red segura y sin intermediarios.
-Ethereum por otro lado, lanzado en 2015 basándose el la base establecida por Bitcoin, expandió su funcionalidad.
+Ethereum por otro lado, lanzado en 2015 basándose en la base establecida por Bitcoin, expandió su funcionalidad.
 
 La ambición de Ethereum no solo se limita a simplificar las transacciones financieras, su propósito es ampliar el alcance de las aplicaciones descentralizadas (Dapps) al proporcionar una infraestructura programable.
 A diferencia de Bitcoin, no cuenta con un suministro limitado de monedas para preservar su valor, además cuenta con tiempos de minado de bloques significativamente menores, por lo que puede ofrecer una experiencia más ágil y confirmaciones de transacciones más rápidas.
@@ -200,26 +200,26 @@ El Ether(ETH) es la criptomoneda que alimenta la red Ethereum, desempeña un pap
 
 Similar a como ocurre con otras criptomonedas, ETH se puede enviar y recibir asegurando transacciones a cualquier parte del mundo y sin intermediarios.
 A su vez, cada operación que cambie el estado de la red, supone el pago de una pequeña tarifa en ETH. Desde una simple transferencia hasta la ejecución de complejos contratos inteligentes requieren computación y almacenamiento, siendo utilizado el ETH para pagar estas denominadas "Tarifas de gas".
-Finalmente como se introdujo el apartado mecanismos de consenso, Ethereum esta implementando el mecanismo de consenso Proof of Stake(PoS) y el ETH constituye el activo que los participantes de la red pueden bloquear(stake) con el objetivo de dar seguridad a la red a cambio de recompensas en esta misma moneda.
+Finalmente como se introdujo el apartado mecanismos de consenso, Ethereum está implementando el mecanismo de consenso Proof of Stake(PoS) y el ETH constituye el activo que los participantes de la red pueden bloquear(stake) con el objetivo de dar seguridad a la red a cambio de recompensas en esta misma moneda.
 
 Aunque ETH no tiene un suminsitro máximo fijo como Bitcoin, las políticas de emisión estan diseñadas para asegurar que el suminsitro de ETH crezca a un ritmo predecible y decreciente, lo que contribuye a la escasez y valor a largo plazo.
-El valor de ETH no se basa solo en su escasez digital como en el resto de criptomonedas, también adquiere un valor adicional al permitir a los usuario pagar las tarifas de gas y más recientemente ETH se ha vuelto valiso para los usuario de aplicaciones financieras descentralizadas(DEFI) al poder usarse como garantía para prestamos criptográficos o como sistema de pago \cite{QueEsETH}.
+El valor de ETH no se basa solo en su escasez digital como en el resto de criptomonedas, también adquiere un valor adicional al permitir a los usuario pagar las tarifas de gas y más recientemente ETH se ha vuelto válido para los usuario de aplicaciones financieras descentralizadas(DEFI) al poder usarse como garantía para prestamos criptográficos o como sistema de pago \cite{QueEsETH}.
 
 
 \subsection{Ethereum Virtual Machine}
 
-La Ethereum Virtual Machine(EVM) constituye el nucleo de la red Ethereum, proporcionando un entorno de ejecución aislado y seguro para los contratos inteligentes y las aplicaciones descentralizadas. 
-La EVM es una maquina virtual Turing completa que facilita la ejecución de código en el contexto de la blockchain.
+La Ethereum Virtual Machine(EVM) constituye el núcleo de la red Ethereum, proporcionando un entorno de ejecución aislado y seguro para los contratos inteligentes y las aplicaciones descentralizadas. 
+La EVM es una maquina virtual Turing completa, que facilita la ejecución de código en el contexto de la blockchain.
 La EVM funciona como una máquina de pila, con una profundidad de 1024 items, cada item es una palabra de 256 bits, seleccionado para su utilización con la criptografía de 256 bits.
 Se ejecuta a través de códigos de operación, que realizan operaciones estándar de pila como XOR, AND, ADD, SUB, etc \cite{QueEsEVM}.
 
-La EVM funciona mediante la ejecución de bytecode, un conjunto de intrucciones de bajo nivel que la máquina es capaz de interpreta y ejecutar directamente.
+La EVM funciona mediante la ejecución de bytecode, un conjunto de intrucciones de bajo nivel que la máquina es capaz de interpretar y ejecutar directamente.
 El bytecode se obtiene de la compilación de contratos inteligentes escritos en lenguajes de alto nivel. 
 La EVM es capaz de ejecutar código en un entorno completamente aislado, por lo que los contratos pueden oprar sin comprometer la seguridad de la red. Manejando el acceso a los recursos de los computadores y limitando sus acciones en un ambiente controlado.
 Esta seguridad se ve reforzada por su naturaleza descentralizada y distribuida, por lo que cualquier intento de manipulación mediante un código malicioso deberá enfrentarse al consenso de la red.
 De esta forma, Ethereum funciona como un ordenador mundial descentralizado de una general en una red entre pares.
 
-La EVM cuenta con gran flexibilidad en cuanto a su capacidad para soportartar una variedad de lenaguejes de programación, facilitando así la adaptabilidad del sistema Ethereum.
+La EVM cuenta con gran flexibilidad en cuanto a su capacidad para soportartar una variedad de lenguajes de programación, facilitando así la adaptabilidad del sistema Ethereum.
 Además, la EVM permite que cualquier persona con acceso a Ethereum pueda desplegar sus propios contratos inteligentes, democratizando el acceso a la tecnología blockchain y creando una gran comunidad de desarrolladores \cite{ComoFuncionaEVM}.
 
 
@@ -230,11 +230,11 @@ La tarifa de gas es la cantidad de gas usado para hacer alguna operación, multi
 Es un mecanismo no solo de prevención contra ataques de spam, sino tambien que facilita una economía alrededor, estableciendo un sistema de compensación para los mineros que procesan y confirman las transacciones.
 El precio del gas suele expresarse en gwei, cada gwei equivale a \(0,000000001\) ETH o \(10^{-9}\) ETH.
 
-Desde 2021 con la actualización "London" se introdujo el mecanismo EIP-1559, que hizo que el calculo de la tarifa de gas fuera más previsible, introduciendo los conceptos de tarifa 
+Desde 2021 con la actualización \"London\" se introdujo el mecanismo EIP-1559, que hizo que el calculo de la tarifa de gas fuera más previsible, introduciendo los conceptos de tarifa 
 base y tarifa prioritaria.
 
-\textbf{La tarifa base} indica la cantidad mínima de gas a pagar para que la transacción se considere como valida para tramitar.
-La tarifa base se ajusta dinámicamente bloque a bloque basándose en la ocupación del bloque anterior. El sistema, calcula cuanto gas se utilizó en total para todas las transacciones en el bloque anterior y lo compara con el tamaño de bloque previamente definido por el protocolo. Este tamaño de bloque previamente definido es una medida de cuánto gas se espera que consuman las transacciones en un bloque ideal, cada bloque en la red Ethereum tiene un tamaño esperado de 15 millones de gas.
+\textbf{La tarifa base} indica la cantidad mínima de gas a pagar para que la transacción se considere como válida para tramitar.
+La tarifa base se ajusta dinámicamente bloque a bloque basándose en la ocupación del bloque anterior. El sistema, calcula cuánto gas se utilizó en total para todas las transacciones en el bloque anterior y lo compara con el tamaño de bloque previamente definido por el protocolo. Este tamaño de bloque previamente definido es una medida de cuánto gas se espera que consuman las transacciones en un bloque ideal, cada bloque en la red Ethereum tiene un tamaño esperado de 15 millones de gas.
 Si el bloque anterior consumió más gas del tamaño previamente definido, la tarifa base aumentará para el siguiente bloque hasta un máximo de 12,5\%. 
 El crecimiento exponencial en el costo de las transacciones cuando los bloques están constantemente sobreocupados actúa como un freno contra la congestión y alcanzando el tamaño un tamaño de equilibrio de 15 millones de gas de media por bloque , ya que solo las transacciones prioritarias de aquellos que estén dispuestos a pagar más serán ejecutadas.
 
@@ -261,11 +261,11 @@ El crecimiento exponencial en el costo de las transacciones cuando los bloques e
 \end{table}
 
 
-Por otro lado, \textbf{la tarifa prioritaria} establece una propina que se añade a la tarifa base para que los validadores vean la transacción más atractiva para incluirla en el siguiente bloque, ya que es esta propina la que adquirirán en recompensa a su trabajo, a su vez la tarifa base es consumida y por lo tanto eliminada.
-Por lo general la tarifa base por si sola es insuficiente para que un validador se interese por ella, por lo que la elección de una transacción por parte del validador depende de la tarifa prioritaria, la cual se tiene que ajustar su precio en base al uso de la red en el momento de enviar la transacción.
+Por otro lado, \textbf{la tarifa prioritaria} establece una propina que se añade a la tarifa base para que los validadores vean la transacción más atractiva para incluirla en el siguiente bloque, ya que es esta propina la que adquirirán en recompensa a su trabajo, a su vez la tarifa base es consumida y por lo tanto, eliminada.
+Por lo general, la tarifa base por si sola es insuficiente para que un validador se interese por ella, por lo que la elección de una transacción por parte del validador depende de la tarifa prioritaria, la cual tiene que ajustar su precio en base al uso de la red en el momento de enviar la transacción.
 
 Existe otro tipo de tarifa que se puede incluir de manera opcional en las transacciones, esta es la tarifa máxima, que es la que se ha usado para las transacciones dentro de este proyecto.
-Este parámetro opcional recoge la cantidad máxima que el usuario esta dispuesto a pagar por la validación de una transacción, por lo que dependiendo de la importancia de la transacción se puede consentir pagar más a cambio de una mayor velocidad de validación.
+Este parámetro opcional recoge la cantidad máxima que el usuario está dispuesto a pagar por la validación de una transacción, por lo que dependiendo de la importancia de la transacción se puede consentir pagar más a cambio de una mayor velocidad de validación.
 La tarifa total constituye la suma de la tarifa base y la tarifa prioritaria \cite{gasEthereum}.
 
 
@@ -285,7 +285,7 @@ Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesid
 La tokenización~\cite{tokenización} es el proceso de convertir la información delicada o activos del mundo real en representaciones digitales denominadas "tokens", dentro del ecosistema Blockchain.
 Este procedimiento juega un papel crucial en la protección de datos confidenciales al reemplazar la información original con un token único, el cual no tiene valor fuera de su contexto específico de uso.
 
-La información sensible se almacena en la "bóveda de tokenización" ~\cite{bóvedaTokenización} una infraestructura de almacenamiento segura donde los datos originales se cifran y aíslan. El acceso a la bóveda es solo posible a través de rigurosos controles de seguridad y claves de descifrado especificas.
+La información sensible se almacena en la "bóveda de tokenización" ~\cite{bóvedaTokenización} una infraestructura de almacenamiento segura donde los datos originales se cifran y aíslan. El acceso a la bóveda es solo posible a través de rigurosos controles de seguridad y claves de descifrado específicas.
 A diferencia de los métodos de cifrado que utilizan un algoritmo matemático para transformar datos en un formato ilegible que puede ser revertido usando un clave concreta, la tokenizción no mantiene una relación algorítmica con los datos originales. En consecuencia, los tokens generados no pueden ser revertidos sin un acceso autorizado a la bóveda de tokenización, lo que proporciona una capa adicional de seguridad.
 Por lo tanto, mientras los datos originales se almacenan en una bóveda de tokens segura, los tokens se distribuyen en sistemas internos para su utilización diaria.
 

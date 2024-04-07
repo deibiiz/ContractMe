@@ -26,6 +26,7 @@ export default function CreateContract() {
     const { writeAsync } = useContractWrite({
         address: contractAddress,
         abi: ABI,
+        functionName: 'mint',
     })
 
     const mintContract = async () => {
@@ -50,7 +51,6 @@ export default function CreateContract() {
             }
 
             const tx = await writeAsync({
-                fuctionName: "signContract",
                 args: [
                     _to,
                     _salaryNumber,

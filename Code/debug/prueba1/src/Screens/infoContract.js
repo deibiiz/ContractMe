@@ -86,8 +86,7 @@ const ContractDetailsScreen = ({ route }) => {
             } else {
 
                 console.log(contractId);
-                console.log(tokenId)
-                await contract.cancelContract(contractId).send({ from: address });
+                console.log(tokenId);
                 const tx = await writeAsync({
                     functionName: 'cancelContract',
                     args: [
@@ -97,7 +96,7 @@ const ContractDetailsScreen = ({ route }) => {
                 console.log(tx);
 
                 alert('Contrato cancelado con éxito.');
-                navigation.navigate('ShowContract');
+                navigation.navigate('Home1');
             }
         } catch (error) {
             console.error("Error al cancelar el contrato:", error);
@@ -308,7 +307,7 @@ const ContractDetailsScreen = ({ route }) => {
                                 <Text style={styles.textoAviso}> El salario ha sido liberado </Text>
                             )}
 
-                            {!contractDetails.isSigned && (
+                            {!contractDetails.isSigned && !contractDetails.isFinished && (
                                 <>
                                     <Boton
                                         texto="Mostrar código QR"

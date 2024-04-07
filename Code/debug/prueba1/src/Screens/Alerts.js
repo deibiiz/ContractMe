@@ -120,7 +120,7 @@ export default function Alertas() {
         <FlatList
             data={pendingContracts}
             keyExtractor={(item) => item}
-            ListHeaderComponentStyle={renderHeader}
+            ListHeaderComponent={renderHeader}
             renderItem={({ item }) => (
                 <TouchableOpacity
                     style={styles.contractItem}

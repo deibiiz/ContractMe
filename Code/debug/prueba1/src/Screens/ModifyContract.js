@@ -24,9 +24,6 @@ const ModifyContract = ({ route, navigation }) => {
         functionName: 'proposeChange',
     })
 
-    console.log(duration);
-    console.log(startDate);
-    console.log(endDate);
 
     const sendProposal = async () => {
         try {
@@ -47,7 +44,7 @@ const ModifyContract = ({ route, navigation }) => {
                 });
                 console.log(tx);
 
-                navigation.navigate("ShowContract", { tokenId: tokenId });
+                navigation.navigate("Home1");
             }
         } catch (error) {
             console.error("Error al modificar el contrato:", error);
