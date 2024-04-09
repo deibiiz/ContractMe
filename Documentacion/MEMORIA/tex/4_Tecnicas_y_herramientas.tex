@@ -58,39 +58,81 @@ Además, Remix se integra con herramientas y plugins adicionales, ofreciendo un 
 Remix ha tenido una gran protagonismo en el desarrollo de mi proyecto permitiéndome iterar rápidamente a través de diferentes versiones de contratos inteligentes. Pudiendo ejecutar pruebas unitarias con diversas redes Ethereum como Rinkeby y Goerli, indispensable para validar la lógica del Smart Contract antes de su despliegue final. Dándome una gran capacidad de testeo en un entorno controlado pero realista el cual ha sido crucial para la corrección de errores y la optimización del uso de gas, asegurando así la eficiencia y seguridad de los contratos inteligentes desarrollados.
 
 
+\subsection{Infura}
+
+Infura es una plataforma que proporciona una API escalable y de alta disponibilidad para acceder a la Blockchain de Ethereum, entre muchas otras.
+Esta plataforma permite desplegar contratos inteligentes en la Blockchain sin necesidad de mantener un nodo propio lo que representa un ahorro significativo en timpo y recursos.
+Para ello, Infura proporciona "endPoints" de API que facilitan la lecutra y escritura de datos en la Blockchain.
+Infura es una propuesta de gran valor para el desarrollo de dApps como la presente, ya que facilita el despliegue y la interacción de contratos inteligentes, asegurando una alta disponibilidad. Esto garantiza que las aplicaciones puedan realizar y recibir transacciones en cualquier momento.
+Del mismo modo, a medida que el proyecto crece, Infura se adapta a las necesidades de escalabilidad, permitiendo que la aplicación pueda manejar un mayor número de solicitudes de manera eficiente.
+
+
 \subsection{Truffle}
 
 Tras una fase inicial de desarrollo de los Smart Contracts usando Remix, la transición al uso de Truffle ha marcado un punto de inflexión en la complejidad de mi proyecto.
 Truffle consiste en una suite de desarrollo avanzada para Ethereum, ofreciendo un conjunto de herramientas diseñadas para facilitar el desarrollo, gestión y despliegue de Smart Contracts.
-Truffle proporciona un entorno de desarrollo estructurado generando una jerarquía de carpetas para favorecer la implementación de proyectos blockchain complejos.
+Truffle ofrece un entorno de desarrollo estructurado generando una jerarquía de carpetas para favorecer la implementación de proyectos blockchain complejos.
 Ahorra mucho tiempo con su sistema de migraciones y scripts de despliegue el cual automatiza y simplifica el proceso de lanzamiento de contratos.
-Aunque Remix es una excelente herramienta, Truffle eleva la posibilidad de hacer pruebas unitarias a otro nivel con un marco de prueba mucho mas sofisticado, permitiendo ejecutar test en Solidity o JavaScript.
-Finalmente, uno de las mayores ventajas de usar Truffle en el desarrollo de aplicaciones descentralizadas es en cómo simplifica el proceso de unir el trabajo que se realiza en el backend con el frontend. Cuenta con herramientas que ayudan a conectar Smart Contracts con aplicaciones móviles haciendo que la conexión sea mas directa y menos propensa a errores.
+
+Aunque Remix es una excelente herramienta, Truffle eleva la posibilidad de hacer pruebas unitarias a otro nivel con un marco de prueba mucho mas sofisticado, permitiendo ejecutar test en Solidity o JavaScript.Esta capacidad ampliada para realizar pruebas unitarias contribuye de manera crucial a la calidad y seguridad del código de los Smart Contracts.
+
+Finalmente, uno de las mayores ventajas de usar Truffle en el desarrollo de aplicaciones descentralizadas es en cómo simplifica el proceso de unir el trabajo que se realiza en el backend con el frontend. Truffle proporciona herramientas que que promueven una conexión mas directa y menos propensa a errores entre Smart Contracts y las aplicaciones móviles.
 
 
 \subsection{Ganache}
 
-Ganache funciona como un nodo de Ethereum personal, permitiendo a los desarrolladores simular un entorno de blockchain que opera localmente ofreciendo un espacio seguro y controlado para experimentar sin ningún costo real ni tiempos de espera con las redes públicas de Ethereum.
-Proporciona diez cuentas cargadas con 1000 ETH cada una y con su clave pública y privada correspondiente.
-Ganache se puede usar tanto en la línea de comandos como en en la aplicación de escritorio y proporciona  una vista de las transacciones, bloques y estado de la red, mostrando el feedback en tiempo real, vital para realizar una iteración rápida.
-Ganache se integra perfectamente con Truffle, siendo Ganache el entorno de desarrollo local predeterminado de Truffle.
+Ganache funciona como un nodo de Ethereum personal, permitiendo a los desarrolladores simular un entorno de blockchain que opera localmente ofreciendo un espacio seguro y controlado para experimentar sin ningún costo real ni tiempos de espera al contrario que pasa con las redes públicas de Ethereum.
+Por defecto, proporciona diez cuentas cargadas con 1000 ETH cada una junto con sus correspondientes claves públicas y privadas, aunque esta configuración puede ajustarse según las necesidades del proyecto.
+
+Disponible tanto como una herramienta en línea de comandos o como una aplicación de escritorio. Ganache proporciona  una vista de las transacciones, bloques y estado de la red, mostrando el feedback en tiempo real, vital para realizar una iteración rápida.
+
+La integración de Ganache con Truffle facilita aún más su utilidad, estableciéndose como el entorno de desarrollo local predeterminado dentro del ecosistema Truffle.
+De esta forma se permite testear la eficiencia de los contratos ajustando parámetros como el tiempo de bloque para simular diferentes condiciones de red.
 
 
 \subsection{MetaMask}
 
 MetaMask es una extensión de navegador y una aplicación móvil que permite a los usuarios interactuar con la blockchain de manera segura y sencilla. Actúa como puente entre los navegadores web y la blockchain.
-Su funcionamiento es análogo a una cartera digital, permitiendo a los usuarios almacenar sus cuentas de Ethereum.
-Al conectarse a dApps, los usuarios pueden usar sus cuentas de MetaMask para autenticarse eliminando la necesidad de copiar claves privadas manualmente. Por otro lado, aplica una capa adicional de seguridad ya que esta herramienta encripta la información del usuario y almacena las claves privadas directamente en el dispositivo del usuario. Esto asegura que solo el usuario tenga acceso a sus fondos y datos.
-La integración de MetaMask en mi proyecto no solo mejora la experiencia del usuario final, sino que también agiliza el desarrollo de mi proyecto al proporcionar una manera fácil y segura de acceder a los activos de los usuarios.
+Su funcionamiento es análogo a una cartera digital, permitiendo a los usuarios almacenar sus cuentas de Ethereum así como el envío de criptomonedas.
+
+Al conectarse a dApps, los usuarios pueden usar sus cuentas de MetaMask para autenticarse eliminando la necesidad de ingresar claves privadas manualmente. Por otro lado, aplica una capa adicional de seguridad al encriptar la información del usuario y almacenar las claves privadas directamente en el dispositivo del usuario. Esto asegura que solo el usuario tenga acceso a sus fondos y datos.
+
+La integración de MetaMask en mi proyecto no solo mejora la experiencia del usuario final,
+proporcionando una forma más segura e intuitiva de acceder a sus activos, sino que también agiliza el desarrollo de mi proyecto al simplificar la manera en que los usuarios se conectan a la dApp.
+
+Finalmente una característica definitiva de Metamask a diferencia de otras billeteras, es su capacidad para agregar redes personalizadas, de gran utilidad para el testeo de la aplicación, permitiendo la conexión a entornos específicos como el entorno local proporcionado por Ganache o la tesnet de Sepolia.
 
 
 \subsection{Node.js}
 
-Node.js es un entorno de ejecución en JavaScript, tradicionalmente un lenguaje de programación del lado del cliente, para desarrollar aplicaciones del lado del servidor. Es conocido por su capacidad para manejar operaciones asíncronas y por su escalabilidad siendo de gran popularidad en el desarrollo de aplicaciones web modernas. Una de las ventajas de de Node.js es su ecosistema de paquetes gestionados por npm (Node Package Manager), que proporciona acceso a miles de librerías.
-En el proyecto se ha usado de manera frecuente, más allá de ser un requisito para utilizar Truffle, a través del uso de npm install se ha usado "npm install" para descargar librerías y paquetes necesarios para el desarrollo del frontend y backend.
+Node.js es un entorno de ejecución en JavaScript, que tradicionalmente ha sido un lenguaje de programación del lado del cliente, para desarrollar aplicaciones del lado del servidor. Es conocido por su capacidad para manejar operaciones asíncronas y por su escalabilidad siendo de gran popularidad en el desarrollo de aplicaciones web modernas. Una de las ventajas de de Node.js es su ecosistema de paquetes gestionados por npm (Node Package Manager), que proporciona acceso a miles de librerías.
+
+En el proyecto se ha usado de manera frecuente, más allá de ser un requisito para utilizar Truffle, a través del comando \"npm install\" para descargar librerías y paquetes necesarios tanto para el desarrollo del frontend como el del backend.
 Bien es así, que aunque React Native sea el framework principal del desarrollo del frontend, la gestión de sus dependencias, librerías adicionales se realiza mediante npm, el cual opera sobre Node.js.
-A su vez, por ejemplo el uso de la biblioteca Web3.js, una de las mas importantes del proyecto ya que es fundamental para interactuar con la blockchain, se ha instalado y gestionado usando npm.
-Por tanto, Node.js ha sido una pieza crucial en el desarrollo del proyecto, simplificando la configuración del proyecto.
+Por ejemplo el uso de la biblioteca \"Ethers\", una de las mas importantes del proyecto ya que es fundamental para interactuar con la blockchain, se ha instalado y gestionado usando npm.
+Por tanto, Node.js ha sido una pieza crucial en el desarrollo del proyecto, demostrando su valor no solo como una plataforma de desarrollo del lado del servidor, sino también como un eje central para la administración de paquetes y librerías en el desarrollo de aplicaciones completas.
+
+
+\subsection{EtherScan}
+
+EtherScan ofrece una plataforma web que permite explorar los bloques de la red de Ethereum.
+Esta herramienta permite seguir la actualización de la red Ethereum en tiempo real, observando cómo se añaden nuevos bloques y el conjunto de transacciones de cada uno. También permite buscar específicamente una transacción que se ha cometido a lo largo del tiempo mediante su función hash.
+A parte de mostrar las transacciones en tiempo real, EtherScan permite desglosar cada transacción para ofrecer detalles como el número de bloque, la hora exacta de la confirmación, y datos específicos sobre las acciones dentro de las transacción, tales como transferencias de tokenes ERC-721, el valor transferido, las tarifas de gas, etcétera.
+EtherScan también sirve como un centro de análisis, en su plataforma podemos encontrar información relevando sobre el estado de la red, cómo estadísticas en tiempo real y datos históricos sobre la dificultad del minado, el precio del gas y otras métricas que pueden ser da gran utilidad para entender el comportamiento de la app en un momento determinado.
+EtherScan ha tenido un gran protagonismo en la etapa final de mi aplicación donde se ha desplegado el contrato inteligente en una red real de prueba.
+Con esta herramienta se ha monitoreado la ejecución y rendimiento del contrato, asegurando su correcto funcionamiento y fiabilidad.
+Por otro lado, ha permitido experimentar y observar la eficiencia del contrato dependiendo de las fluctuaciones en el precio del gas y otras condiciones de la red.
+
+
+\subsection{Sepolia PoW Faucet}
+
+En las primeras implementaciones del proyecto se ha utilizado ETH ficticios que se generaban en un contexto local, pero en las versiones finales del proyecto y en su despliegue en una red de prueba real ha sido necesario obtener ETH de prueba reales para poder interaccionar con la Blockchain.
+Al ser ETH de prueba, estos carecen de valor y por lo tanto no se pueden comprar como se haría con ETH de la mainnet, por lo tanto las únicas formas de conseguirlos es minando o que otro usuario te los proporcione.
+Convertirse en un minero para obtener ETH de prueba es una opción más compleja, por lo que el uso de las faucet reduce en gran cantidad esta barrera de entrada.
+
+Existen diversas faucets que proveen una cantidad de ETH de prueba diaria, pero en la mayoría para verificar la autenticidad del usuario se requiere que dicho usuario cuente con una pequeña cantidad de ETH reales en su billetera y por lo tanto obligan a hacer una pequeña inversión.
+Sin embargo, existe una faucet llamada Sepolia PoW Faucet que verifica la autenticidad del usuario mediante el mecanismo de prueba de trabajo (PoW), eliminando la necesidad de poseer ETH reales.
+Este enfoque requiere que los usuarios realicen un trabajo de cómputo, específicamente generando hashes que cumplan con ciertos criterios preestablecidos, para demostrar su esfuerzo y recibir ETH de prueba a cambio. 
 
 
 \section{Bibliotecas}
