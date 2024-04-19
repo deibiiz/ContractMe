@@ -9,6 +9,7 @@
 
 # Expo
 .expo/
+*/.expo
 dist/
 web-build/
 
@@ -37,6 +38,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# vscode
+*/.vscode
 
 
 package-lock.json

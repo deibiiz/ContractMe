@@ -33,7 +33,7 @@ Los requisitos principales del proyecto se pueden dividir en los siguiente punto
 
 Una vez expuestos los requerimientos principales del proyecto, la etapa inicial del proyecto se basó en una exhaustiva investigación que permitió obtener un conocimiento detallado sobre las tecnologías y herramientas necesarias. Dado que inicialmente no contaba con conocimientos previos en desarrollo de aplicaciones móviles y tecnología blockchain, esta investigación fue crucial para identificar las mejores prácticas y soluciones en estos campos. 
 Esta etapa de investigación y adaptación a las nuevas tecnologías tuvo una duración de aproximadamente 3 semanas, durante el cual se hizo especial énfasis en entender a fondo el funcionamiento de la blockchain y los contratos inteligentes.
-Este aprendizaje teórico se reforzó de manera practica con diversos proyectos usando Truffle, completando videoTutoriales y realizando el curso interactivo CryptoZombies, además de consultar numerosos artículos especializados. Estas actividades facilitaron la asimilación del nuevo lenguaje de programación y familiarización con el entorno blockchain.
+Este aprendizaje teórico se reforzó de manera practica con diversos proyectos usando Truffle, completando videoTutoriales y realizando el curso interactivo "CryptoZombies", además de consultar numerosos artículos especializados. Estas actividades facilitaron la asimilación del nuevo lenguaje de programación y familiarización con el entorno blockchain.
 
 
 \subsubsection{Sprint 0}
@@ -42,16 +42,163 @@ Este sprint se desarrolló entre los días 3 y 17 de Noviembre de 2023. Se reali
 
 \begin{enumerate}
 
-\item \textbf{Configuración repositorio:}
+\item \textbf{Configuración repositorio:} Se configuró el repositorio en GitLab y se establecieron ramas principales basadas en el flujo de trabajo de GitFlow, incluyendo 'main' para la producción y 'develop' para el desarrollo 
 
-\item \textbf{Configuración entorno para la redacción de la memoria:}
+\item \textbf{Configuración entorno para la redacción de la memoria:} Se descargaron las plantillas y se configuró el software de redacción "Texmaker".
 
-\item \textbf{Investigación de tecnologías para realizar una app móvil:}
+\item \textbf{Investigación de tecnologías para realizar una app móvil:} Se realizó un análisis comparativo de las plataformas de desarrollo móvil más populares. Se evaluaron criterios como el rendimiento, la facilidad de uso y la comunidad de desarrolladores.
 
-\item \textbf{Diseñar la arquitectura del proyecto:}
+\item \textbf{Diseñar la arquitectura del proyecto:} Se definieron los componentes principales del sistema y su interacción. Para facilitar la compresión de la estructura y el flujo de datos se desarrollaron diagramas.
 
 \end{enumerate}
 
+
+\subsubsection{Sprint 1}
+
+Este sprint se desarrolló entre los días 17 de Noviembre y 1 de Diciembre de 2023. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Investigación Smart Contracts:} Se evaluó la elección entre usar tokenes fungibles o no fungibles para el desarrollo de los contratos, optándose finalmente por el estándar ERC-721, característico de los NFTs, debido a su adaptabilidad al proyecto.
+A partir de esta decisión fue necesario evaluar la versión adecuada para el compilador de solidity que asegure la compatibilidad con ciertas bibliotecas necesarias.
+
+\item \textbf{Creación de un prototipo visual:} Se diseñó un prototipo visual inicial para la aplicación móvil utilizando herramientas como Figma y Canvas.
+El prototipo se centró en crear una interfaz intuitiva y atractiva que refleje las funcionalidades claves del proyecto.
+
+\end{enumerate}
+
+
+\subsubsection{Sprint 2}
+
+Este sprint se desarrolló entre los días 1 de Diciembre y 21 de Diciembre de 2023. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Primera implementación del contrato inteligente:} Siguiendo el estándar ERC-721 se planteó una primera solución que incluyese las funcionalides básicas de creación y transferencia de NFTs de manera segura y eficiente.
+
+\item \textbf{Configuración entorno de desarrollo aplicación móvil:} Se configuró el entorno de desarrollo para asegurar la correcta conectividad entre la aplicación móvil y el backend, representado por el blockchain y el contrato inteligente.
+
+
+\end{enumerate}
+
+
+\subsubsection{Sprint 3}
+
+Este sprint se desarrolló entre los días 21 de Diciembre de 2023 y 12 de Enero de 2024. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Continuación con la implementación del contrato inteligente:} Se continuó con el desarrollo del contrato inteligente implementando funciones que manejasen la lógica de los pagos dentro de la app. También se programación la lógica para la correcta destrucción del contrato una vez ha transcurrido su ciclo de vida.
+
+\item \textbf{Creación de pruebas unitarias para comprobar el correcto funcionamiento del contrato inteligente:}  Para garantizar el correcto funcionamiento del contrato inteligente se realizaron test en Java utilizando las herramientas Ganache y Truffle.
+Ganache sirvió para simular un entorno blockchain local y Truffle sirvió para compilar, migrar y probar el contrato inteligente con los test creados.
+
+\item \textbf{Implementar navegación en la aplicación móvil:} Se programaron las pantallas principales de la aplicación. Estas pantallas se integraron mediante un menú interactivo que facilita la navegación dentro de la app mejorando la experiencia del usuario.
+
+\item \textbf{Tareas de ordenación de repositorio:} Se realizaron taras de ordenación y limpieza en el repositorio del código. Incluyó la reorganización de directorios, la eliminación de archivos obsoletos y la estandarización de nombres de archivos y carpetas para mejorar la accesibilidad y el mantenimiento.
+
+\item \textbf{Modificación del ReadMe:} Se actualizó el archivo ReadMe para reflejar los cambios recientes en el proyecto y proporcionar una guía más clara y detallada para los usuarios que quieran replicar el proyecto.
+
+\end{enumerate}
+
+Debido a las fechas de vacaciones de Navidad, a los compromisos académicos y la gran demanda de los issues, no se logró completar lo previsto para este sprint, por lo que se decidió en la reunión del 12 de Enero ampliar 2 semanas más este sprint.
+
+
+\subsubsection{Sprint 4}
+
+Este sprint se desarrolló entre los días 26 de Enero y 9 de Febrero de 2024. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Integración de Metamask:} Se integró la billetera Metamask para facilitar las transacciones en la aplicación. Esto incluyó configurar la autenticación y las firmas de transacciones a través de la popular billetera de criptomonedas, permitiendo a los usuarios interactuar de manera segura a través de la extensión de navegador de Metamask.
+
+\item \textbf{Documentación de tecnologías utilizadas:}  Tras el progresivo avance del proyecto y el amplio repertorio de frameworks y librerías utilizadas, se plasmaron y explicaron todas ellas en su correspondiente apartado en la memoria.
+
+\end{enumerate}
+
+
+\subsubsection{Sprint 5}
+
+Este sprint se desarrolló entre los días 9 de Febrero y 23 de Febrero de 2024. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Creación de la guía de instalación:} Se elaboró una guía de instalación detallada para facilitar la configuración inicial del sistema por parte de los usuarios. Recogiendo las instrucciones paso a paso para la instalación del software, configuración del entorno y la conexión con las dependencias necesarias.
+
+\item \textbf{Documentación del contexto teórico:}  Se empezó a recoger en la memoria todos los fundamentos teóricos que fundamentan este proyecto, proporcionando una base sólida que ayude a entender el marco en el que se desarrolla la aplicación. 
+
+\item \textbf{Implementación de pantallas informativas:} Se implementaron dos pantallas clave en la aplicación móvil: la pantalla "Wallet", que permite al usuario la conexión con la billetera y muestra los datos de la cuenta seleccionada en la billetera Metamask, y la pantalla "Info", que incluye información actualizada sobre el precio del Ethereum, junto con un gráfico interactivo y una calculadora para conversiones.
+
+\item \textbf{Implementar funcionalidad modificar contrato:} Se extendieron las funciones del contrato inteligente para permitir modificar un contrato existente. Esto incluyó la adición de métodos para actualizar parámetros del contrato y funciones que permiten a los usuarios adaptar el contrato a necesidades cambiantes, asegurando así una mayor flexibilidad.
+
+\item \textbf{Creación base de datos para el almacenamiento de las cuentas de los usuario:}  Se implementó una base de datos utilizando Firebase de Google, aprovechando la amplia gama de funcionalidades que incluye. De esta forma se permitía a los usuarios iniciar sesión con su cuenta google, Facebook y Github entre muchas otras, facilitando un proceso de autenticación rápido y seguro, además de almacenar de manera eficiente los datos de las cuentas de los usuarios.
+
+\end{enumerate}
+
+
+\subsubsection{Sprint 6}
+
+Este sprint se desarrolló entre los días 23 de Febrero y 8 de Marzo de 2024. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Modularizar código:} Debido a que los smart contracts en la Ethereum Virtual Machine (EVM) están sujetos a una restricción de tamaño para prevenir ataques de denegación de servicio, el contrato que me encontraba desarrollando se encontraba en el límite de tamaño permitido, impidiendo futuras ampliaciones. 
+Para resolver esto, se optó por modularizar el contrato inteligente en diferentes componentes. Esto no solo evitó la necesidad de desplegar múltiples contratos, lo cual hubiera sido más costoso en términos de gas, sino que también ayudo en la organización del código.
+
+\item \textbf{Validación de datos de entrada en Smart Contract:} Aunque inicialmente el contrato inteligente ya incluía algunas comprobaciones básicas en el código Solidity y la aplicación también verificaba las entradas, se realizaron mejoras significativas en estas validaciones para reforzar la seguridad.
+
+\item \textbf{Ampliación funcionalidad SmartContract:} Se añadió código adicional al contrato inteligente para permitir que usuarios adicionales, aparte del dueño original, pudieran tener permisos de gestión del contrato. Esto fue diseñado para facilitar la colaboración permitiendo que usuarios autorizados puedan realizar cambios sin depender el propietario inicial.
+
+\item \textbf{Modificación lógica contrato:} Se modificó la lógica del contrato para permitir la creación de contratos sin asignar inicialmente un trabajador. Esta funcionalidad permitió mostrar contratos disponibles en una especie de "tablón de ofertas de trabajo", donde las personas en búsqueda de empleo pueden encontrar y seleccionar contratos que coincidan con sus habilidades y expectativas.
+
+\end{enumerate}
+
+Los siguientes objetivos que se exponen a continuación, no han podido ser completados y han sido pospuestos hasta el sprint 10.
+Hasta ahora, la aplicación se ha estado probando de manera local en una pestaña del navegador por razones de eficiencia y comodidad. Sin embargo, al intentar realizar las pruebas con un teléfono móvil para funcionalidades que requieren ejecución nativa, como el escaneo de códigos QR o el acceso a la ubicación, se han encontrado errores debido a incompatibilidades con las bibliotecas y el sistema operativo Android.  
+Por tanto, estos problemas se han tenido que posponer hasta que se solucione el problema de compatibilidad de la app con la biblioteca web3.
+
+\begin{enumerate}
+
+\item \textbf{Implementación de códigos QR:} La integración de códigos QR, diseñada para facilitar transacciones rápidas y seguras mediante escaneo, se ha pospuesto debido a problemas técnicos encontrados durante las pruebas en dispositivos móviles.
+
+\item \textbf{Inclusión ubicación a los parámetros del contrato:} Del mismo modo que con los códigos QR, por la imposibilidad de probar los servicios de ubicación en un dispositivo móvil, se ha tenido que posponer.
+
+\item \textbf{Creación de un filtro para buscar contratos:}  Este issue ha sido pospuesto ya que depende directamente de la incorporación de la ubicación como parámetro para realizar el filtro.
+
+\item \textbf{Creación de eventos para registrar alertas en los contratos:} Debido a la importancia de solucionar el problema de desplegue en teléfonos móvil, este issue ha pasado a segundo plano.
+
+\end{enumerate}
+
+
+\subsubsection{Sprint 7}
+
+Este sprint se desarrolló entre los días 8 de Marzo y 22 de Marzo de 2024. Se realizaron las siguientes tareas y objetivos:
+
+\begin{enumerate}
+
+\item \textbf{Resolver error compatibilidad app android y biblioteca web3:} Este issue tuvo prioridad máxima y se le dedicó únicamente para el. Al ejecutar la aplicación en un dispositivo móvil aparecía un un problema de compatibilidad significativo entre la biblioteca web3 y el motor JavaScript Hermes utilizado en React Native.
+Este problema incapacitada cualquier avance para el que se requerirse las funcionales nativas del dispositivo móvil.
+
+\item \textbf{adaptar aplicación web a aplicación móvil:} La aplicación en su primera etapa de desarrollo fue hecha desde un entorno web. Por lo que una vez solucionado el problema anterior que impedía desplegar el proyecto en un dispositivo móvil, fue necesario enfrentarse a diversos desafíos adicionales al adaptar características específicas de la web para funcionar en un entorno móvil.
+
+\end{enumerate}
+
+Después de varias horas de esfuerzo, se logró identificar y corregir el error más importante hasta el momento. Además de cumplir con los requisitos establecidos para este sprint, también se consiguió implementar la funcionalidad para mostrar códigos QR con los detalles del contrato, el cual era uno de los objetivos que habían quedado pendientes del sprint anterior. 
+
+\subsubsection{Sprint 8}
+
+Este sprint se desarrolló entre los días 22 de Marzo y 5 de Abril de 2024. Se realizaron las siguientes tareas y objetivos:
+
+Este sprint se centró principalmente en resolver desafíos relacionados con la migración de la aplicación web a móvil, especialmente en lo que respecta a la conectividad con la billetera externa Metamask.
+
+\begin{enumerate}
+
+\item \textbf{Importar cuentas de Ganache a la app móvil de Metamask:} Esto representaba inicialmente una fase intermedia entre las pruebas locales y el despliegue en una red real.
+Por errores de conexión se llego a la conclusión de que no era posible, por lo que se decidió omitir este paso ya que su eliminación no afecta el progreso hacia el entorno de producción.
+
+\item \textbf{Gestionar conexión de la billetera desde la app:} Directamente conectar con Metamask resultó inviable debido a restricciones técnicas, por lo que se evaluó para adaptar el sistema para utilizar Wallet Connect junto con las librerías wagmi y viem, permitiendo la conexión con más de 300 billeteras diferentes
+
+\end{enumerate}
 
 
 
