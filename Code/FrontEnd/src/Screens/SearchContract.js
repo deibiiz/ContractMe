@@ -47,7 +47,7 @@ export default function SearchContracts() {
     return (
         <View style={styles.fullContainer}>
             {
-                unsignedContracts.length === 0 && <Text style={styles.textoAviso} >No hay contratos pendientes de firma.</Text>
+                unsignedContracts.length === 0 && <Text style={styles.textoAviso} >En estos momentos no hay contratos disponibles.</Text>
             }
 
             <FlatList

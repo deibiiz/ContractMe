@@ -8,6 +8,7 @@ import { useAccount, useDisconnect, useContractWrite } from 'wagmi'
 //import "@ethersproject/shims"
 import { ethers } from "ethers";
 import { EtherProvider } from "../ContractConexion/EtherProvider";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 export default function LoginWallet() {
@@ -27,20 +28,19 @@ export default function LoginWallet() {
     })
 
     async function writeToContract() {
-        // Asegúrate de tener una dirección desde la cual estás enviando la transacción.
         if (!address) {
             console.error("Billetera no conectada");
             return;
         }
 
-        // Asume que ya tienes definidos o puedes obtener los valores para _to, _salary, _start, _duration, _description, _title
-        const _to = "0x922Fd344AE304f3baC6b2f5f459E056ADFC2cf24"; // Por ejemplo, usar la dirección conectada
-        const _salary = ethers.utils.parseEther('0.001'); // Convertir 1 ether a wei, ajusta según necesidad
-        const _salaryNumber = Number(_salary); // Convertir 1 ether a wei, ajusta según necesidad
-        const _start = Number(1); // Fecha de inicio en segundos desde epoch, ajusta según necesidad
-        const _duration = Number(360000); // Duración en segundos, ajusta según necesidad
-        const _description = "Description of the minted item2"; // Descripción
-        const _title = "Title of the minted item2"; // Título
+
+        const _to = "0x922Fd344AE304f3baC6b2f5f459E056ADFC2cf24";
+        const _salary = ethers.utils.parseEther('0.001');
+        const _salaryNumber = Number(_salary);
+        const _start = Number(1);
+        const _duration = Number(360000);
+        const _description = "Description of the minted item2";
+        const _title = "Title of the minted item2";
 
         await writeAsync({
             args: [
@@ -78,16 +78,18 @@ export default function LoginWallet() {
     }, [address, provider]);
 
 
-    useEffect(() => {
-        if (address) {
-            getAccountHistory(address).then(events => {
-                setEvents(events);
-            }).catch(error => {
-                console.error("Error al obtener el historial de la cuenta", error);
-                alert("Error al obtener el historial de la cuenta");
-            });
-        }
-    }, [address]);
+    useFocusEffect(
+        React.useCallback(() => {
+            if (address) {
+                getAccountHistory(address).then(events => {
+                    setEvents(events);
+                }).catch(error => {
+                    console.error("Error al obtener el historial de la cuenta", error);
+                    alert("Error al obtener el historial de la cuenta");
+                });
+            }
+        }, [address])
+    );
 
     const getAccountHistory = async (accoutAddress) => {
 
@@ -109,7 +111,8 @@ export default function LoginWallet() {
                     type: type,
                     tokenId: event.args.tokenId.toString(),
                     salary: ethers.utils.formatEther(event.args.salary.toString()),
-                    date: new Date(event.args.timestamp * 1000).toLocaleString(),
+                    date: new Date(event.args.timestamp * 1000),
+                    dateString: new Date(event.args.timestamp * 1000).toLocaleString(),
                 };
                 allEvents.push(eventData);
             });
@@ -193,13 +196,13 @@ export default function LoginWallet() {
                                         {item.type === "TokenMinted" && (
                                             <View>
                                                 <Text style={styles.lossesText}>-{item.salary} ETH</Text>
-                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                                <Text style={styles.textoFecha}>{item.dateString} </Text>
                                             </View>)}
 
                                         {item.type === "ContractCancelled" && (
                                             <View>
                                                 <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                                <Text style={styles.textoFecha}>{item.dateString} </Text>
                                             </View>)}
 
 
@@ -208,12 +211,12 @@ export default function LoginWallet() {
                                                 {item.newSalary < item.salary ? (
                                                     <>
                                                         <Text style={styles.profitText}>+{item.salary - item.newSalary} ETH</Text>
-                                                        <Text style={styles.textoFecha}>{item.date} </Text>
+                                                        <Text style={styles.textoFecha}>{item.dateString} </Text>
                                                     </>
                                                 ) : (
                                                     <>
                                                         <Text style={styles.lossesText}>-{item.newSalary - item.salary} ETH</Text>
-                                                        <Text style={styles.textoFecha}>{item.date} </Text>
+                                                        <Text style={styles.textoFecha}>{item.dateString} </Text>
                                                     </>
                                                 )}
                                             </View>
@@ -222,7 +225,7 @@ export default function LoginWallet() {
                                         {item.type === "SalaryReleased" && (
                                             <View>
                                                 <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                                <Text style={styles.textoFecha}>{item.date} </Text>
+                                                <Text style={styles.textoFecha}>{item.dateString} </Text>
                                             </View>
                                         )}
 
