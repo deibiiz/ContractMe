@@ -7,10 +7,87 @@ import { useAccount } from "wagmi";
 
 export default function Alertas() {
 
+    const [events, setEvents] = useState([]);
     const [pendingContracts, setPendingContracts] = useState([]);
     const navigation = useNavigation();
     const { address } = useAccount();
     const { contract } = EtherProvider();
+
+
+
+    useFocusEffect(
+        React.useCallback(() => {
+            if (address) {
+                getAccountHistory(address).then(events => {
+                    setEvents(events);
+                }).catch(error => {
+                    console.error("Error al obtener el historial de la cuenta", error);
+                    alert("Error al obtener el historial de la cuenta");
+                });
+            }
+        }, [address])
+    );
+
+    const getAccountHistory = async (accoutAddress) => {
+
+        let allEvents = [];
+
+        const SalaryReleasedFilter = contract.filters.SalaryReleased(null, null, null, accoutAddress);
+        const TokenMintedFilter = contract.filters.TokenMinted(null, accoutAddress);
+        const ApprovalChangesFilter = contract.filters.ApprovalChanges(null, accoutAddress);
+        const RejectChangesFilter = contract.filters.RejectChanges(null, accoutAddress);
+        const SignerFilter = contract.filters.ContractSigned(null, accoutAddress);
+
+        const SalaryReleasedEvents = await contract.queryFilter(SalaryReleasedFilter, 0, "latest");
+        const TokenMintedEvents = await contract.queryFilter(TokenMintedFilter, 0, "latest");
+        const ApprovalChangesEvents = await contract.queryFilter(ApprovalChangesFilter, 0, "latest");
+        const RejectChangesEvents = await contract.queryFilter(RejectChangesFilter, 0, "latest");
+        const SignerEvents = await contract.queryFilter(SignerFilter, 0, "latest");
+
+        const addEvents = (events, type) => {
+            events.forEach(event => {
+                const eventData = {
+                    type: type,
+                    tokenId: event.args.tokenId.toString(),
+                    date: new Date(event.args.timestamp * 1000),
+                    dateString: new Date(event.args.timestamp * 1000).toLocaleString(),
+                };
+                allEvents.push(eventData);
+            });
+        };
+
+        addEvents(SalaryReleasedEvents, "SalaryReleased");
+        addEvents(TokenMintedEvents, "TokenMinted");
+        addEvents(ApprovalChangesEvents, "ApprovalChanges");
+        addEvents(RejectChangesEvents, "RejectChanges");
+        addEvents(SignerEvents, "Signer");
+
+        allEvents.sort((a, b) => a.date - b.date);
+        allEvents.reverse();
+
+        return allEvents;
+    };
+
+    const eventToText = (eventType) => {
+        switch (eventType) {
+            case "TokenMinted":
+                return "Tienes una oferta de contrato";
+            case "ApprovalChanges":
+                return "Tu trabajador ha aceptado la modificación";
+            case "RejectChanges":
+                return "Tu trabajador ha rechazado la modificación";
+            case "SalaryReleased":
+                return "Tu salario ha sido liberado";
+            case "Signer":
+                return "Tu trabajador ha firma el contrato";
+            default:
+                return eventType;
+        }
+    };
+
+
+
+
 
     useFocusEffect(
         useCallback(() => {
@@ -105,6 +182,7 @@ export default function Alertas() {
         }
     };
 
+
     const renderHeader = () => (
         <View>
             {pendingContracts.length > 0 ? (
@@ -118,18 +196,21 @@ export default function Alertas() {
     return (
 
         <FlatList
-            data={pendingContracts}
-            keyExtractor={(item) => item}
-            ListHeaderComponent={renderHeader}
+            data={events}
+            keyExtractor={(item, index) => item.tokenId.toString() + index}
             renderItem={({ item }) => (
                 <TouchableOpacity
                     style={styles.contractItem}
-                    onPress={() => { selectContract(item) }}
+                    onPress={() => navigation.navigate("infoContract", { tokenId: item.tokenId })}
                 >
-                    <Text>Contrato ID: {item}</Text>
+                    <Text>{eventToText(item.type)} ID: {item.tokenId}</Text>
+                    <Text>Date: {item.dateString}</Text>
                 </TouchableOpacity>
             )}
+            ListEmptyComponent={<Text style={styles.textoAviso}>No hay eventos registrados para esta cuenta.</Text>}
         />
+
+
     );
 }
 

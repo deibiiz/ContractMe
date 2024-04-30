@@ -15,6 +15,7 @@ contract MyContractManagement is MyContract {
     event TokenMinted(
         uint256 tokenId,
         address indexed employer,
+        address indexed worker,
         uint256 salary,
         uint256 timestamp
     );
@@ -80,7 +81,7 @@ contract MyContractManagement is MyContract {
         contractsOwner[msg.sender].push(tokenID);
         unsignedContractsOfWorker[_to].push(tokenID);
 
-        emit TokenMinted(tokenID, msg.sender, _salary, block.timestamp);
+        emit TokenMinted(tokenID, msg.sender, _to, _salary, block.timestamp);
         return tokenID;
     }
 

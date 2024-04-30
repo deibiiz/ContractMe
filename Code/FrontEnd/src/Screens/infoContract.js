@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { EtherProvider } from "../ContractConexion/EtherProvider";
 import { useAccount, useContractWrite } from "wagmi";
@@ -160,6 +160,72 @@ const ContractDetailsScreen = ({ route }) => {
         }
     };
 
+    const applyChanges = async (tokenId) => {
+        try {
+            if (!address) {
+                alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
+            } else {
+                const { oldDetails, newDetails } = await fetchContractDetails(tokenId);
+                navigation.navigate("ApplyChanges", { oldContractDetails: oldDetails, newContractDetails: newDetails });
+            }
+        } catch (error) {
+            console.error("Error al aplicar los cambios:", error);
+            alert('Error al aplicar los cambios.');
+        }
+    };
+
+
+    const fetchContractDetails = async (tokenId) => {
+        try {
+            const details = await contract.contractDetails(tokenId);
+            const proposal = await contract.changeProposals(tokenId);
+            const employer = await contract.getOwnerOfContract(tokenId);
+
+            const newTitle = proposal.newTitle ? proposal.newTitle : details.title;
+
+            const salaryInEther = ethers.utils.formatEther(details.salary);
+            const newSalaryInEther = proposal.newSalary ? ethers.utils.formatEther(proposal.newSalary) : salaryInEther;
+
+            const startDate = new Date(Number(details.startDate) * 1000).toLocaleString();
+            const endDate = new Date((Number(details.startDate) + Number(details.duration)) * 1000).toLocaleString();
+            const newEndDate = proposal.newDuration ? new Date((Number(details.startDate) + Number(proposal.newDuration)) * 1000).toLocaleString() : endDate;
+
+            const newDescription = proposal.newDescription ? proposal.newDescription : details.description;
+            const newIsPaused = proposal.isPaused ? proposal.isPaused : details.isPaused;
+
+            const oldContractData = {
+                tokenId: tokenId,
+                title: details.title,
+                startDate: startDate,
+                endDate: endDate,
+                salary: salaryInEther,
+                description: details.description,
+                isPaused: details.isPaused,
+                employer: employer,
+                worker: details.worker,
+            };
+
+            const newContractData = {
+                tokenId: tokenId,
+                newTitle: newTitle,
+                startDate: startDate,
+                endDate: endDate,
+                newSalary: newSalaryInEther,
+                newEndDate: newEndDate,
+                newDescription: newDescription,
+                newIsPaused: newIsPaused,
+                employer: employer,
+                worker: details.worker,
+            };
+
+            return { oldDetails: oldContractData, newDetails: newContractData }
+
+        } catch (error) {
+            console.error("Error al obtener detalles del contrato:", error);
+            return null;
+        }
+    };
+
 
     if (!contractDetails) {
         return <Text>Cargando...</Text>;
@@ -287,19 +353,6 @@ const ContractDetailsScreen = ({ route }) => {
                                             fontWeight: "bold",
                                         }}
                                     />
-                                    <Boton
-                                        texto="Abrir disputa"
-                                        estiloBoton={{
-                                            width: "100%",
-                                            borderRadius: 8,
-                                            backgroundColor: "#F84343",
-                                        }}
-                                        estiloTexto={{
-                                            fontSize: 16,
-                                            fontWeight: "bold",
-                                        }}
-                                    />
-                                    <Text style={styles.textoAviso}> Si no se abre una disputa, el pago será liberado automáticamente en 7 días.</Text>
                                 </>
                             )}
 
@@ -342,20 +395,39 @@ const ContractDetailsScreen = ({ route }) => {
                         </>
                     )}
 
-                    {!contractDetails.isSigned && fromWorkerSection && contractDetails.employer !== address && (
-                        <Boton
-                            texto="Firmar contrato"
-                            onPress={() => { signTheContract(contractDetails.tokenId) }}
-                            estiloBoton={{
-                                width: "100%",
-                                borderRadius: 8,
-                            }}
-                            estiloTexto={{
-                                fontSize: 16,
-                                fontWeight: "bold",
-                            }}
-                        />
-                    )}
+                    {fromWorkerSection && (
+                        <>
+                            {!contractDetails.isSigned && contractDetails.employer !== address && (
+                                <Boton
+                                    texto="Firmar contrato"
+                                    onPress={() => { signTheContract(contractDetails.tokenId) }}
+                                    estiloBoton={{
+                                        width: "100%",
+                                        borderRadius: 8,
+                                    }}
+                                    estiloTexto={{
+                                        fontSize: 16,
+                                        fontWeight: "bold",
+                                    }}
+                                />
+                            )}
+                            {contractDetails.isPending && contractDetails.employer !== address && (
+                                <Boton
+                                    texto="Ver petición de modificación"
+                                    onPress={() => { applyChanges(contractDetails.tokenId) }}
+                                    estiloBoton={{
+                                        width: "100%",
+                                        borderRadius: 8,
+                                    }}
+                                    estiloTexto={{
+                                        fontSize: 16,
+                                        fontWeight: "bold",
+                                    }}
+                                />
+                            )}
+                        </>
+                    )
+                    }
                 </View>
             </View>
         </ScrollView>

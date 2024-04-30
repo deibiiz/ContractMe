@@ -19,10 +19,6 @@ export default function CreateContract() {
     const { address } = useAccount();
     const { contractAddress, ABI } = EtherProvider();
 
-    if (!address) {
-        alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
-    }
-
     const { writeAsync } = useContractWrite({
         address: contractAddress,
         abi: ABI,

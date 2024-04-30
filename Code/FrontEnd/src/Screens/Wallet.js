@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import Boton from "../components/Boton";
 import '@walletconnect/react-native-compat'
 import { useWeb3Modal } from '@web3modal/wagmi-react-native'
@@ -95,7 +95,7 @@ export default function LoginWallet() {
 
         let allEvents = [];
 
-        const SalaryReleasedFilter = contract.filters.SalaryReleased(null, null, accoutAddress);
+        const SalaryReleasedFilter = contract.filters.SalaryReleased(null, null, null, accoutAddress);
         const TokenMintedFilter = contract.filters.TokenMinted(null, accoutAddress);
         const ContractCancelledFilter = contract.filters.ContractCancelled(null, accoutAddress);
         const ApprovalChangesFilter = contract.filters.ApprovalChanges(null, accoutAddress);

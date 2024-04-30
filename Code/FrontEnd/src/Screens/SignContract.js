@@ -12,10 +12,6 @@ export default function SignContract() {
 
     const navigation = useNavigation();
 
-    if (!address) {
-        alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
-    }
-
     const fetchUnsignedContracts = async () => {
         const { contract } = EtherProvider();
         if (address) {
