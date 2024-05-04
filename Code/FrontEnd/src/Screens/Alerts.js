@@ -20,6 +20,7 @@ export default function Alertas() {
             if (address) {
                 getAccountHistory(address).then(events => {
                     setEvents(events);
+                    fetchWorkerContracts();
                 }).catch(error => {
                     console.error("Error al obtener el historial de la cuenta", error);
                     alert("Error al obtener el historial de la cuenta");
@@ -80,6 +81,8 @@ export default function Alertas() {
                 return "Tu salario ha sido liberado";
             case "Signer":
                 return "Tu trabajador ha firma el contrato";
+            case "ContractModification":
+                return "Solicitud de modificación de contrato";
             default:
                 return eventType;
         }
@@ -89,11 +92,7 @@ export default function Alertas() {
 
 
 
-    useFocusEffect(
-        useCallback(() => {
-            fetchWorkerContracts();
-        }, [address])
-    );
+
 
 
     const fetchWorkerContracts = async () => {
@@ -102,19 +101,23 @@ export default function Alertas() {
             if (!address) {
                 alert("Por favor, inicia sesión en MetaMask y selecciona una cuenta.");
             } else {
+                const contractsList = await contract.getContractsOfWorker(address);
+                let pendingOwnerContracts = [];
 
-                if (address) {
-                    const contractsList = await contract.getContractsOfWorker(address);
-                    let pendingOwnerContracts = [];
-
-                    for (let contractId of contractsList) {
-                        const proposal = await contract.changeProposals(contractId);
-                        if (proposal.isPending) {
-                            pendingOwnerContracts.push(contractId.toString());
-                        }
+                for (let contractId of contractsList) {
+                    const proposal = await contract.changeProposals(contractId);
+                    if (proposal.isPending) {
+                        pendingOwnerContracts.push({
+                            type: "ContractModification",
+                            tokenId: contractId.toString(),
+                            date: new Date(), // Utiliza una fecha relevante
+                            dateString: new Date().toLocaleString(), // O la fecha de la propuesta si está disponible
+                        });
                     }
-                    setPendingContracts(pendingOwnerContracts);
                 }
+                setEvents(prevEvents => [...prevEvents, ...pendingOwnerContracts]);
+                console.log("Contratos pendientes de modificación:", pendingOwnerContracts);
+
             }
         } catch (error) {
             console.error("Error al obtener los contratos:", error);

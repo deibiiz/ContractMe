@@ -4,9 +4,19 @@ pragma solidity ^0.8.20;
 import "./MyContract.sol";
 
 contract MyContractChanges is MyContract {
+    event ChangeProposed(
+        uint256 indexed tokenId,
+        address indexed employer,
+        address indexed worker,
+        uint256 salary,
+        uint256 newSalary,
+        uint256 timestamp
+    );
+
     event ApprovalChanges(
         uint256 indexed tokenId,
         address indexed employer,
+        address indexed worker,
         uint256 salary,
         uint256 newSalary,
         uint256 timestamp
@@ -15,7 +25,7 @@ contract MyContractChanges is MyContract {
     event RejectChanges(
         uint256 indexed tokenId,
         address indexed employer,
-        uint256 salary,
+        address indexed worker,
         uint256 newSalary,
         uint256 timestamp
     );
@@ -116,6 +126,14 @@ contract MyContractChanges is MyContract {
             if (excessAmount > 0) {
                 payable(msg.sender).transfer(excessAmount);
             }
+            emit ChangeProposed(
+                _tokenID,
+                msg.sender,
+                contractDetails[_tokenID].worker,
+                currentSalary,
+                _newSalary,
+                block.timestamp
+            );
         }
 
         changeProposals[_tokenID] = ChangeProposal({
@@ -148,7 +166,7 @@ contract MyContractChanges is MyContract {
         emit RejectChanges(
             _tokenID,
             ownerOf(_tokenID),
-            salary,
+            contractDetails[_tokenID].worker,
             proposedChange.newSalary,
             block.timestamp
         );
@@ -188,6 +206,7 @@ contract MyContractChanges is MyContract {
         emit ApprovalChanges(
             _tokenID,
             ownerOf(_tokenID),
+            contractDetails[_tokenID].worker,
             salary,
             proposedChange.newSalary,
             block.timestamp

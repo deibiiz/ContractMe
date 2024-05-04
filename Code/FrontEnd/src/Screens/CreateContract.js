@@ -1,3 +1,16 @@
+import React from 'react';
+import { Text, View } from 'react-native';
+
+export default function Settings() {
+    return (
+        <View>
+            <Text>Hello World</Text>
+        </View>
+    );
+}
+
+
+/*
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import { ethers } from "ethers";
@@ -158,3 +171,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
 });
+*/

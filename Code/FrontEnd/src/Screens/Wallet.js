@@ -1,3 +1,74 @@
+import React from 'react';
+import { Text, View } from 'react-native';
+
+export default function Settings() {
+    return (
+        <View>
+            <Text>Hello World</Text>
+        </View>
+    );
+}
+
+
+/*
+import React, { useState, useEffect } from 'react';
+import { Text, View } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { ethers } from 'ethers';
+import { EtherProvider } from '../ContractConexion/EtherProvider';
+import { useAccount } from '../components/ContextoCuenta';
+
+export default function Wallet() {
+    const [accounts, setAccounts] = useState([]);
+    const [balance, setBalance] = useState('');
+    const { selectedAccount, setSelectedAccount } = useAccount(); // Utiliza el contexto
+
+    useEffect(() => {
+        const loadData = async () => {
+            const { provider } = EtherProvider();
+            const accounts = await provider.listAccounts();
+            setAccounts(accounts);
+            if (accounts.length > 0) {
+                setSelectedAccount(accounts[0]); // Usa setSelectedAccount del contexto
+                updateBalance(accounts[0]);
+            }
+        };
+
+        loadData();
+    }, [setSelectedAccount]); // Agrega setSelectedAccount como dependencia
+
+    const updateBalance = async (account) => {
+        const { provider } = EtherProvider();
+        const balance = await provider.getBalance(account);
+        const balanceInEth = ethers.utils.formatEther(balance);
+        setBalance(balanceInEth);
+    };
+
+    const handleAccountChange = async (itemValue) => {
+        setSelectedAccount(itemValue); // Actualiza el estado en el contexto
+        updateBalance(itemValue);
+    };
+
+    return (
+        <View>
+            <Picker
+                selectedValue={selectedAccount}
+                onValueChange={(itemValue, itemIndex) => handleAccountChange(itemValue)}
+                style={{ height: 50, width: 250 }}
+            >
+                {accounts.map((account, index) => (
+                    <Picker.Item key={index} label={account} value={account} />
+                ))}
+            </Picker>
+            <Text>Cuenta seleccionada: {selectedAccount}</Text>
+            <Text>Balance: {balance} ETH</Text>
+        </View>
+    );
+}
+
+
+
+/*
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import Boton from "../components/Boton";
@@ -10,7 +81,6 @@ import { ethers } from "ethers";
 import { EtherProvider } from "../ContractConexion/EtherProvider";
 import { useFocusEffect } from "@react-navigation/native";
 
-
 export default function LoginWallet() {
     const { open } = useWeb3Modal()
     const { disconnect } = useDisconnect()
@@ -22,7 +92,7 @@ export default function LoginWallet() {
     console.log('Estado de conexión:', isConnected ? 'Conectado' : 'Desconectado');
 
     const { writeAsync } = useContractWrite({
-        address: '0x3eA2717cf5AE3ccc89d868fB317aE938b6aC8EBc',
+        address: contractAddress,
         abi: ABI,
         functionName: 'mint',
     })
@@ -38,7 +108,7 @@ export default function LoginWallet() {
         const _salary = ethers.utils.parseEther('0.001');
         const _salaryNumber = Number(_salary);
         const _start = Number(1);
-        const _duration = Number(360000);
+        const _duration = Number(36000000);
         const _description = "Description of the minted item2";
         const _title = "Title of the minted item2";
 
@@ -325,3 +395,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     }
 });
+*/

@@ -13,6 +13,7 @@
     "@expo/metro-runtime": "~3.1.3",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/netinfo": "11.1.0",
+    "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native-stack": "^6.9.26",
     "@walletconnect/react-native-compat": "^2.11.3",
@@ -21,6 +22,7 @@
     "ethers": "^5.7.2",
     "expo": "~50.0.14",
     "expo-application": "~5.8.3",
+    "expo-barcode-scanner": "~12.9.3",
     "expo-status-bar": "~1.11.1",
     "install": "^0.13.0",
     "npm": "^10.5.1",
@@ -37,8 +39,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
     "viem": "1.21.4",
-    "wagmi": "1.4.13",
-    "expo-barcode-scanner": "~12.9.3"
+    "wagmi": "1.4.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

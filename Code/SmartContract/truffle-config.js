@@ -46,8 +46,6 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 const privateKey = ["567aff5b818bed985a03d31303cd20a397ed5f2adda0e88e24be18411463f1fa"];
 const { MNEMONIC, PROJECT_ID } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -95,14 +93,17 @@ module.exports = {
     sepolia: {
       provider: () => new HDWalletProvider({
         privateKeys: privateKey,
-        providerOrUrl: "https://sepolia.infura.io/v3/d2fa416c31e348ef82c706d0a1e24fc8",
+        providerOrUrl: "https://eth-sepolia.g.alchemy.com/v2/nsZEIobF8lYVmwmp9YPnrarQf8rVgrZj",
         numberOfAddresses: 1,
       }),
       network_id: 11155111, // El ID de red para Sepolia
-      gasPrice: 10000000000, // 10 Gwei - Ajusta según sea necesario
+      gasPrice: 10000000000000, // 10 Gwei - Ajusta según sea necesario
       confirmations: 2,    // Número de confirmaciones a esperar entre despliegues
       timeoutBlocks: 200,  // Número de bloques antes de que se agote el tiempo de espera del despliegue
-      skipDryRun: true     // Omitir la ejecución de prueba antes de los despliegues reales
+      skipDryRun: true,     // Omitir la ejecución de prueba antes de los despliegues reales
+      networkCheckTimeout: 9000000,
+      pollingInterval: 1800000,
+      disableConfirmationListener: true
     },
 
 
