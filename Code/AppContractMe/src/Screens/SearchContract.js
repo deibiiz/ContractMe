@@ -57,11 +57,11 @@ export default function SearchContracts() {
                             style={styles.contractItem}
                             onPress={() => navigation.navigate('infoContract', { tokenId: item.id.toString(), fromWorkerSection: true })}
                         >
-                            <Text style={styles.title}> {item.title}</Text>
+                            <Text style={styles.textItems}> {item.title}</Text>
                             <Text style={styles.textoInfo}> Salario: {item.salaryInEther} ETH</Text>
-                            <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
-                                <Text style={styles.textoInfo}> {item.startDate}  -  </Text>
-                                <Text style={styles.textoInfo}> {item.endDate}</Text>
+                            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+                                <Text style={styles.textoFecha}> {item.startDate} - </Text>
+                                <Text style={styles.textoFecha}> {item.endDate}</Text>
                             </View>
                         </TouchableOpacity>
                     );
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderBottomWidth: 2,
         borderBottomColor: '#ccc',
-        width: '85%',
+        width: '100%',
         alignSelf: 'center'
     },
     title: {
@@ -107,6 +107,20 @@ const styles = StyleSheet.create({
     textoInfo: {
         fontSize: 14,
         color: "black",
+        marginLeft: 8,
+    },
+    textoFecha: {
+        fontSize: 14,
+        color: "#586069",
+        textAlign: "right",
+        marginRight: 5,
+    },
+    textItems: {
+        fontSize: 19,
+        color: "black",
+        marginBottom: 8,
+        marginTop: 5,
+        marginLeft: 8,
     },
 });
 

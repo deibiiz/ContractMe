@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import Web3 from 'web3';
-import { MyContract, provider } from '../ContractConexion/EtherProvider';
-import { useAccount } from '../components/ContextoCuenta';
+import { Picker } from "@react-native-picker/picker";
+import Web3 from "web3";
+import { MyContract, provider } from "../ContractConexion/EtherProvider";
+import { useAccount } from "../components/ContextoCuenta";
 
 export default function Wallet() {
     const [accounts, setAccounts] = useState([]);
-    const [balance, setBalance] = useState('');
+    const [balance, setBalance] = useState("");
     const [events, setEvents] = useState([]);
     const { selectedAccount, setSelectedAccount } = useAccount();
 
@@ -28,7 +28,7 @@ export default function Wallet() {
 
     const updateBalance = async (account) => {
         const balance = await provider.eth.getBalance(account);
-        const balanceInEth = Web3.utils.fromWei(balance, 'ether');
+        const balanceInEth = Web3.utils.fromWei(balance, "ether");
         setBalance(balanceInEth);
     };
 
@@ -55,40 +55,34 @@ export default function Wallet() {
     const getAccountHistory = async () => {
 
         try {
-            const eventTypes = ['TokenMinted', 'SalaryReleased', 'ContractCancelled', 'ApprovalChanges'];
+            const eventTypes = ["TokenMinted", "SalaryReleased", "ContractCancelled", "ApprovalChanges"];
             let allEvents = [];
 
             for (let eventType of eventTypes) {
                 const fetchedEvents = await MyContract.getPastEvents(eventType, {
                     fromBlock: 0,
-                    toBlock: 'latest'
+                    toBlock: "latest"
                 });
 
                 const processedEvents = fetchedEvents.map(event => {
-                    let dateString;
-                    try {
-                        dateString = new Date(parseInt(event.returnValues.timestamp.toString()) * 1000).toLocaleString();
-                    } catch (e) {
-                        console.error("Error convirtiendo a timestamp:", e);
-                        dateString = "Fecha desconocida";
-                    }
+
                     return {
                         ...event,
                         eventName: eventType,
                         returnValues: {
                             ...event.returnValues,
+                            tokenId: event.returnValues.tokenId.toString(),
                             salary: event.returnValues.salary ? Web3.utils.fromWei(event.returnValues.salary, 'ether') : null,
                             newSalary: event.returnValues.newSalary ? Web3.utils.fromWei(event.returnValues.newSalary, 'ether') : null,
-                            date: dateString,
+                            date: new Date(parseInt(event.returnValues.timestamp.toString()) * 1000).toLocaleString(),
                         }
                     };
                 }).filter(event => {
-                    if (eventType === 'SalaryReleased') {
+                    if (eventType === "SalaryReleased") {
                         return event.returnValues.worker === selectedAccount;
                     } else {
                         return event.returnValues.employer === selectedAccount;
                     }
-
                 });
                 allEvents = [...allEvents, ...processedEvents];
             }
@@ -99,7 +93,7 @@ export default function Wallet() {
             });
             return allEvents;
         } catch (error) {
-            console.error('Error al obtener eventos:', error);
+            console.error("Error al obtener eventos:", error);
         }
     };
 
@@ -148,8 +142,9 @@ export default function Wallet() {
 
                                 <View style={styles.contractItem}>
 
-                                    <View>
+                                    <View style={{ flexDirection: "row" }}>
                                         <Text style={styles.textItems} >{eventToText(item.eventName)}</Text>
+                                        <Text style={styles.textItems} >  ID: {item.returnValues.tokenId}</Text>
                                     </View>
 
                                     {item.eventName === "TokenMinted" && (
