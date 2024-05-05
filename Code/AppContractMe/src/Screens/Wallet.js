@@ -3,7 +3,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Web3 from 'web3';
-import { Boton } from '../components/Boton';
 import { MyContract, provider } from '../ContractConexion/EtherProvider';
 import { useAccount } from '../components/ContextoCuenta';
 
@@ -13,17 +12,6 @@ export default function Wallet() {
     const [events, setEvents] = useState([]);
     const { selectedAccount, setSelectedAccount } = useAccount();
 
-    /*
-        MyContract.events.TokenMinted({
-            fromBlock: 0
-        }, function (error, event) {
-            if (error) console.error(error);
-            console.log(event);
-        }).on('data', function (event) {
-            console.log('Nuevo evento TokenMinted:', event);
-            // Aquí puedes manejar la lógica para actuar sobre los datos del evento.
-        }).on('error', console.error);
-    */
 
     useEffect(() => {
         const loadData = async () => {
@@ -51,71 +39,68 @@ export default function Wallet() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     useFocusEffect(
         React.useCallback(() => {
             if (selectedAccount) {
-                getAccountHistory(selectedAccount).then(events => {
+                getAccountHistory().then(events => {
                     setEvents(events);
                 }).catch(error => {
                     console.error("Error al obtener el historial de la cuenta", error);
-                    //alert("Error al obtener el historial de la cuenta");
+                    alert("Error al obtener el historial de la cuenta");
                 });
             }
         }, [selectedAccount])
     );
 
-    const getAccountHistory = async (accoutAddress) => {
+    const getAccountHistory = async () => {
 
-        let allEvents = [];
+        try {
+            const eventTypes = ['TokenMinted', 'SalaryReleased', 'ContractCancelled', 'ApprovalChanges'];
+            let allEvents = [];
 
+            for (let eventType of eventTypes) {
+                const fetchedEvents = await MyContract.getPastEvents(eventType, {
+                    fromBlock: 0,
+                    toBlock: 'latest'
+                });
 
-        const SalaryReleasedFilter = MyContract.filters.SalaryReleased(null, null, null, accoutAddress);
-        const TokenMintedFilter = MyContract.filters.TokenMinted(null, accoutAddress);
-        const ContractCancelledFilter = MyContract.filters.ContractCancelled(null, accoutAddress);
-        const ApprovalChangesFilter = MyContract.filters.ApprovalChanges(null, accoutAddress);
+                const processedEvents = fetchedEvents.map(event => {
+                    let dateString;
+                    try {
+                        dateString = new Date(parseInt(event.returnValues.timestamp.toString()) * 1000).toLocaleString();
+                    } catch (e) {
+                        console.error("Error convirtiendo a timestamp:", e);
+                        dateString = "Fecha desconocida";
+                    }
+                    return {
+                        ...event,
+                        eventName: eventType,
+                        returnValues: {
+                            ...event.returnValues,
+                            salary: event.returnValues.salary ? Web3.utils.fromWei(event.returnValues.salary, 'ether') : null,
+                            newSalary: event.returnValues.newSalary ? Web3.utils.fromWei(event.returnValues.newSalary, 'ether') : null,
+                            date: dateString,
+                        }
+                    };
+                }).filter(event => {
+                    if (eventType === 'SalaryReleased') {
+                        return event.returnValues.worker === selectedAccount;
+                    } else {
+                        return event.returnValues.employer === selectedAccount;
+                    }
 
-        const SalaryReleasedEvents = await MyContract.queryFilter(SalaryReleasedFilter, 0, "latest");
-        const TokenMintedEvents = await MyContract.queryFilter(TokenMintedFilter, 0, "latest");
-        const ContractCancelledEvents = await MyContract.queryFilter(ContractCancelledFilter, 0, "latest");
-        const ApprovalChangesEvents = await MyContract.queryFilter(ApprovalChangesFilter, 0, "latest");
+                });
+                allEvents = [...allEvents, ...processedEvents];
+            }
 
-        const addEvents = (events, type) => {
-            events.forEach(event => {
-                const eventData = {
-                    type: type,
-                    tokenId: event.args.tokenId.toString(),
-                    salary: ethers.utils.formatEther(event.args.salary.toString()),
-                    date: new Date(event.args.timestamp * 1000),
-                    dateString: new Date(event.args.timestamp * 1000).toLocaleString(),
-                };
-                allEvents.push(eventData);
+            allEvents.sort((a, b) => {
+
+                return parseInt(b.returnValues.timestamp.toString()) - parseInt(a.returnValues.timestamp.toString());
             });
-        };
-
-        addEvents(SalaryReleasedEvents, "SalaryReleased");
-        addEvents(TokenMintedEvents, "TokenMinted");
-        addEvents(ContractCancelledEvents, "ContractCancelled");
-        addEvents(ApprovalChangesEvents, "ApprovalChanges");
-
-        allEvents.sort((a, b) => a.date - b.date);
-        allEvents.reverse();
-
-        return allEvents;
+            return allEvents;
+        } catch (error) {
+            console.error('Error al obtener eventos:', error);
+        }
     };
 
     const eventToText = (eventType) => {
@@ -146,67 +131,69 @@ export default function Wallet() {
                         <Picker.Item key={index} label={account} value={account} />
                     ))}
                 </Picker>
-                <Text>Cuenta seleccionada: {selectedAccount}</Text>
-                <Text>Balance: {balance} ETH</Text>
+                <Text style={styles.text}>Cuenta seleccionada: </Text>
+                <Text style={styles.textoAviso}> {selectedAccount}</Text>
+                <Text style={styles.balanceText}>Balance: {balance} ETH</Text>
             </View>
+
 
             <View style={[styles.card, styles.eventsContainer]}>
                 <FlatList
                     data={events}
                     keyExtractor={(item, index) => index.toString()}
+
                     renderItem={({ item }) => {
-                        if (item.type !== "ApprovalChanges" || (item.type === "ApprovalChanges" && item.salary !== item.newSalary)) {
+                        if (item.eventName !== "ApprovalChanges" || (item.eventName === "ApprovalChanges" && item.returnValues.salary !== item.returnValues.newSalary)) {
                             return (
+
                                 <View style={styles.contractItem}>
 
-                                    <View style={{ flexDirection: "row" }}>
-                                        <Text>{eventToText(item.type)}</Text>
-                                        <Text>  ID: {item.tokenId}</Text>
+                                    <View>
+                                        <Text style={styles.textItems} >{eventToText(item.eventName)}</Text>
                                     </View>
 
-                                    {item.type === "TokenMinted" && (
-                                        <View>
-                                            <Text style={styles.lossesText}>-{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.dateString} </Text>
+                                    {item.eventName === "TokenMinted" && (
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            <Text style={styles.lossesText}>-{item.returnValues.salary} ETH</Text>
+                                            <Text style={styles.textoFecha}>{item.returnValues.date} </Text>
                                         </View>)}
 
-                                    {item.type === "ContractCancelled" && (
-                                        <View>
-                                            <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.dateString} </Text>
+                                    {item.eventName === "ContractCancelled" && (
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            <Text style={styles.profitText}>+{item.returnValues.salary} ETH</Text>
+                                            <Text style={styles.textoFecha}>{item.returnValues.date} </Text>
                                         </View>)}
 
+                                    {item.eventName === "SalaryReleased" && (
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            <Text style={styles.profitText}>+{item.returnValues.salary} ETH</Text>
+                                            <Text style={styles.textoFecha}>{item.returnValues.date} </Text>
+                                        </View>
+                                    )}
 
-                                    {item.type === "ApprovalChanges" && (
-                                        <View>
-                                            {item.newSalary < item.salary ? (
+                                    {item.eventName === "ApprovalChanges" && (
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                            {item.returnValues.newSalary < item.returnValues.salary ? (
                                                 <>
-                                                    <Text style={styles.profitText}>+{item.salary - item.newSalary} ETH</Text>
-                                                    <Text style={styles.textoFecha}>{item.dateString} </Text>
+                                                    <Text style={styles.profitText}>+{item.returnValues.salary - item.returnValues.newSalary} ETH</Text>
+                                                    <Text style={styles.textoFecha}>{item.returnValues.date} </Text>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <Text style={styles.lossesText}>-{item.newSalary - item.salary} ETH</Text>
-                                                    <Text style={styles.textoFecha}>{item.dateString} </Text>
+                                                    <Text style={styles.lossesText}>-{item.returnValues.newSalary - item.returnValues.salary} ETH</Text>
+                                                    <Text style={styles.textoFecha}>{item.returnValues.date} </Text>
                                                 </>
                                             )}
                                         </View>
                                     )}
-
-                                    {item.type === "SalaryReleased" && (
-                                        <View>
-                                            <Text style={styles.profitText}>+{item.salary} ETH</Text>
-                                            <Text style={styles.textoFecha}>{item.dateString} </Text>
-                                        </View>
-                                    )}
-
                                 </View>
                             );
                         } else {
                             return null;
                         }
-                    }}
-                    ListEmptyComponent={<Text style={styles.textoAviso}>No hay eventos registrados para esta cuenta.</Text>}
+                    }
+                    }
+                    ListEmptyComponent={< Text style={styles.textoAviso} > No hay eventos registrados para esta cuenta.</Text >}
                 />
             </View>
 
@@ -247,12 +234,12 @@ const styles = StyleSheet.create({
     balanceText: {
         fontSize: 16,
         color: "#4caf50",
-        marginTop: 5,
+        marginTop: 15,
         fontWeight: "bold",
         textAlign: "center",
     },
     contractItem: {
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#F6F6F6",
         padding: 10,
         marginVertical: 5,
         borderRadius: 5,
@@ -276,7 +263,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: "#586069",
         marginBottom: 20,
-        marginTop: 20,
+        marginTop: 10,
         fontStyle: "italic",
         textAlign: "center",
         paddingHorizontal: 10,
@@ -285,17 +272,22 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#586069",
         textAlign: "right",
+
     },
     text: {
         fontSize: 16,
         color: "#586069",
-        marginBottom: 5,
-        marginTop: 20,
+        marginBottom: 0,
+        marginTop: 0,
         fontWeight: "bold",
         textAlign: "center",
         paddingHorizontal: 10,
-    }
+    },
+    textItems: {
+        fontSize: 18,
+        color: "black",
+        marginBottom: 5,
+        marginTop: 0,
+    },
 });
-
-
 

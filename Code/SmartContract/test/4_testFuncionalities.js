@@ -82,7 +82,7 @@ contract("MyContract", accounts => {
         assert.isTrue(errorOcurred, "El contrato no se ha cancelado correctamente");
     });
 
-    it("Comrprueba que un manager pueda modificar un contrato", async () => {
+    it("Comprueba que un manager pueda modificar un contrato", async () => {
         const contract = await MyContract.deployed();
         const newSalary = web3.utils.toWei("2", "ether");
         const newDuration = 20;
@@ -121,5 +121,23 @@ contract("MyContract", accounts => {
         assert.equal(contractsOwner.length, 2, "El número de contratos del owner no es correcto");
         assert.equal(contractsWorker.length, 3, "El número de contratos del trabajador no es correcto");
     });
+
+    it("Comprueba que se pueda eliminar a un manager", async () => {
+        const contract = await MyContract.deployed();
+        const mintedToken = await contract.mint(buyer, salary, start, duration, description, title, { from: owner, value: salary });
+        const tokenId = mintedToken.logs[0].args.tokenId;
+
+        await contract.assignManagerToToken(tokenId, owner2, { from: owner });
+        let managers = await contract.getManagersOfToken(tokenId);
+        assert(managers.includes(owner2), "El manager no fue asignado correctamente");
+
+        const actualOwner = await contract.ownerOf(tokenId);
+        assert.equal(actualOwner, owner, "El propietario del token no es quien intenta hacer la revocación");
+
+        await contract.revokeManagerFromToken(tokenId, owner2, { from: owner, gas: 1000000 });
+        managers = await contract.getManagersOfToken(tokenId);
+        assert.equal(managers.length, 0, "El manager no se ha eliminado correctamente");
+    });
+
 
 });

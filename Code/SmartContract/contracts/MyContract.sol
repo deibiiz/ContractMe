@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract MyContract is ERC721 {
-
     struct ContractDetails {
         uint256 salary;
         uint256 startDate;
@@ -38,12 +37,11 @@ contract MyContract is ERC721 {
     mapping(uint256 => address[]) public tokenManagersList;
     uint256 public tokenID;
 
-
     function isContractFinished(uint256 _tokenID) public view returns (bool) {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
-        
+
         if (contractDetails[_tokenID].isFinished == true) {
             return true;
         }
@@ -58,18 +56,13 @@ contract MyContract is ERC721 {
         return false;
     }
 
-
     function removeContractFromOwner(
         uint256 _tokenID,
         address _owner
     ) internal {
         try this.ownerOf(_tokenID) {} catch {
-            revert("El token no existe."); 
+            revert("El token no existe.");
         }
-        require(
-            ownerOf(_tokenID) == _owner,
-            "El propietario no coincide con el propietario del token"
-        );
 
         uint256 contractIndex;
         uint256 lastContractIndex = contractsOwner[_owner].length - 1;

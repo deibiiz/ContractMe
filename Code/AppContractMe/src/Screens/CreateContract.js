@@ -5,6 +5,7 @@ import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
 import { MyContract, provider } from "../ContractConexion/EtherProvider";
 
+
 export default function CreateContract() {
     const [_title, setTitle] = useState('');
     const [recipient, setRecipient] = useState('');
@@ -14,6 +15,8 @@ export default function CreateContract() {
     const [_description, setDescription] = useState('');
     const [mintStatus, setMintStatus] = useState('');
     const { selectedAccount } = useAccount();
+
+
 
     const mintContract = async () => {
         if (!salary || !start || !duration || !_description || !_title) {
@@ -26,12 +29,14 @@ export default function CreateContract() {
                 alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
             }
 
+
             const _parsedSalary = Web3.utils.toWei(salary, 'ether');
             const _start = Number(start);
             const _duration = Number(duration);
             const _to = recipient || "0x0000000000000000000000000000000000000000";
             if (!Web3.utils.isAddress(_to) || _to === selectedAccount) {
                 alert("Dirección de destinatario inválida");
+                return;
             }
 
 

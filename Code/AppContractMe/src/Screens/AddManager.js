@@ -39,8 +39,13 @@ const AssignManagerScreen = ({ route }) => {
             } else {
                 console.log("Asignando manager...", tokenId, newManagerAddress);
 
+                if (!Web3.utils.isAddress(newManagerAddress) || newManagerAddress === selectedAccount) {
+                    alert("Dirección de destinatario inválida");
+                    return;
+                }
 
-                await MyContract.methods.assignManagerToToken(tokenId, newManagerAddress).send({ from: selectedAccount });
+                await MyContract.methods.assignManagerToToken(tokenId, newManagerAddress).send({ from: selectedAccount, gas: 1000000 });
+
 
                 alert("Manager asignado con éxito.");
                 const updatedManagers = await MyContract.methods.getManagersOfToken(tokenId).call();
@@ -60,11 +65,14 @@ const AssignManagerScreen = ({ route }) => {
                 alert("Por favor, conecta tu wallet.");
             } else {
 
-                await MyContract.methods.revokeManagerFromToken(tokenId, managerAddress).send({ from: selectedAccount });
+                console.log("Eliminando manager...", tokenId, managerAddress);
+                await MyContract.methods.revokeManagerFromToken(tokenId, managerAddress).send({ from: selectedAccount, gas: 1000000 });
 
-                alert("Manager eliminado con éxito.");
-                const updatedManagers = await contract.getManagersOfToken(tokenId);
+                alert('Manager eliminado con éxito.');
+
+                const updatedManagers = await MyContract.methods.getManagersOfToken(tokenId).call();
                 setManagers(updatedManagers);
+
             }
         }
         catch (error) {

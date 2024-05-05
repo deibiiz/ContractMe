@@ -79,14 +79,12 @@ contract MyContractChanges is MyContract {
                 tokenManagers[_tokenId][_manager],
             "Error: condiciones no cumplidas."
         );
-
         for (uint256 i = 0; i < tokenManagersList[_tokenId].length; i++) {
             if (tokenManagersList[_tokenId][i] == _manager) {
                 removeManagerFromList(_tokenId, i);
                 break;
             }
         }
-
         tokenManagers[_tokenId][_manager] = false;
         removeContractFromOwner(_tokenId, _manager);
     }
