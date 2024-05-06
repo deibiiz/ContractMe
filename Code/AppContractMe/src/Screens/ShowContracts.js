@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, StyleSheet, Dimensions, Text, FlatList, ScrollView } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet, Dimensions, Text, FlatList, ActivityIndicator } from "react-native";
 import { TabView, TabBar } from "react-native-tab-view";
 import { TouchableOpacity, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -14,6 +14,7 @@ const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedCon
 
     return (
         <View style={styles.container}>
+            {contracts.length > 0 ? null : <Text style={styles.text}>No tienes contratos como empleador.</Text>}
             <FlatList
                 data={contracts}
                 keyExtractor={item => item}
@@ -37,18 +38,21 @@ const EmployerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedCon
             </TouchableOpacity>
 
             {showFinalizedContracts && (
-                <FlatList
-                    data={finalizedOwnerContracts}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => navigation.navigate("infoContract", { tokenId: item, fromWorkerSection: false })}
-                        >
-                            <Text>Contrato ID: {item}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
+                <>
+                    {finalizedOwnerContracts.length > 0 ? null : <Text style={styles.text}>No tienes contratos finalizados como empleador.</Text>}
+                    <FlatList
+                        data={finalizedOwnerContracts}
+                        keyExtractor={item => item}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                                onPress={() => navigation.navigate("infoContract", { tokenId: item, fromWorkerSection: false })}
+                            >
+                                <Text>Contrato ID: {item}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </>
             )}
         </View>
     );
@@ -59,6 +63,7 @@ const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContr
 
     return (
         <View style={styles.container}>
+            {contracts.length > 0 ? null : <Text style={styles.text}>No tienes contratos como trabajador.</Text>}
             <FlatList
                 data={contracts}
                 renderItem={({ item }) => (
@@ -79,18 +84,21 @@ const WorkerScreen = ({ contracts, showFinalizedContracts, setShowFinalizedContr
             </TouchableOpacity>
 
             {showFinalizedContracts && (
-                <FlatList
-                    data={finalizedWorkerContracts}
-                    keyExtractor={item => item}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => navigation.navigate("infoContract", { tokenId: item, fromWorkerSection: true })}
-                        >
-                            <Text>Contrato ID: {item}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
+                <>
+                    {finalizedWorkerContracts.length > 0 ? null : <Text style={styles.text}>No tienes contratos finalizados como trabajador.</Text>}
+                    <FlatList
+                        data={finalizedWorkerContracts}
+                        keyExtractor={item => item}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                                onPress={() => navigation.navigate("infoContract", { tokenId: item, fromWorkerSection: true })}
+                            >
+                                <Text>Contrato ID: {item}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                </>
             )}
         </View>
     );
@@ -117,6 +125,7 @@ export default function OwnerContracts() {
     const { selectedAccount } = useAccount();
 
     const loadAccountAndContracts = async () => {
+        setFetchStatus("Loading");
         try {
             if (selectedAccount) {
                 await fetchOwnerContracts(selectedAccount);
@@ -127,10 +136,8 @@ export default function OwnerContracts() {
         } catch (error) {
             console.error("Error al cargar los contratos:", error);
             setFetchStatus("Error al cargar los contratos");
-        }
-
-        if (!selectedAccount) {
-            alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
+        } finally {
+            setFetchStatus('');
         }
     };
 
@@ -257,6 +264,11 @@ export default function OwnerContracts() {
                 initialLayout={initialLayout}
                 renderTabBar={renderTabBar}
             />
+            {fetchStatus === "Loading" && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#164863" />
+                </View>
+            )}
         </GestureHandlerRootView>
     );
 }
@@ -268,6 +280,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
         alignItems: 'stretch',
+    },
+    text: {
+        fontSize: 17,
+        fontStyle: "italic",
+        textAlign: "center",
+        justifyContent: "center",
+        color: "gray",
+        marginTop: 50,
     },
     Bar: {
         backgroundColor: '#fff',
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         marginTop: 30,
-        marginBottom: 15,
+        marginBottom: 0,
         width: '85%',
         alignSelf: 'center',
         alignItems: 'center'
@@ -301,6 +321,17 @@ const styles = StyleSheet.create({
     textoBoton: {
         color: '#fff',
         fontWeight: 'bold'
+    },
+    loadingContainer: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "black",
+        opacity: 0.3,
     },
 });
 

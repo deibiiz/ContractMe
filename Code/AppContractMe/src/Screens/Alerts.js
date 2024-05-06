@@ -39,6 +39,7 @@ export default function Alertas() {
                     fromBlock: 0,
                     toBlock: "latest"
                 });
+                console.log(`Events for ${eventType}:`, fetchedEvents); // Debug log
 
                 const processedEvents = fetchedEvents.map(event => {
 
@@ -102,11 +103,23 @@ export default function Alertas() {
             data={events}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => {
-                if (item.eventName !== "ContractCancelled") {
+                if (item.eventName === "ContractCancelled") {
                     return (
                         <TouchableOpacity
                             style={styles.contractItem}
-                            onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId })}
+                        >
+                            <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
+                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
+                                <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
+                            </View>
+                        </TouchableOpacity >
+                    );
+                } else if (item.eventName === "ChangeProposed") {
+                    return (
+                        <TouchableOpacity
+                            style={styles.contractItem}
+                            onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId, fromWorkerSection: true })}
                         >
                             <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -119,14 +132,15 @@ export default function Alertas() {
                     return (
                         <TouchableOpacity
                             style={styles.contractItem}
+                            onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId })}
                         >
                             <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                                 <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
                                 <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
                             </View>
-                        </TouchableOpacity >
-                    )
+                        </TouchableOpacity>
+                    );
                 }
             }
             }

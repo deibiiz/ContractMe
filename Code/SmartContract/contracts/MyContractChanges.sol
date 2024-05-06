@@ -124,14 +124,10 @@ contract MyContractChanges is MyContract {
             if (excessAmount > 0) {
                 payable(msg.sender).transfer(excessAmount);
             }
-            emit ChangeProposed(
-                _tokenID,
-                msg.sender,
-                contractDetails[_tokenID].worker,
-                currentSalary,
-                _newSalary,
-                block.timestamp
-            );
+        } else if (_newSalary < currentSalary) {
+            uint256 refundAmount = currentSalary - _newSalary;
+            address owner = ownerOf(_tokenID);
+            payable(owner).transfer(refundAmount);
         }
 
         changeProposals[_tokenID] = ChangeProposal({
@@ -142,6 +138,15 @@ contract MyContractChanges is MyContract {
             isPaused: _isPaused,
             isPending: true
         });
+
+        emit ChangeProposed(
+            _tokenID,
+            msg.sender,
+            contractDetails[_tokenID].worker,
+            currentSalary,
+            _newSalary,
+            block.timestamp
+        );
     }
 
     function rejectChange(uint256 _tokenID) public {

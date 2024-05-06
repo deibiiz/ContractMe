@@ -27,11 +27,13 @@ const ContractDetailsScreen = ({ route }) => {
             const pauseTime = new Date(Number(details.pauseTime) * 1000).toLocaleString();
             const isFinished = await MyContract.methods.isContractFinished(tokenId).call();
 
+
             setContractDetails({
                 ...details,
                 salary: salaryInEther,
                 startDate: startDate,
                 endDate: endDate,
+                startSeconds: Number(details.startDate),
                 duration: Number(details.duration),
                 pauseDate: pauseTime,
                 pauseDuration: details.pauseDuration,
@@ -169,6 +171,8 @@ const ContractDetailsScreen = ({ route }) => {
 
             const newDescription = proposal.newDescription ? proposal.newDescription : details.description;
             const newIsPaused = proposal.isPaused ? proposal.isPaused : details.isPaused;
+
+
 
             const oldContractData = {
                 tokenId: tokenId,
