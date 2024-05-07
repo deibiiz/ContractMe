@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Switch, ScrollView } from "react-native";
 import Boton from "../components/Boton.js";
 import Web3 from "web3";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAccount } from "../components/ContextoCuenta";
 import { MyContract } from "../ContractConexion/EtherProvider";
 
@@ -21,7 +21,7 @@ const ModifyContract = ({ route, navigation }) => {
     const endDateSeconds = contractDetails.startSeconds + contractDetails.duration;
     const duration = contractDetails.duration;
 
-    const [mode, setMode] = useState('date');
+    const [mode, setMode] = useState("date");
     const [show, setShow] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date(endDateSeconds * 1000));
     const [secondsToFinish, setSecondsToFinish] = useState(endDateSeconds);
@@ -49,12 +49,12 @@ const ModifyContract = ({ route, navigation }) => {
 
     const showDatepicker = () => {
         setShow(true);
-        setMode('date');
+        setMode("date");
     };
 
     const showTimepicker = () => {
         setShow(true);
-        setMode('time');
+        setMode("time");
     };
 
     const sendProposal = async () => {
@@ -62,11 +62,11 @@ const ModifyContract = ({ route, navigation }) => {
             if (!selectedAccount) {
                 alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
             } else {
-                const parsedSalary = Web3.utils.toWei(salary, 'ether');
+                const parsedSalary = Web3.utils.toWei(salary, "ether");
 
                 MyContract.methods.proposeChange(tokenId, title, parsedSalary, secondsToFinish, description, isPaused).send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
                 alert("Solicitud de cambios enviada correctamente.");
-                navigation.navigate('ShowContract', { tokenId: tokenId });
+                navigation.navigate("ShowContract", { tokenId: tokenId });
             }
         } catch (error) {
             console.error("Error al modificar el contrato:", error);
@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     switchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         marginBottom: 10,
         marginTop: 14,
         paddingHorizontal: 15,

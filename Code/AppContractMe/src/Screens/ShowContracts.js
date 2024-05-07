@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         marginTop: 30,
-        marginBottom: 0,
+        marginBottom: 15,
         width: '85%',
         alignSelf: 'center',
         alignItems: 'center'
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "black",
-        opacity: 0.3,
+        opacity: 0.15,
     },
 });
 

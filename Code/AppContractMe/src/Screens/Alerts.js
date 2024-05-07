@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { MyContract } from "../ContractConexion/EtherProvider";
 import { useAccount } from "../components/ContextoCuenta";
@@ -8,7 +8,7 @@ import Web3 from "web3";
 export default function Alertas() {
 
     const [events, setEvents] = useState([]);
-    const [pendingContracts, setPendingContracts] = useState([]);
+    const [fetchStatus, setFetchStatus] = useState('');
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
 
@@ -28,7 +28,7 @@ export default function Alertas() {
     );
 
     const getAccountHistory = async () => {
-
+        setFetchStatus("Loading");
         try {
             const eventTypes = ["TokenMinted", "SalaryReleased", "ContractCancelled",
                 "ContractFinalized", "ContractSigned", "ChangeProposed", "ApprovalChanges", "RejectChanges"];
@@ -39,7 +39,6 @@ export default function Alertas() {
                     fromBlock: 0,
                     toBlock: "latest"
                 });
-                console.log(`Events for ${eventType}:`, fetchedEvents); // Debug log
 
                 const processedEvents = fetchedEvents.map(event => {
 
@@ -69,6 +68,9 @@ export default function Alertas() {
             return allEvents;
         } catch (error) {
             console.error("Error al obtener eventos:", error);
+            setFetchStatus("Error al cargar los contratos");
+        } finally {
+            setFetchStatus('');
         }
     };
 
@@ -98,54 +100,61 @@ export default function Alertas() {
 
 
     return (
+        <>
+            {fetchStatus === "Loading" && (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#164863" />
+                </View>
+            )}
 
-        <FlatList
-            data={events}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => {
-                if (item.eventName === "ContractCancelled") {
-                    return (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                        >
-                            <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
-                                <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
-                            </View>
-                        </TouchableOpacity >
-                    );
-                } else if (item.eventName === "ChangeProposed") {
-                    return (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId, fromWorkerSection: true })}
-                        >
-                            <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
-                                <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                } else {
-                    return (
-                        <TouchableOpacity
-                            style={styles.contractItem}
-                            onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId })}
-                        >
-                            <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
-                                <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    );
+            <FlatList
+                data={events}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => {
+                    if (item.eventName === "ContractCancelled") {
+                        return (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                            >
+                                <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                    <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
+                                    <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
+                                </View>
+                            </TouchableOpacity >
+                        );
+                    } else if (item.eventName === "ChangeProposed") {
+                        return (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                                onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId, fromWorkerSection: true })}
+                            >
+                                <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                    <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
+                                    <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    } else {
+                        return (
+                            <TouchableOpacity
+                                style={styles.contractItem}
+                                onPress={() => navigation.navigate("infoContract", { tokenId: item.returnValues.tokenId })}
+                            >
+                                <Text style={styles.textItems}>{eventToText(item.eventName)}</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                    <Text style={styles.textoFecha}>Token ID:{item.returnValues.tokenId}</Text>
+                                    <Text style={styles.textoFecha}>{item.returnValues.date}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }
                 }
-            }
-            }
-            ListEmptyComponent={< Text style={styles.textoAviso} > No hay eventos registrados para esta cuenta.</Text >}
-        />
+                }
+                ListEmptyComponent={< Text style={styles.textoAviso} > No hay eventos registrados para esta cuenta.</Text >}
+            />
+        </>
 
 
     );
@@ -196,6 +205,17 @@ const styles = StyleSheet.create({
         color: "black",
         marginBottom: 8,
         marginTop: 5,
+    },
+    loadingContainer: {
+        position: "absolute",
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "black",
+        opacity: 0.1,
     },
 });
 
