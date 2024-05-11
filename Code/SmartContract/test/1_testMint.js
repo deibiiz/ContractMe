@@ -4,7 +4,6 @@ contract("MyContract", accounts => {
 
   const [owner, buyer] = accounts; //owner es el que despliega el contrato y buyer generalmente es la segunda cuenta de ganache
   const salary = web3.utils.toWei("1", "ether");
-  const overpayAmount = web3.utils.toWei("3", "ether");
   const start = 1;
   const duration = 120; // 2 minutos
   const description = "Trabajo de prueba";
@@ -22,14 +21,16 @@ contract("MyContract", accounts => {
   });
 
 
-  it("Devolver el sobrante cuando se paga de mas", async () => {
+  it("No se puede acuñar un NFT si no se envia suficiente dinero", async () => {
     const contract = await MyContract.deployed();
 
-    const initialBalance = await web3.eth.getBalance(buyer);
-    await contract.mint(buyer, salary, start, duration, description, title, { from: buyer, value: overpayAmount });
-    const finalBalance = await web3.eth.getBalance(buyer);
-    const expectedFinalBalance = web3.utils.toBN(initialBalance).sub(web3.utils.toBN(overpayAmount));
+    let errorOcurred = false;
+    try {
+      await contract.mint(buyer, salary, start, duration, description, title, { from: buyer, value: web3.utils.toWei("0.5", "ether") });
+    } catch (e) {
+      errorOcurred = true;
+    }
 
-    assert(finalBalance > expectedFinalBalance, "Los fondos deben de ser devueltos al comprador");
+    assert(errorOcurred, "No se puede acuñar un NFT si no se envia suficiente dinero");
   });
 });

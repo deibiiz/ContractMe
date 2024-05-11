@@ -4,7 +4,7 @@ import { TabView, TabBar } from "react-native-tab-view";
 import { TouchableOpacity, GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract } from "../ContractConexion/EtherProvider";
 
 
 const initialLayout = { width: Dimensions.get("window").width };
@@ -154,6 +154,8 @@ export default function OwnerContracts() {
             return;
         }
 
+        const MyContract = await getMyContract();
+
         try {
             const contractsList = await MyContract.methods.getContractsFromOwner(account).call();
             let signedOwnerContracts = [];
@@ -190,6 +192,8 @@ export default function OwnerContracts() {
             alert("No se encontró la dirección de la cuenta.");
             return;
         }
+
+        const MyContract = await getMyContract();
 
         try {
             const contractsList = await MyContract.methods.getContractsOfWorker(account).call();

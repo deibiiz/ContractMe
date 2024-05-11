@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { EtherProvider } from "../ContractConexion/EtherProvider";
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
-import Web3 from 'web3';
+import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
 
@@ -18,10 +16,13 @@ const ContractDetailsScreen = ({ route }) => {
 
     const fetchContractDetailsCallback = React.useCallback(() => {
         const fetchContractDetails = async () => {
+            const MyContract = await getMyContract();
+            const web3 = await getWeb3();
+
             const details = await MyContract.methods.contractDetails(tokenId).call();
             const employer = await MyContract.methods.getOwnerOfContract(tokenId).call();
             const changeProposoal = await MyContract.methods.changeProposals(tokenId).call();
-            const salaryInEther = Web3.utils.fromWei(details.salary, 'ether');
+            const salaryInEther = web3.utils.fromWei(details.salary, 'ether');
             const startDate = new Date(Number(details.startDate) * 1000).toLocaleString();
             const endDate = new Date(Number(details.startDate) * 1000 + Number(details.duration) * 1000).toLocaleString();
             const pauseTime = new Date(Number(details.pauseTime) * 1000).toLocaleString();
@@ -56,6 +57,7 @@ const ContractDetailsScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
             } else {
+                const MyContract = await getMyContract();
 
                 MyContract.methods.finalizeContract(tokenId).send({ from: selectedAccount });
 
@@ -72,16 +74,15 @@ const ContractDetailsScreen = ({ route }) => {
         }
     };
 
-    const cancelarContrato = async (contractId) => {
+    const cancelarContrato = async () => {
         try {
             if (!selectedAccount) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
             } else {
-
-                console.log(contractId);
                 console.log(tokenId);
+                const MyContract = await getMyContract();
 
-                await MyContract.methods.cancelContract(contractId).send({ from: selectedAccount });
+                await MyContract.methods.cancelContract(tokenId).send({ from: selectedAccount });
 
                 alert('Contrato cancelado con éxito.');
                 navigation.navigate('Home1');
@@ -101,6 +102,7 @@ const ContractDetailsScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
             } else {
+                const MyContract = await getMyContract();
 
                 await MyContract.methods.signContract(tokenId).send({ from: selectedAccount, gas: 1000000 });
 
@@ -124,6 +126,7 @@ const ContractDetailsScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
             } else {
+                const MyContract = await getMyContract();
 
                 MyContract.methods.releaseSalary(tokenId).send({ from: selectedAccount });
 
@@ -156,14 +159,17 @@ const ContractDetailsScreen = ({ route }) => {
 
     const fetchContractDetails = async (tokenId) => {
         try {
+            const MyContract = await getMyContract();
+            const web3 = await getWeb3();
+
             const details = await MyContract.methods.contractDetails(tokenId).call();
             const proposal = await MyContract.methods.changeProposals(tokenId).call();
             const employer = await MyContract.methods.getOwnerOfContract(tokenId).call();
 
             const newTitle = proposal.newTitle ? proposal.newTitle : details.title;
 
-            const salaryInEther = Web3.utils.fromWei(details.salary, 'ether');
-            const newSalaryInEther = proposal.newSalary ? Web3.utils.fromWei(proposal.newSalary, 'ether') : salaryInEther;
+            const salaryInEther = web3.utils.fromWei(details.salary, 'ether');
+            const newSalaryInEther = proposal.newSalary ? web3.utils.fromWei(proposal.newSalary, 'ether') : salaryInEther;
 
             const startDate = new Date(Number(details.startDate) * 1000).toLocaleString();
             const endDate = new Date((Number(details.startDate) + Number(details.duration)) * 1000).toLocaleString();
@@ -359,7 +365,7 @@ const ContractDetailsScreen = ({ route }) => {
 
                                     <Boton
                                         texto="Cancelar contrato"
-                                        onPress={() => { cancelarContrato(contractDetails.tokenId) }}
+                                        onPress={() => { cancelarContrato() }}
                                         estiloBoton={{
                                             width: "100%",
                                             borderRadius: 8,

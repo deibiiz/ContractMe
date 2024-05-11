@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, ScrollView, Button, TouchableOpacity } from "react-native";
-import Web3 from "web3";
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
 
 
 
@@ -31,7 +30,7 @@ export default function CreateContract() {
 
         const now = new Date();
         const seconds = Math.floor((currentDate - now) / 1000);
-        setSecondsToStart(seconds + 60);
+        setSecondsToStart(seconds);
     };
 
     const onChangeEnd = (event, selectedDate) => {
@@ -60,17 +59,20 @@ export default function CreateContract() {
 
 
 
-
     const mintContract = async () => {
         if (!salary || !secondsToStart || !secondsToFinish || !_description || !_title) {
             alert("Por favor, introduce todos los datos.");
             return;
         }
 
+        if (!selectedAccount) {
+            alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta");
+            return;
+        }
+
         try {
-            if (!selectedAccount) {
-                alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta");
-            }
+            const web3 = await getWeb3();
+            const MyContract = await getMyContract();
 
             const now = new Date();
             if (startDate < now) {
@@ -83,10 +85,10 @@ export default function CreateContract() {
                 return;
             }
 
-            const _parsedSalary = Web3.utils.toWei(salary, 'ether');
+            const _parsedSalary = web3.utils.toWei(salary, 'ether');
             const _to = recipient || "0x0000000000000000000000000000000000000000";
 
-            if (!Web3.utils.isAddress(_to)) {
+            if (!web3.utils.isAddress(_to)) {
                 alert("Dirección de destinatario inválida");
                 return;
             }

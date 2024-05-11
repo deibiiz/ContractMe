@@ -20,6 +20,8 @@ import ModifyContract from "./Screens/ModifyContract";
 import ApplyChanges from "./Screens/ApplyChanges";
 import ShowQR from "./Screens/ShowQR";
 import QR from "./components/CamaraQR";
+import { NavigationContainer } from "@react-navigation/native";
+import { AccountProvider } from "./components/ContextoCuenta";
 
 
 const HomeStackNavigator = createNativeStackNavigator();
@@ -259,6 +261,10 @@ function MyTabs() {
 
 export default function Navigation() {
     return (
-        <MyTabs />
+        <AccountProvider>
+            <NavigationContainer>
+                <MyTabs />
+            </NavigationContainer>
+        </AccountProvider>
     );
 }

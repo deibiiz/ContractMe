@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { Picker } from "@react-native-picker/picker";
-import Web3 from "web3";
-import { MyContract, provider } from "../ContractConexion/EtherProvider";
+import { getWeb3, getMyContract } from "../ContractConexion/EtherProvider"; // Usa las funciones para obtener web3 y el contrato
 import { useAccount } from "../components/ContextoCuenta";
 
 export default function Wallet() {
@@ -12,10 +11,10 @@ export default function Wallet() {
     const [events, setEvents] = useState([]);
     const { selectedAccount, setSelectedAccount } = useAccount();
 
-
     useEffect(() => {
         const loadData = async () => {
-            const accounts = await provider.eth.getAccounts();
+            const web3 = await getWeb3(); // Usa la función getWeb3
+            const accounts = await web3.eth.getAccounts();
             setAccounts(accounts);
             if (accounts.length > 0) {
                 setSelectedAccount(accounts[0]);
@@ -27,8 +26,9 @@ export default function Wallet() {
     }, [setSelectedAccount]);
 
     const updateBalance = async (account) => {
-        const balance = await provider.eth.getBalance(account);
-        const balanceInEth = Web3.utils.fromWei(balance, "ether");
+        const web3 = await getWeb3(); // Asegura obtener web3 para cada llamada
+        const balance = await web3.eth.getBalance(account);
+        const balanceInEth = web3.utils.fromWei(balance, "ether");
         setBalance(balanceInEth);
     };
 
@@ -37,61 +37,48 @@ export default function Wallet() {
         updateBalance(itemValue);
     };
 
-
-
     useFocusEffect(
         React.useCallback(() => {
-            if (selectedAccount) {
-                getAccountHistory().then(events => {
-                    setEvents(events);
-                }).catch(error => {
-                    console.error("Error al obtener el historial de la cuenta", error);
-                    alert("Error al obtener el historial de la cuenta");
-                });
-            }
+            const fetchEvents = async () => {
+                if (selectedAccount) {
+                    try {
+                        const events = await getAccountHistory(selectedAccount);
+                        setEvents(events);
+                    } catch (error) {
+                        console.error("Error al obtener el historial de la cuenta", error);
+                        alert("Error al obtener el historial de la cuenta");
+                    }
+                }
+            };
+            fetchEvents();
         }, [selectedAccount])
     );
 
-    const getAccountHistory = async () => {
-
+    const getAccountHistory = async (account) => {
+        const web3 = await getWeb3()
+        const MyContract = await getMyContract(); // Usa la función getMyContract
         try {
             const eventTypes = ["TokenMinted", "SalaryReleased", "ContractCancelled", "ApprovalChanges"];
             let allEvents = [];
-
             for (let eventType of eventTypes) {
                 const fetchedEvents = await MyContract.getPastEvents(eventType, {
                     fromBlock: 0,
                     toBlock: "latest"
                 });
-
-                const processedEvents = fetchedEvents.map(event => {
-
-                    return {
-                        ...event,
-                        eventName: eventType,
-                        returnValues: {
-                            ...event.returnValues,
-                            tokenId: event.returnValues.tokenId.toString(),
-                            salary: event.returnValues.salary ? Web3.utils.fromWei(event.returnValues.salary, 'ether') : null,
-                            newSalary: event.returnValues.newSalary ? Web3.utils.fromWei(event.returnValues.newSalary, 'ether') : null,
-                            date: new Date(parseInt(event.returnValues.timestamp.toString()) * 1000).toLocaleString(),
-                        }
-                    };
-                }).filter(event => {
-                    if (eventType === "SalaryReleased") {
-                        return event.returnValues.worker === selectedAccount;
-                    } else {
-                        return event.returnValues.employer === selectedAccount;
+                const processedEvents = fetchedEvents.map(event => ({
+                    ...event,
+                    eventName: eventType,
+                    returnValues: {
+                        ...event.returnValues,
+                        tokenId: event.returnValues.tokenId.toString(),
+                        salary: event.returnValues.salary ? web3.utils.fromWei(event.returnValues.salary, 'ether') : null,
+                        newSalary: event.returnValues.newSalary ? web3.utils.fromWei(event.returnValues.newSalary, 'ether') : null,
+                        date: new Date(parseInt(event.returnValues.timestamp.toString()) * 1000).toLocaleString(),
                     }
-                });
+                })).filter(event => eventType === "SalaryReleased" ? event.returnValues.worker === account : event.returnValues.employer === account);
                 allEvents = [...allEvents, ...processedEvents];
             }
-
-            allEvents.sort((a, b) => {
-
-                return parseInt(b.returnValues.timestamp.toString()) - parseInt(a.returnValues.timestamp.toString());
-            });
-            return allEvents;
+            return allEvents.sort((a, b) => parseInt(b.returnValues.timestamp.toString()) - parseInt(a.returnValues.timestamp.toString()));
         } catch (error) {
             console.error("Error al obtener eventos:", error);
         }

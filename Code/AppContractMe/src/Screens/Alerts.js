@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract } from "../ContractConexion/EtherProvider";
 import { useAccount } from "../components/ContextoCuenta";
-import Web3 from "web3";
 
 export default function Alertas() {
 
@@ -30,6 +29,7 @@ export default function Alertas() {
     const getAccountHistory = async () => {
         setFetchStatus("Loading");
         try {
+            const MyContract = await getMyContract();
             const eventTypes = ["TokenMinted", "SalaryReleased", "ContractCancelled",
                 "ContractFinalized", "ContractSigned", "ChangeProposed", "ApprovalChanges", "RejectChanges"];
             let allEvents = [];

@@ -163,7 +163,8 @@ contract MyContractManagement is MyContract {
         require(
             tokenManagers[_tokenID][msg.sender] == true &&
                 !contractDetails[_tokenID].isSigned &&
-                contractDetails[_tokenID].isFinished == false,
+                contractDetails[_tokenID].isFinished == false &&
+                isContractFinished(_tokenID) == false,
             "Error: condiciones no cumplidas."
         );
 

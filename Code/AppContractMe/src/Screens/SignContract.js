@@ -4,18 +4,18 @@ import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract } from "../ContractConexion/EtherProvider";
 
 
 export default function SignContract() {
     const [unsignedContracts, setUnsignedContracts] = useState([]);
     const { selectedAccount } = useAccount();
-
     const navigation = useNavigation();
 
     const fetchUnsignedContracts = async () => {
         if (selectedAccount) {
             try {
+                const MyContract = await getMyContract();
                 const contractIds = await MyContract.methods.getUnsignedContractsOfWorker(selectedAccount).call();
                 const contractActive = contractIds.map(id => id.toString()).map(async id => {
                     const isFinished = await MyContract.methods.isContractFinished(id).call();

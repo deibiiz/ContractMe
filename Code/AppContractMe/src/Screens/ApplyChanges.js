@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract } from "../ContractConexion/EtherProvider";
 
 const ContractAlertScreen = ({ route }) => {
     const { oldContractDetails, newContractDetails } = route.params;
@@ -16,7 +16,7 @@ const ContractAlertScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
             } else {
-
+                const MyContract = await getMyContract();
                 await MyContract.methods.rejectChange(newContractDetails.tokenId).send({ from: selectedAccount });
                 alert("Cambios rechazados correctamente.");
                 navigation.navigate("infoContract", { tokenId: newContractDetails.tokenId, fromWorkerSection: true });
@@ -32,7 +32,7 @@ const ContractAlertScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert("Por favor, inicia sesión en MetaMask y selecciona una cuenta.");
             } else {
-
+                const MyContract = await getMyContract();
                 await MyContract.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount });
                 alert("Cambios aceptados correctamente.");
                 navigation.navigate("infoContract", { tokenId: newContractDetails.tokenId, fromWorkerSection: true });

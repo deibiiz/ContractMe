@@ -4,7 +4,7 @@ import Boton from '../components/Boton.js';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
 
 const AssignManagerScreen = ({ route }) => {
     const { tokenId } = route.params;
@@ -17,6 +17,7 @@ const AssignManagerScreen = ({ route }) => {
     useEffect(() => {
         const getManagers = async () => {
             try {
+                const MyContract = await getMyContract();
                 const managers = await MyContract.methods.getManagersOfToken(tokenId).call();
                 setManagers(managers);
             } catch (error) {
@@ -38,8 +39,10 @@ const AssignManagerScreen = ({ route }) => {
                 alert("Por favor, conecta tu wallet.");
             } else {
                 console.log("Asignando manager...", tokenId, newManagerAddress);
+                const MyContract = await getMyContract();
+                const web3 = await getWeb3();
 
-                if (!Web3.utils.isAddress(newManagerAddress) || newManagerAddress === selectedAccount) {
+                if (!web3.utils.isAddress(newManagerAddress) || newManagerAddress === selectedAccount) {
                     alert("Dirección de destinatario inválida");
                     return;
                 }
@@ -64,6 +67,7 @@ const AssignManagerScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert("Por favor, conecta tu wallet.");
             } else {
+                const MyContract = await getMyContract();
 
                 console.log("Eliminando manager...", tokenId, managerAddress);
                 await MyContract.methods.revokeManagerFromToken(tokenId, managerAddress).send({ from: selectedAccount, gas: 1000000 });

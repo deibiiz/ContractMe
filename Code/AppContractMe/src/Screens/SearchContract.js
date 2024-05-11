@@ -2,8 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from "react-native";
-import Web3 from "web3";
-import { MyContract, provider } from "../ContractConexion/EtherProvider";
+import { getWeb3, getMyContract } from "../ContractConexion/EtherProvider";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SearchContracts() {
@@ -12,7 +11,8 @@ export default function SearchContracts() {
 
     const fetchUnsignedContracts = async () => {
         try {
-            const web3 = new Web3(provider);
+            const web3 = await getWeb3();
+            const MyContract = await getMyContract();
             const contractIds = await MyContract.methods.getUnsignedContractsOfWorker("0x0000000000000000000000000000000000000000").call();
             const contractPromises = contractIds.map(async (id) => {
                 const isFinished = await MyContract.methods.isContractFinished(id).call();

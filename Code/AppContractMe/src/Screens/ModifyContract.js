@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Switch, ScrollView } from "react-native";
 import Boton from "../components/Boton.js";
-import Web3 from "web3";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
 
 
 const ModifyContract = ({ route, navigation }) => {
@@ -62,7 +61,10 @@ const ModifyContract = ({ route, navigation }) => {
             if (!selectedAccount) {
                 alert("Por favor, inicia sesión con tu billetera y selecciona una cuenta.");
             } else {
-                const parsedSalary = Web3.utils.toWei(salary, "ether");
+                const web3 = await getWeb3();
+                const MyContract = await getMyContract();
+
+                const parsedSalary = web3.utils.toWei(salary, "ether");
 
                 MyContract.methods.proposeChange(tokenId, title, parsedSalary, secondsToFinish, description, isPaused).send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
                 alert("Solicitud de cambios enviada correctamente.");
