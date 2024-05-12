@@ -16,7 +16,7 @@ export async function getWeb3() {
 export async function getMyContract() {
     const web3 = await getWeb3();
     const MyContract1 = require('./MyContractAux.json');
-    const contractAddress = '0xfa0186102A9c16f4515E984AEc687ddF1767FF84';
+    const contractAddress = '0xCfEB869F69431e42cdB54A4F4f105C19C080A601';
     const MyContract = new web3.eth.Contract(MyContract1.abi, contractAddress);
     return MyContract;
 }

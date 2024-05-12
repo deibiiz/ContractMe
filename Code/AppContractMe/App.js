@@ -11,6 +11,7 @@ import Navigation from "./src/Navigation";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     const data = await AsyncStorage.getAllKeys();
