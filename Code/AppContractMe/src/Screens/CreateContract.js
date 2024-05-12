@@ -133,7 +133,7 @@ export default function CreateContract() {
                     maxLength={1000}
                 />
 
-                <Text style={styles.TextInput}>Dirección del destinatario (OPCIONAL)</Text>
+                <Text style={styles.TextInput}>Dirección del destinatario (opcional)</Text>
                 <TextInput
                     style={styles.input}
                     onChangeText={setRecipient}

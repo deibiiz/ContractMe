@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Button } from "react-native";
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
-
+import { auth } from "../AppLogin/firebaseConfig";
 
 export default function Settings() {
+
 
     const handleSignOut = async () => {
         try {
@@ -14,7 +14,6 @@ export default function Settings() {
             console.error("Error cerrando sesión: ", error);
         }
     };
-
 
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

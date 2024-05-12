@@ -1,41 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Text, View, StyleSheet, FlatList } from 'react-native';
-import { Picker } from "@react-native-picker/picker";
-import { getWeb3, getMyContract } from "../ContractConexion/EtherProvider"; // Usa las funciones para obtener web3 y el contrato
+import { getWeb3, getMyContract } from "../ContractConexion/EtherProvider";
 import { useAccount } from "../components/ContextoCuenta";
 
 export default function Wallet() {
-    const [accounts, setAccounts] = useState([]);
     const [balance, setBalance] = useState("");
     const [events, setEvents] = useState([]);
-    const { selectedAccount, setSelectedAccount } = useAccount();
-
-    useEffect(() => {
-        const loadData = async () => {
-            const web3 = await getWeb3(); // Usa la función getWeb3
-            const accounts = await web3.eth.getAccounts();
-            setAccounts(accounts);
-            if (accounts.length > 0) {
-                setSelectedAccount(accounts[0]);
-                updateBalance(accounts[0]);
-            }
-        };
-
-        loadData();
-    }, [setSelectedAccount]);
+    const { selectedAccount } = useAccount();
 
     const updateBalance = async (account) => {
-        const web3 = await getWeb3(); // Asegura obtener web3 para cada llamada
+        const web3 = await getWeb3();
         const balance = await web3.eth.getBalance(account);
         const balanceInEth = web3.utils.fromWei(balance, "ether");
         setBalance(balanceInEth);
     };
 
-    const handleAccountChange = async (itemValue) => {
-        setSelectedAccount(itemValue);
-        updateBalance(itemValue);
-    };
+    useEffect(() => {
+        if (selectedAccount) {
+            updateBalance(selectedAccount);
+        }
+    }, [selectedAccount]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -56,7 +41,7 @@ export default function Wallet() {
 
     const getAccountHistory = async (account) => {
         const web3 = await getWeb3()
-        const MyContract = await getMyContract(); // Usa la función getMyContract
+        const MyContract = await getMyContract();
         try {
             const eventTypes = ["TokenMinted", "SalaryReleased", "ContractCancelled", "ApprovalChanges"];
             let allEvents = [];
@@ -103,15 +88,6 @@ export default function Wallet() {
     return (
         <View style={styles.container} >
             <View style={styles.card}>
-                <Picker
-                    selectedValue={selectedAccount}
-                    onValueChange={handleAccountChange}
-                    style={{ height: 50, width: 250 }}
-                >
-                    {accounts.map((account, index) => (
-                        <Picker.Item key={index} label={account} value={account} />
-                    ))}
-                </Picker>
                 <Text style={styles.text}>Cuenta seleccionada: </Text>
                 <Text style={styles.textoAviso}> {selectedAccount}</Text>
                 <Text style={styles.balanceText}>Balance: {balance} ETH</Text>

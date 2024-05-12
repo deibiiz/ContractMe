@@ -1,15 +1,44 @@
-import React from "react";
+import { useEffect } from 'react';
 import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import Boton from "../components/Boton";
+import { useAccount } from "../components/ContextoCuenta";
+import { auth, db } from "../AppLogin/firebaseConfig";
+import { doc, getDoc } from 'firebase/firestore';
 
 const Home = () => {
-
     const navigation = useNavigation();
+    const { selectedAccount, setSelectedAccount } = useAccount();
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (user) {
+            const docRef = doc(db, 'users', user.uid);
+
+            getDoc(docRef)
+                .then((docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        setSelectedAccount(data.ganache);
+                        console.log("Documento encontrado:", data);
+                    } else {
+                        console.log("No se ha encontrado documento");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al obtener documento:", error);
+                });
+        } else {
+            console.log("Usuario no verificado");
+        }
+    }, [selectedAccount]);
+
+
 
     return (
         <View style={styles.container}>
+
             <StatusBar style="auto" />
 
             <Boton
