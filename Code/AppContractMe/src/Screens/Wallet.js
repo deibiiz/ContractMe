@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { getWeb3, getMyContract } from "../ContractConexion/EtherProvider";
 import { useAccount } from "../components/ContextoCuenta";
 
 export default function Wallet() {
     const [balance, setBalance] = useState("");
+    const [fetchStatus, setFetchStatus] = useState("");
     const [events, setEvents] = useState([]);
     const { selectedAccount } = useAccount();
 
@@ -27,11 +28,14 @@ export default function Wallet() {
             const fetchEvents = async () => {
                 if (selectedAccount) {
                     try {
+                        setFetchStatus("Loading");
                         const events = await getAccountHistory(selectedAccount);
                         setEvents(events);
                     } catch (error) {
                         console.error("Error al obtener el historial de la cuenta", error);
                         alert("Error al obtener el historial de la cuenta");
+                    } finally {
+                        setFetchStatus("");
                     }
                 }
             };
@@ -95,6 +99,11 @@ export default function Wallet() {
 
 
             <View style={[styles.card, styles.eventsContainer]}>
+                {fetchStatus === "Loading" && (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="large" color="#164863" />
+                    </View>
+                )}
                 <FlatList
                     data={events}
                     keyExtractor={(item, index) => index.toString()}

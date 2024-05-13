@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { AccountProvider } from "./components/ContextoCuenta";
 
 //screens
 import Home from "./Screens/Home";
@@ -20,8 +22,8 @@ import ModifyContract from "./Screens/ModifyContract";
 import ApplyChanges from "./Screens/ApplyChanges";
 import ShowQR from "./Screens/ShowQR";
 import QR from "./components/CamaraQR";
-import { NavigationContainer } from "@react-navigation/native";
-import { AccountProvider } from "./components/ContextoCuenta";
+import Profile from "./Screens/Profile";
+
 
 
 const HomeStackNavigator = createNativeStackNavigator();
@@ -140,6 +142,16 @@ function MyStack() {
                 component={QR}
                 options={{
                     title: "Escanear Código QR",
+                    headerStyle: {
+                        backgroundColor: "#9BBEC8",
+                    },
+                }}
+            />
+            <HomeStackNavigator.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                    title: "Perfil",
                     headerStyle: {
                         backgroundColor: "#9BBEC8",
                     },

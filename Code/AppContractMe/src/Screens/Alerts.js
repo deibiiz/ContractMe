@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getMyContract } from "../ContractConexion/EtherProvider";
@@ -7,7 +7,7 @@ import { useAccount } from "../components/ContextoCuenta";
 export default function Alertas() {
 
     const [events, setEvents] = useState([]);
-    const [fetchStatus, setFetchStatus] = useState('');
+    const [fetchStatus, setFetchStatus] = useState("");
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
 
@@ -70,7 +70,7 @@ export default function Alertas() {
             console.error("Error al obtener eventos:", error);
             setFetchStatus("Error al cargar los contratos");
         } finally {
-            setFetchStatus('');
+            setFetchStatus("");
         }
     };
 
