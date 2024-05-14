@@ -100,7 +100,7 @@ export default function Wallet() {
 
             <View style={[styles.card, styles.eventsContainer]}>
                 {fetchStatus === "Loading" && (
-                    <View style={styles.loadingContainer}>
+                    <View>
                         <ActivityIndicator size="large" color="#164863" />
                     </View>
                 )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../AppLogin/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import Boton from "../components/Boton";
@@ -18,6 +18,7 @@ export default function Settings() {
         ganache: "",
         nombre: "",
         pais: "",
+        paidCode: "",
         telefono: "",
         email: "",
     });
@@ -26,22 +27,20 @@ export default function Settings() {
         const user = auth.currentUser;
         if (user) {
             const docRef = doc(db, "users", user.uid);
-            getDoc(docRef)
-                .then((docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        const fecha = data.fecha ? data.fecha.toDate() : null;
-                        const email = user.email;
-                        setUserData({ ...data, fecha, email });
-                    } else {
-                        console.log("No se ha encontrado documento");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener documento:", error);
-                });
-        } else {
-            console.log("Usuario no verificado");
+            const unsubscribe = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    const email = user.email;
+                    const fecha = data.fecha ? data.fecha.toDate() : null;
+                    setUserData({ ...data, email, fecha: fecha ? new Date(fecha).toLocaleDateString() : "No disponible" });
+                } else {
+                    console.log("No se ha encontrado documento");
+                }
+            }, error => {
+                console.error("No se han detectado cambios:", error);
+            });
+
+            return () => unsubscribe();
         }
     }, []);
 
@@ -79,7 +78,7 @@ export default function Settings() {
 
                 <View style={styles.textIcon}>
                     <MaterialIcons name="calendar-today" size={18} color="black" />
-                    <Text style={styles.text}>Fecha de nacimiento:  {userData.fecha ? new Date(userData.fecha).toLocaleDateString() : "No disponible"}</Text>
+                    <Text style={styles.text}>Fecha de nacimiento:  {userData.fecha}</Text>
                 </View>
 
                 <View style={styles.textIcon}>
@@ -101,7 +100,7 @@ export default function Settings() {
             <View style={styles.buttonGroup}>
                 <Boton
                     texto="Modificar Perfil"
-                    onPress={() => navigation.navigate("Profile")}
+                    onPress={() => navigation.navigate("Profile", { userData: userData })}
                     estiloBoton={
                         {
                             borderRadius: 5,
