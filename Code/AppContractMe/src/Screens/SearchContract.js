@@ -9,36 +9,37 @@ export default function SearchContracts() {
     const [unsignedContracts, setUnsignedContracts] = useState([]);
     const navigation = useNavigation();
 
-    const fetchUnsignedContracts = async () => {
-        try {
-            const web3 = await getWeb3();
-            const MyContract = await getMyContract();
-            const contractIds = await MyContract.methods.getUnsignedContractsOfWorker("0x0000000000000000000000000000000000000000").call();
-            const contractPromises = contractIds.map(async (id) => {
-                const isFinished = await MyContract.methods.isContractFinished(id).call();
-                if (!isFinished) {
-                    const details = await MyContract.methods.contractDetails(id).call();
-                    const title = details.title;
-                    const salaryInEther = details.salary ? web3.utils.fromWei(details.salary, 'ether') : '0';
-                    const startDate = new Date(Number(details.startDate) * 1000).toLocaleDateString();
-                    const endDate = new Date(Number(details.startDate) * 1000 + Number(details.duration) * 1000).toLocaleDateString();
-                    return { id, title, salaryInEther, startDate, endDate };
-                }
-                return null;
-            });
-
-            const contracts = await Promise.all(contractPromises);
-            const filteredContracts = contracts.filter(contract => contract !== null);
-            setUnsignedContracts(filteredContracts);
-        } catch (error) {
-            console.error("Error al obtener contratos sin firmar:", error);
-        }
-    };
-
     useFocusEffect(
         useCallback(() => {
-            fetchUnsignedContracts();
-        }, [fetchUnsignedContracts])
+            const fetchData = async () => {
+
+                try {
+                    const web3 = await getWeb3();
+                    const MyContract = await getMyContract();
+                    const contractIds = await MyContract.methods.getUnsignedContractsOfWorker("0x0000000000000000000000000000000000000000").call();
+                    const contractPromises = contractIds.map(async (id) => {
+                        const isFinished = await MyContract.methods.isContractFinished(id).call();
+                        if (!isFinished) {
+                            const details = await MyContract.methods.contractDetails(id).call();
+                            const title = details.title;
+                            const salaryInEther = details.salary ? web3.utils.fromWei(details.salary, "ether") : "0";
+                            const startDate = new Date(Number(details.startDate) * 1000).toLocaleDateString();
+                            const endDate = new Date(Number(details.startDate) * 1000 + Number(details.duration) * 1000).toLocaleDateString();
+                            return { id, title, salaryInEther, startDate, endDate };
+                        }
+                        return null;
+                    });
+
+                    const contracts = await Promise.all(contractPromises);
+                    const filteredContracts = contracts.filter(contract => contract !== null);
+                    setUnsignedContracts(filteredContracts);
+                } catch (error) {
+                    console.error("Error al obtener contratos sin firmar:", error);
+                }
+            };
+
+            fetchData();
+        }, [])
     );
 
 
@@ -55,7 +56,7 @@ export default function SearchContracts() {
                     return (
                         <TouchableOpacity
                             style={styles.contractItem}
-                            onPress={() => navigation.navigate('infoContract', { tokenId: item.id.toString(), fromWorkerSection: true })}
+                            onPress={() => navigation.navigate("infoContract", { tokenId: item.id.toString(), fromWorkerSection: true })}
                         >
                             <Text style={styles.textItems}> {item.title}</Text>
                             <Text style={styles.textoInfo}> Salario: {item.salaryInEther} ETH</Text>
@@ -76,50 +77,46 @@ const styles = StyleSheet.create({
 
     fullContainer: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        alignItems: 'stretch',
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        alignItems: "stretch",
     },
     contractItem: {
-        padding: 6,
-        marginTop: 10,
-        borderRadius: 5,
-        borderBottomWidth: 2,
-        borderBottomColor: '#ccc',
-        width: '100%',
-        alignSelf: 'center'
+        padding: 5,
+        marginTop: 4,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ccc",
+        width: "100%",
+        backgroundColor: "white",
     },
     title: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 18,
+        fontWeight: "bold",
         marginBottom: 5,
     },
     textoAviso: {
-        fontSize: 17,
+        fontSize: 16,
         color: "#586069",
         marginBottom: 20,
         marginTop: 20,
         fontStyle: "italic",
         textAlign: "center",
-        paddingHorizontal: 10,
     },
     textoInfo: {
-        fontSize: 14,
+        fontSize: 16,
         color: "black",
+        marginTop: 5,
         marginLeft: 8,
     },
     textoFecha: {
         fontSize: 14,
         color: "#586069",
-        textAlign: "right",
         marginRight: 5,
     },
     textItems: {
         fontSize: 19,
         color: "black",
-        marginBottom: 8,
-        marginTop: 5,
         marginLeft: 8,
     },
 });

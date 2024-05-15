@@ -1,7 +1,5 @@
 //ganache-cli --host 192.168.1.33 -d --db ganache_db
 
-
-
 let web3Instance = null;
 
 export async function getWeb3() {
@@ -16,7 +14,8 @@ export async function getWeb3() {
 export async function getMyContract() {
     const web3 = await getWeb3();
     const MyContract1 = require('./MyContractAux.json');
-    const contractAddress = '0xCfEB869F69431e42cdB54A4F4f105C19C080A601';
+    const contractAddress = '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e';
     const MyContract = new web3.eth.Contract(MyContract1.abi, contractAddress);
     return MyContract;
 }
+

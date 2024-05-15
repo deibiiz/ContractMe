@@ -4,15 +4,18 @@ import { useAccount } from "../components/ContextoCuenta";
 import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Boton from '../components/Boton.js';
+import { useAuthentication } from '../components/Authentication';
 
 
 const ContractDetailsScreen = ({ route }) => {
     const { tokenId, fromWorkerSection } = route.params;
-    console.log(tokenId, fromWorkerSection);
     const [contractDetails, setContractDetails] = useState(null);
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
+    const { esAutenticado, AutenticarConHuella } = useAuthentication();
+    const [contractSigned, setContractSigned] = useState(false);
 
+    console.log(tokenId, fromWorkerSection);
 
     const fetchContractDetailsCallback = React.useCallback(() => {
         const fetchContractDetails = async () => {
@@ -92,6 +95,14 @@ const ContractDetailsScreen = ({ route }) => {
             alert("Error al cancelar el contrato.");
         }
     };
+
+
+    useEffect(() => {
+        if (esAutenticado && !contractSigned) {
+            signTheContract();
+        }
+    }, [esAutenticado, contractSigned]);
+
 
     const signTheContract = async () => {
         if (!tokenId) {
@@ -252,6 +263,11 @@ const ContractDetailsScreen = ({ route }) => {
                 </View>
 
                 <View style={styles.block}>
+                    <Text style={styles.title}>Descripción del contrato</Text>
+                    <Text> {contractDetails.description}</Text>
+                </View>
+
+                <View style={styles.block}>
                     <Text style={styles.title}>Cuenta del empleador</Text>
                     <Text>{contractDetails.employer}</Text>
                 </View>
@@ -267,8 +283,8 @@ const ContractDetailsScreen = ({ route }) => {
                 </View>
 
                 <View style={styles.block}>
-                    <Text style={styles.title}>Descripción del contrato</Text>
-                    <Text> {contractDetails.description}</Text>
+                    <Text style={styles.title}>Ubicación</Text>
+                    <Text> {contractDetails.country}, {contractDetails.city}</Text>
                 </View>
 
                 <View style={styles.block}>
@@ -387,7 +403,7 @@ const ContractDetailsScreen = ({ route }) => {
                             {!contractDetails.isSigned && contractDetails.employer !== selectedAccount && (
                                 <Boton
                                     texto="Firmar contrato"
-                                    onPress={() => { signTheContract(contractDetails.tokenId) }}
+                                    onPress={AutenticarConHuella}
                                     estiloBoton={{
                                         width: "100%",
                                         borderRadius: 8,

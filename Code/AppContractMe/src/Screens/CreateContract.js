@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
 import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
+import { Picker } from "@react-native-picker/picker";
+import { Country, City } from "country-state-city";
 
 
 
@@ -12,6 +14,10 @@ export default function CreateContract() {
     const [recipient, setRecipient] = useState('');
     const [salary, setSalary] = useState('');
     const [_description, setDescription] = useState('');
+    const [selectedCountryCode, setSelectedCountryCode] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+    const [countries, setCountries] = useState([]);
+    const [cities, setCities] = useState([]);
     const [mintStatus, setMintStatus] = useState('');
     const { selectedAccount } = useAccount();
 
@@ -23,6 +29,9 @@ export default function CreateContract() {
     const [secondsToStart, setSecondsToStart] = useState(0);
     const [secondsToFinish, setSecondsToFinish] = useState(0);
 
+
+
+    // Codigo para calendario y reloj
     const onChangeStart = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShowStart(false);
@@ -59,8 +68,30 @@ export default function CreateContract() {
 
 
 
+    // Carga de paises y ciudades
+    useEffect(() => {
+        const loadCountries = async () => {
+            const countryList = Country.getAllCountries();
+            setCountries(countryList);
+        };
+        loadCountries();
+    }, []);
+
+    useEffect(() => {
+        const loadCities = async () => {
+            if (selectedCountryCode) {
+                const citiesList = await City.getCitiesOfCountry(selectedCountryCode);
+                setCities(citiesList);
+            }
+        };
+        loadCities();
+    }, [selectedCountryCode]);
+
+
+
+
     const mintContract = async () => {
-        if (!salary || !secondsToStart || !secondsToFinish || !_description || !_title) {
+        if (!salary || !secondsToStart || !secondsToFinish || !_description || !_title || !selectedCountryCode || !selectedCity) {
             alert("Por favor, introduce todos los datos.");
             return;
         }
@@ -99,7 +130,7 @@ export default function CreateContract() {
             }
 
 
-            const result = await MyContract.methods.mint(_to, _parsedSalary, secondsToStart, secondsToFinish, _description, _title)
+            const result = await MyContract.methods.mint(_to, _parsedSalary, secondsToStart, secondsToFinish, _description, _title, selectedCountryCode, selectedCity)
                 .send({ from: selectedAccount, value: _parsedSalary, gas: 1000000 });
 
             console.log("Contrato creado:", result);
@@ -151,6 +182,29 @@ export default function CreateContract() {
                     keyboardType="numeric"
                     maxLength={15}
                 />
+
+                <Text style={styles.TextInput}>País</Text>
+                <Picker
+                    selectedValue={selectedCountryCode}
+                    style={styles.input}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setSelectedCountryCode(itemValue);
+                        setSelectedCity(''); // Reset city selection
+                    }}>
+                    {countries.map((country, index) => (
+                        <Picker.Item key={index} label={country.name} value={country.isoCode} />
+                    ))}
+                </Picker>
+
+                <Text style={styles.TextInput}>Ciudad</Text>
+                <Picker
+                    selectedValue={selectedCity}
+                    style={styles.input}
+                    onValueChange={(itemValue, itemIndex) => setSelectedCity(itemValue)}>
+                    {cities.map((city, index) => (
+                        <Picker.Item key={index} label={city.name} value={city.name} />
+                    ))}
+                </Picker>
 
                 <Text style={styles.TextInput}>Fecha inicio</Text>
                 <View style={styles.containerDate}>
@@ -291,5 +345,9 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "white",
         textAlign: "center",
+    },
+    picker: {
+        backgroundColor: "white",
+        borderColor: "red",
     },
 });

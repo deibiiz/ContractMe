@@ -116,7 +116,7 @@ export default function OwnerContracts() {
     ]);
     const [employerContracts, setEmployerContracts] = useState([]);
     const [workerContracts, setWorkerContracts] = useState([]);
-    const [fetchStatus, setFetchStatus] = useState('');
+    const [fetchStatus, setFetchStatus] = useState("");
 
     const [showFinalizedContracts, setShowFinalizedContracts] = useState(false);
     const [finalizedOwnerContracts, setFinalizedOwnerContracts] = useState([]);
@@ -137,7 +137,7 @@ export default function OwnerContracts() {
             console.error("Error al cargar los contratos:", error);
             setFetchStatus("Error al cargar los contratos");
         } finally {
-            setFetchStatus('');
+            setFetchStatus("");
         }
     };
 
@@ -227,7 +227,7 @@ export default function OwnerContracts() {
 
     const renderScene = ({ route }) => {
         switch (route.key) {
-            case 'employer':
+            case "employer":
                 return <EmployerScreen
 
                     contracts={employerContracts}
@@ -235,7 +235,7 @@ export default function OwnerContracts() {
                     setShowFinalizedContracts={setShowFinalizedContracts}
                     finalizedOwnerContracts={finalizedOwnerContracts}
                 />;
-            case 'worker':
+            case "worker":
                 return <WorkerScreen
                     contracts={workerContracts}
                     showFinalizedContracts={showFinalizedContracts}
@@ -254,8 +254,8 @@ export default function OwnerContracts() {
             indicatorStyle={styles.indicator}
             style={styles.Bar}
             labelStyle={styles.barText}
-            activeColor={'#164863'}
-            inactiveColor={'#9AA5A7'}
+            activeColor={"#164863"}
+            inactiveColor={"#9AA5A7"}
         />
     );
 
@@ -280,10 +280,10 @@ export default function OwnerContracts() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        alignItems: 'stretch',
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+        alignItems: "stretch",
     },
     text: {
         fontSize: 17,
@@ -294,13 +294,13 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     Bar: {
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
     },
     indicator: {
-        backgroundColor: 'black',
+        backgroundColor: "black",
     },
     barText: {
-        fontWeight: 'bold',
+        fontWeight: "bold",
         fontSize: 13,
     },
     contractItem: {
@@ -308,23 +308,23 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 5,
         borderBottomWidth: 2,
-        borderBottomColor: '#ccc',
-        width: '85%',
-        alignSelf: 'center'
+        borderBottomColor: "#ccc",
+        width: "85%",
+        alignSelf: "center"
     },
     desplegable: {
-        backgroundColor: '#164863',
+        backgroundColor: "#164863",
         padding: 10,
         borderRadius: 5,
         marginTop: 30,
         marginBottom: 15,
-        width: '85%',
-        alignSelf: 'center',
-        alignItems: 'center'
+        width: "85%",
+        alignSelf: "center",
+        alignItems: "center"
     },
     textoBoton: {
-        color: '#fff',
-        fontWeight: 'bold'
+        color: "#fff",
+        fontWeight: "bold"
     },
     loadingContainer: {
         position: "absolute",

@@ -10,6 +10,8 @@ contract MyContract is ERC721 {
         uint256 duration;
         string title;
         string description;
+        string country;
+        string city;
         bool isSigned;
         address worker;
         bool isFinished;
