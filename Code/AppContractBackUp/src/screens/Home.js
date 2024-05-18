@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import Boton from "../components/Boton";
 
@@ -10,7 +9,6 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar style="auto" />
 
             <Boton
                 texto="Crear Contrato"

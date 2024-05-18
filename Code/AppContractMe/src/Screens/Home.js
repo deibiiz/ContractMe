@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import Boton from "../components/Boton";
 import { useAccount } from "../components/ContextoCuenta";
@@ -38,8 +37,6 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-
-            <StatusBar style="auto" />
 
             <Boton
                 texto="Crear Contrato"

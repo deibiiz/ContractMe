@@ -283,11 +283,6 @@ const ContractDetailsScreen = ({ route }) => {
                 </View>
 
                 <View style={styles.block}>
-                    <Text style={styles.title}>Ubicación</Text>
-                    <Text> {contractDetails.country}, {contractDetails.city}</Text>
-                </View>
-
-                <View style={styles.block}>
                     <Text style={styles.title}>Fechas del contrato</Text>
                     <Text>Inicio:  {contractDetails.startDate}</Text>
                     <Text>Fin:      {contractDetails.endDate}</Text>

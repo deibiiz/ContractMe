@@ -14,9 +14,6 @@ export default function CreateContract() {
     const [recipient, setRecipient] = useState('');
     const [salary, setSalary] = useState('');
     const [_description, setDescription] = useState('');
-    const [selectedCountryCode, setSelectedCountryCode] = useState('');
-    const [selectedCity, setSelectedCity] = useState('');
-    const [countries, setCountries] = useState([]);
     const [cities, setCities] = useState([]);
     const [mintStatus, setMintStatus] = useState('');
     const { selectedAccount } = useAccount();
@@ -67,31 +64,8 @@ export default function CreateContract() {
     };
 
 
-
-    // Carga de paises y ciudades
-    useEffect(() => {
-        const loadCountries = async () => {
-            const countryList = Country.getAllCountries();
-            setCountries(countryList);
-        };
-        loadCountries();
-    }, []);
-
-    useEffect(() => {
-        const loadCities = async () => {
-            if (selectedCountryCode) {
-                const citiesList = await City.getCitiesOfCountry(selectedCountryCode);
-                setCities(citiesList);
-            }
-        };
-        loadCities();
-    }, [selectedCountryCode]);
-
-
-
-
     const mintContract = async () => {
-        if (!salary || !secondsToStart || !secondsToFinish || !_description || !_title || !selectedCountryCode || !selectedCity) {
+        if (!salary || !secondsToStart || !secondsToFinish || !_description || !_title) {
             alert("Por favor, introduce todos los datos.");
             return;
         }
@@ -130,7 +104,7 @@ export default function CreateContract() {
             }
 
 
-            const result = await MyContract.methods.mint(_to, _parsedSalary, secondsToStart, secondsToFinish, _description, _title, selectedCountryCode, selectedCity)
+            const result = await MyContract.methods.mint(_to, _parsedSalary, secondsToStart, secondsToFinish, _description, _title)
                 .send({ from: selectedAccount, value: _parsedSalary, gas: 1000000 });
 
             console.log("Contrato creado:", result);
@@ -182,29 +156,6 @@ export default function CreateContract() {
                     keyboardType="numeric"
                     maxLength={15}
                 />
-
-                <Text style={styles.TextInput}>País</Text>
-                <Picker
-                    selectedValue={selectedCountryCode}
-                    style={styles.input}
-                    onValueChange={(itemValue, itemIndex) => {
-                        setSelectedCountryCode(itemValue);
-                        setSelectedCity(''); // Reset city selection
-                    }}>
-                    {countries.map((country, index) => (
-                        <Picker.Item key={index} label={country.name} value={country.isoCode} />
-                    ))}
-                </Picker>
-
-                <Text style={styles.TextInput}>Ciudad</Text>
-                <Picker
-                    selectedValue={selectedCity}
-                    style={styles.input}
-                    onValueChange={(itemValue, itemIndex) => setSelectedCity(itemValue)}>
-                    {cities.map((city, index) => (
-                        <Picker.Item key={index} label={city.name} value={city.name} />
-                    ))}
-                </Picker>
 
                 <Text style={styles.TextInput}>Fecha inicio</Text>
                 <View style={styles.containerDate}>

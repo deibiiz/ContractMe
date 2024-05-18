@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Dimensions } from 'react-native';
 import Boton from '../components/Boton';
@@ -65,7 +64,6 @@ export default function Register({ AutenticarConHuella, AutenticarDirecto }) {
                         borderRadius: 15,
                     }}
                 />
-                <StatusBar style="auto" />
             </View>
         </View>
     );

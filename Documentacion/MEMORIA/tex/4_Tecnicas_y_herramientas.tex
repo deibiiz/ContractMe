@@ -1,5 +1,7 @@
 \capitulo{4}{Técnicas y herramientas}
 
+En esta sección se expone las herramientas y bibliotecas que se han aprendido y utilizado a lo largo del desarrollo del proyecto.
+A lo largo del ciclo de su ciclo de vida, el proyecto experimentó varios cambios, incluyendo la sustitución o eliminación de algunas bibliotecas. Sin embargo, es importante destacar todas estas herramientas, ya que cada una ha tenido un impacto significativo en el proyecto y han sido fundamentales en diferentes etapas del mismo.
 
 \section{Herramientas}
 
@@ -34,6 +36,33 @@ Ofrece un conjunto de APIs disponibles a través de módulos que se pueden invoc
 Expo ha sido fundamental en el proyecto para desarrollar la interfaz de usuario permitiendo probar y visualizar cambios en tiempo real en diferentes plataformas.
 Una de las funcionalidades significativas de Expo ha sido su capacidad para facilitar la ejecución y testeo de la aplicación directamente en dispositivos móviles personales sin necesidad de configurar emuladores. Esto se logra mediante el uso de la aplicación ExpoGo en el teléfono móvil y escaneando un código QR generado por el entorno de desarrollo Expo.
 Expo ha tenido un papel fundamental en las fases de prueba y depuración, permitiendo probar la aplicación en un entorno real y ajustar la interfaz de usuario con un ciclo de retroalimentación casi instantáneo.
+
+
+\subsection{FireBase}
+
+Firebase es una plataforma de Google creada para el desarrollo de aplicaciones móviles y web.
+Cuenta con un amplio conjunto de servicios integrados que permiten crear aplicaciones robustas y de alta calidad sin necesidad de gestionar la infraestructura subyacente.
+
+Ente el amplio abanico de servicios que ofrecen, destacan los siguientes:
+ 
+\begin{itemize}
+
+\item \textbf{FireBase Authentication:} Provee diversos servicios de autenticación de usuarios, como inicio de sesión con correo electrónico, Google, FaceBook, X y Github entre otros. Facilitando la implementación de una amplia gama de servicios de autenticación sin necesidad de manejar detalles complicados de seguridad.
+
+\item \textbf{FireStore:} Ofrece soluciones de bases de datos en tiempo real y basadas en la nube. Esto permite sincronizar datos entre los usuarios en tiempo real, a parte, FireStore ofrece una estructura fácilmente escalable.
+
+\item \textbf{FireBase Cloud Messaging:} Sistema que permite enviar notificaciones a los usuarios de forma segura mediante correo y teléfono. Aunque para la versión gratuita este servicio es muy limitado.
+
+\item \textbf{FireBase Analytics:} Ofrece una herramienta poderosa para analizar el uso de la aplicación por parte de los usuarios.
+Permitiendo rastrear eventos específicos, obtener información demográfica de los usuarios, analizar la duración y frecuencia de las sesiones, y monitorear la retención y la ejecución de objetivos preestablecidos.
+
+\item \textbf{FireBase Cloud Functions:} Permite ejecutar código backend en respuesta a eventos desencadenados por alguno de los servicios de Firebase.
+Es de gran utilidad para para ejecutar ciertas tareas en el lado del servidor, como procesamiento de pagos o el envió de correos electrónicos. 
+
+\end{itemize}
+
+Es una herramienta de gran potencial que se integra perfectamente con React Native a través de módulos y SDKs.
+Proveyendo a los desarrolladores una variedad de herramientas preconstruidas y escalables a medida que la aplicación crece sin necesidad de ninguna intervención.
 
 
 \subsection{Solidity}
@@ -97,10 +126,20 @@ Su funcionamiento es análogo a una cartera digital, permitiendo a los usuarios 
 
 Al conectarse a dApps, los usuarios pueden usar sus cuentas de MetaMask para autenticarse eliminando la necesidad de ingresar claves privadas manualmente. Por otro lado, aplica una capa adicional de seguridad al encriptar la información del usuario y almacenar las claves privadas directamente en el dispositivo del usuario. Esto asegura que solo el usuario tenga acceso a sus fondos y datos.
 
-La integración de MetaMask en mi proyecto no solo mejora la experiencia del usuario final,
-proporcionando una forma más segura e intuitiva de acceder a sus activos, sino que también agiliza el desarrollo de mi proyecto al simplificar la manera en que los usuarios se conectan a la dApp.
+La integración de MetaMask al proyecto no solo mejora la experiencia del usuario final, proporcionando una forma más segura e intuitiva de acceder a sus activos, sino que también agiliza el desarrollo de mi proyecto al simplificar la manera en que los usuarios se conectan a la dApp.
 
 Finalmente una característica definitiva de Metamask a diferencia de otras billeteras, es su capacidad para agregar redes personalizadas, de gran utilidad para el testeo de la aplicación, permitiendo la conexión a entornos específicos como el entorno local proporcionado por Ganache o la tesnet de Sepolia.
+
+
+\subsection{WalletConnect}
+
+Wallet Connect es protocolo de código abierto que facilita la conexión segura entre billeteras móviles y aplicaciones descentralizadas.
+Cuando un usuario quiere interactuar con una dApp, Wallet Connect genera un código QR o un enlace directo utilizado por la billetera descargada en el dispositivo del usuario. Esto establece una conexión cifrada y autoriza a la dApp para enviar solicitudes de transacción a la cartera.
+
+El usuario puede entonces administrar las transacciones directamente desde su billetera, garantizando que mantiene el control total sobre sus claves privadas y, por ende, sobre sus activos. 
+De esta manera se elimina la necesidad de ingresar claves privadas en la dApp.
+
+WalletConnect es compatible con una amplia variedad de billeteras, lo que la convierte en una herramienta muy poderosa, mejorando la accesibilidad y experiencia del usuario.
 
 
 \subsection{Node.js}
@@ -139,6 +178,7 @@ Este enfoque requiere que los usuarios realicen un trabajo de cómputo, específ
 
 Se muestra a continuación las bibliotecas usadas a lo largo del desarrollo del proyecto.
 
+Bibliotecas para implementación blockchain:
 \begin{itemize}
 
 \item \textbf{OpenZeppelin:} OpenZeppelin es una biblioteca para el desarrollo seguro de Smart Contracts en Ethereum. Ofrece implementaciones auditadas y probadas para minimizar riesgos de seguridad.
@@ -146,31 +186,86 @@ Su uso ha sido crucial para el desarrollo de mi proyecto, usando el estándar ER
 
 \item \textbf{ethers:} Biblioteca caracterizada por su simpleza, ligereza y seguridad para interactuar con la red de Ethereum. Proporciona funcionalidades para crear clientes que requieren comunicarse con la blockchain de Ethereum, permitiendo la gestión de billeteras, la construcción y firma de transacciones, la conexión a diferentes nodos de Ethereum a través de varios proveedores como JSON RPC o Infura, y la interacción con contratos inteligentes.
 
-\item \textbf{axios:} Biblioteca cliente HTTP basada en promesas para el navegador y para Node.js. Permite hacer solicitudes HTTP a servidores externos de manera sencilla y eficaz.
-
-\item \textbf{WalletConnect:} protocolo estándar que facilita la conexión segura entre billeteras móviles y aplicaciones descentralizadas (dApps) mediante el escaneo de un código QR o un enlace directo.
-
-\item \textbf{walletconnect/react-native-compat:} Asegura la compatibilidad de WalletConnect con React Native, simplificando la integración de WalletConnect en aplicaciones móviles
-
-\item \textbf{Viem:}Ppermite a los desarrolladores interactuar con la blockchain de Ethereum, incluyendo abstracciones de la API JSON-RPC, interacción con contratos inteligentes, implementaciones de billeteras y firmas, utilidades de codificación/descodificación, y más. Viem actúa como una base sólida sobre la cual se construyen herramientas más complejas, como Wagmi.
-
-\item \textbf{Wagmi:} Wagmi Core es un envoltorio sobre Viem que proporciona funcionalidad multi-cadena a través de la configuración de Wagmi y manejo automático de cuentas mediante Conectores. Resuelve problemas comunes como la conexión de billeteras, soporte multi-cadena, envío de transacciones, escucha de eventos y cambios de estado, y refresco de datos de blockchain.
-
-\item \textbf{web3modal/wagmi-react-native:} dapta WAGMI y Web3Modal para React Native.
-
-\item \textbf{react-native-qrcode-svg:} Biblioteca de React Native que permite la generación de códigos QR en formato SVG.
-
-\item \textbf{expo-barcode-scanner:} Módulo de Expo que ofrece funcionalidades de escaneo de códigos de barras y QR en aplicaciones React Native.
+\item \textbf{web3:} Biblioteca formada por un conjunto de módulos que permite a las aplicaciones cliente interactuar con una blockchain local o remota a través del protocolo Ethereum. 
+Cuenta con un conjunto de características más amplio que la biblioteca ethers, haciéndola algo más compleja, pero en la practica son bibliotecas muy parecidas.
 
 \item \textbf{react-native-get-random-values:} Polifill que proporciona valores aleatorios seguros para criptografía en React Native, crucial para generar claves y tokens únicos de forma segura.
 
 \item \textbf{ethersproject/shims:} Facilita la compatibilidad de ethers.js en React Native, permitiendo el desarrollo de dApps mediante la provisión de funciones de criptografía y blockchain en dispositivos móviles.
 
+\item \textbf{text-encoding:} Es un polifill que implementa la API \"TextEncoder\" y \"TextDecoder\". Estas API permiten la codificación y decodificación eficiente de texto en formatos como UTF-8.
+
+\end{itemize}
+
+
+Bibliotecas para implementación billetera:
+\begin{itemize}
+
+\item \textbf{metamask/sdk:} Biblioteca que proporciona una conexión segura y fluida desde la dapp a la extensión del navegador o app móvil de MetaMask. 
+
+\item \textbf{WalletConnect:} protocolo estándar que facilita la conexión segura entre billeteras móviles y aplicaciones descentralizadas (dApps) mediante el escaneo de un código QR o un enlace directo.
+
+\item \textbf{walletconnect/react-native-compat:} Asegura la compatibilidad de WalletConnect con React Native, simplificando la integración de WalletConnect en aplicaciones móviles
+
+\item \textbf{Viem:}Permite a los desarrolladores interactuar con la blockchain de Ethereum, incluyendo abstracciones de la API JSON-RPC, interacción con contratos inteligentes, implementaciones de billeteras y firmas, utilidades de codificación/descodificación, y más. Viem actúa como una base sólida sobre la cual se construyen herramientas más complejas, como Wagmi.
+
+\item \textbf{Wagmi:} Wagmi Core es un envoltorio sobre Viem que proporciona funcionalidad multi-cadena a través de la configuración de Wagmi y manejo automático de cuentas mediante Conectores. Resuelve problemas comunes como la conexión de billeteras, soporte multi-cadena, envío de transacciones, escucha de eventos y cambios de estado, y refresco de datos de blockchain.
+
+\item \textbf{web3modal/wagmi-react-native:} adapta WAGMI y Web3Modal para React Native.
+
+\end{itemize}
+
+
+Bibliotecas para implementación base de datos:
+\begin{itemize}
+
+\item \textbf{firebase:} Biblioteca que proporciona acceso a los diversos servicios de FireBase. Es el punto de partida para la integración de cualquier funcionalidad de FireBase.
+
+\item \textbf{firebase/firestore:} Biblioteca que permite la integración con FireStore. Facilita las operaciones de consultas, actualizaciones y escucha de cambios en la base de datos.
+
+\item \textbf{react-native-firebase/app:} Módulo principal de FireBase para React Native, necesario para inicializar y configurar FireBase en la aplicación móvil.
+
 \item \textbf{react-native-async-storage:} Biblioteca para almacenamiento asincrónico y persistente de datos, ideal para almacenar preferencias de usuario y configuraciones.
+
+\end{itemize}
+
+
+Bibliotecas para la navegación de la aplicación:
+\begin{itemize}
+
+\item \textbf{@react-navigation/native:} Biblioteca que vincula la funcionalidad de navegación de React Navigation con las APIs nativas del entorno de React Native.
+Proporcionando la funcionalidad para el enrutamiento y navegación en aplicaciones móviles. 
 
 \item \textbf{react-navigation/native-stack:} Ofrece una experiencia de navegación fluida y optimizada mediante el uso de APIs nativas para la navegación entre pantallas en aplicaciones React Native.
 
-\item \textbf{react-navigation/bottom-tabs:} Biblioteca para crear barras de navegación en la parte inferior de aplicaciones móviles, facilitando la navegación entre vistas
+\item \textbf{react-native-tab-view:} Biblioteca que ofrece una solución para pestañas que se pueden deslizar entre sí, soportando la navegación basada en gestos.
+
+\item \textbf{react-navigation/bottom-tabs:} Biblioteca para crear barras de navegación en la parte inferior de aplicaciones móviles, facilitando la navegación entre vistas.
+
+\item \textbf{react-native-gesture-handler:} Biblioteca utilizada para el manejo avanzado de gestos. Proporcionando soporte para una variedad de gestos, como toques, arrastres y deslizamientos entre otros.
+
+\end{itemize}
+
+
+Bibliotecas para el resto de funcionalidades:
+\begin{itemize}
+
+\item \textbf{axios:} Biblioteca cliente HTTP basada en promesas para el navegador y para Node.js. Permite hacer solicitudes HTTP a servidores externos de manera sencilla y eficaz.
+
+\item \textbf{react-native-qrcode-svg:} Biblioteca de React Native que permite la generación de códigos QR en formato SVG.
+
+\item \textbf{expo-barcode-scanner:} Módulo de Expo que ofrece funcionalidades de escaneo de códigos de barras y QR en aplicaciones React Native.
+
+\item \textbf{expo-local-authentication:} Módulo de Expo que proporciona métodos para permitir la autenticación biométrica como huella digital o reconocimiento facial.
+
+\item \textbf{react-native-community/datetimepicker:} Componente de React Native que proporciona interfaces de usuario para seleccionar fechas y horas.
+Facilita la interacción del usuario con la aplicación.
+
+\item \textbf{react-native-picker/picker:} Biblioteca que ofrece un componente de desplegable que permite a los usuarios seleccionar un item. 
+
+\item \textbf{country-state-city:} Biblioteca que proporciona listas de países, estados y ciudades. Utilizado para mostrar en formularios donde se tiene que elegir una opción. 
+
+\item \textbf{react-native-chart-kit:} Biblioteca que permite la integración de gráficos y visualizaciones en aplicaciones React Native
 
 \end{itemize}
 
@@ -180,6 +275,11 @@ Su uso ha sido crucial para el desarrollo de mi proyecto, usando el estándar ER
 Esta sección incluye herramientas y programas que tienen una relevancia secundaria en el proyecto.
 
 \begin{itemize}
+
+\item \textbf{icons.expo.fyi:} Recurso en línea ofrece una visualización completa de los íconos disponibles en la biblioteca @expo/vector-icons.
+Facilita la integración rápida de los ícono al proporcionar el nombre exacto y el código de importación necesario para cada ícono.
+
+\item \textbf{CoinGecko:} Página web para el análisis de criptomonedas. Se utiliza en el proyecto su API para acceder a la información actualizada sobre el precio del Ethereum. 
 
 \item \textbf{TEXStudio:} IDE para LaTeX.
 

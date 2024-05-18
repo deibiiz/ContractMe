@@ -4,9 +4,9 @@ En este apartado se pretende resumir los aspectos más relevantes que se han tra
 
 
 
-\section{Problemas}
+\section{Dificultades encontradas en el desarrollo}
 
-Este proyecto se ha caracterizado por el gran número de problemas que han surgido primordialmente exacerbados por mi inexperiencia inicial con varias de las tecnologías clave empleadas.
+Este proyecto se ha caracterizado por las diversas dificultades que se han encontrado primordialmente exacerbadas por las incompatibilidades de diversas librerías y herramientas en el desarrollo móvil.
 A continuación, describo alguno de los problemas más significativos y como se han abordado.
 
 \subsection{Incompatibilidad con biblioteca Web3}
@@ -15,25 +15,19 @@ En el momento en el que se intentó realizar la primera conexión con el contrat
 El error se producía a la hora de ejecutar la aplicación de forma nativa en el dispositivo móvil.
 El error describía un problema 'ReferenceError' indicando que la propiedad 'EventTarget' no existía en el motor de JavaScript Hermes utilizado por React Native. 
 
-\begin{verbatim}
-ReferenceError: Property 'EventTarget' doesn't exist, js engine: hermes ERROR Invariant Violation: "main" has not been registered.
-\end{verbatim}
+\textit{ReferenceError: Property 'EventTarget' doesn't exist, js engine: hermes ERROR Invariant Violation: "main" has not been registered.}
 
 Sin embargo, desplegando la aplicación en un entorno web desde el navegador de mi ordenador esta biblioteca no producía ningún error y se consiguió establecer conexión exitosamente con el contrato inteligente.
 Este fue un problema que se alargó a lo largo de los dos siguientes sprints y se investigó de forma reiterada. Temiendo que se debía a un error de incompatibilidad con las versiones de las bibliotecas en mi proyecto, se fue probando diferentes combinaciones hasta que usando la versión 4.1 de la biblioteca Web3 ese error desapareció.
 El problema no se había solucionado ya que dicho error solo desapareció dejando paso a un nuevo error, en este caso el error describía un problema de reconocimiento similar al anterior pero con la propiedad 'TextEncoder' la cual es parte de la API de codificación que proporciona una forma de codificar texto en varios formatos, comúnmente utilizados en entornos web.
 
-\begin{verbatim}
-ReferenceError: Property 'TextEncoder' doesn't exist, js engine: hermes.
-\end{verbatim}
+\textit{ReferenceError: Property 'TextEncoder' doesn't exist, js engine: hermes.}
 
 React native no implementa todas las API web estándar que se encuentran en los navegadores modernos, por lo que es necesario agregar dicha característica de forma manual. Para ello ha hecho uso de un polyfill, que es una biblioteca que pretente proporcionar una implmentación alternativa a la API de funciones nativas.
 Por tanto, se ha instalado 'text-encoding', que es un polyfill para la API de 'TextEncoder'.
 Seguidamente se ha creado un nuevo archivo en la raíz del proyecto al que he llamado 'globals.js', en este archivo se ha asignado 'TextEncoder' de 'text-encoding' a 'global.TextEncoder'. Es decir, que he agregado 'TextEnoder' al objeto global 'global' que actúa de forma similar al objeto 'window' en los navegadores.
 
-\begin{verbatim}
-\texttt{global.TextEncoder = require('text-encoding').TextEncoder;
-\end{verbatim}
+\textit{global.TextEncoder = require('text-encoding').TextEncoder;}
 
 Luego importando 'globals.js' en mi archivo 'App,js' aseguro que 'TextEncoder' este disponible globalmente antes que cualquier otro objeto que dependa de él, evitando errores de referencia.
 
@@ -45,9 +39,7 @@ El proceso de desarrollo del contrato inteligente se ha realizado de forma itera
 
 En una de estas iteraciones, al intentar migrar el contrato, apareció un error que exponía un problema de que el código había superado los 24,576 bytes de tamaño, un límite establecido por la actualización "Spurious Dragon" de Ethereum. Este límite fue introducido para mitigar riesgos de ataques de denegación de servicio (DoS) que podrían ocurrir si se permitiera desplegar contratos de tamaño excesivamente grande.
 
-\begin{verbatim}
-Warning: Contract code size is 26466 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.
-\end{verbatim}
+\textit{Warning: Contract code size is 26466 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.}
 
 con el objetivo de que el contrato sea menor de esos 26576 bytes y así mantener toda la funcionalidad en un único contrato facilitando así su gestión y uso, se aplicaron diversas técnicas.
 En una primera instancia, se hizo una revisión del código para identificar y eliminar redundancias, optimizar las funciones existentes, y donde fue posible, integrar librerías externas que reemplazaran bloques de código repetitivos.
@@ -94,9 +86,7 @@ A partir de esta configuración, Metamask permite importar cuentas disponibles e
 
 Sin embargo, he encontrado un problema al realizar este proceso en la aplicación móvil de MetaMask, a diferencia de la extensión de nevagador, la aplicación móvil no soporta de manera uniforme las redes HTTP Y HTTPS, devolviendome el siguiente error:
 
-\begin{verbatim}
-Could not fetch chain ID. Is your RPC URL correct?
-\end{verbatim}
+\textit{Could not fetch chain ID. Is your RPC URL correct?}
 
 Este mensaje indica que no se puede recuperar el ID de la cadena, el cual es un identificador único de cada blockchain, crucial para la seguridad, utilizado por las billeteras para asegurar que interactuan con la red correcta.
 Este problema radica en que comúnmente, Ganache despliega la red usando HTTP en un entorno local, lo cual es apto para la extensión de navegador, pero no para la aplicación móvil ya que requiere HTTPS.

@@ -26,7 +26,6 @@
     "expo-barcode-scanner": "~13.0.1",
     "expo-dev-client": "~4.0.13",
     "expo-local-authentication": "~14.0.1",
-    "expo-status-bar": "~1.12.1",
     "firebase": "^10.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -21,8 +21,6 @@ export default function Stats() {
             })
             .catch(error => console.error("Ha habido un error!", error));
 
-
-        const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 365);
         axios.get(`https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&from=${startDate.getTime() / 1000}&to=${new Date().getTime() / 1000}`)

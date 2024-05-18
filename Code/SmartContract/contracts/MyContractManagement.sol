@@ -48,9 +48,7 @@ contract MyContractManagement is MyContract {
         uint256 _start,
         uint256 _duration,
         string memory _description,
-        string memory _title,
-        string memory _country,
-        string memory _city
+        string memory _title
     ) public payable returns (uint256) {
         require(
             msg.value >= _salary,
@@ -69,8 +67,6 @@ contract MyContractManagement is MyContract {
             duration: _duration,
             title: _title,
             description: _description,
-            country: _country,
-            city: _city,
             isSigned: false,
             worker: _to,
             isFinished: false,
