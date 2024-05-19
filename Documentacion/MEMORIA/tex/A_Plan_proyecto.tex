@@ -204,6 +204,110 @@ Por errores de conexión se llego a la conclusión de que no era posible, por lo
 
 \section{Estudio de viabilidad}
 
+El estudio de viabilidad es un análisis crítico realizado para evaluar la posibilidad y conveniencia de llevar a cabo un proyecto específico.
+Para determinar si este proyecto es viable, se van a desarrollar la viabilidad económica y la viabilidad legal.
+
 \subsection{Viabilidad económica}
 
+La viabilidad económica de un proyecto evalúa si los beneficios económicos previstos justifican los costos involucrados.
+Se considerarán los costes de recursos humanos, el material empleado y el Software usado
+
+\subsubsection{Coste de personal}
+
+Para realizar una estimación de los costos del proyecto, vamos a acotar el calculo a una duración de 9 meses, que ha sido el tiempo empleado en realizar el proyecto.
+Por otro lado, como solo ha habido una persona desarrollando (el alumno), se va a considerar un único trabajador para los cálculos
+Partiendo de un salario base promedio de un programador junior en España de 21000 brutos anuales, podemos estimar que el coste total personal sería:
+
+\tablaSmallSinColores{Coste total del personal}{p{0.7\textwidth} | p{0.3\textwidth}}{Coste total del personal}
+{\textbf{Concepto} & \textbf{Coste (€)} \\}{
+	Salario bruto (anual) & 21000 \\
+	Retención del IRPF (12\%) & 2520 \\
+	Seguridad Social (28,3\%) & 5943 \\
+	Salario neto (anual) & 12537  \\
+	Salario neto (mensual) & 1044,75  \\\hline
+	Coste total en los 9 meses & 15750 \\
+}
+
+\subsubsection{Coste hardware}
+
+El coste del hardware para la realización del proyecto únicamente ha sido necesario contar con un ordenador para el desarrollador.
+El ordenador utilizado para el desarrollo tiene una antigüedad de 7 años, por lo que ya ha sido amortizado y se desprecia el costo del ordenador.
+
+\subsubsection{Coste SoftWare}
+
+Las herramientas de software empleadas en este proyecto son principalmente gratuitas; sin embargo, los servicios de Firebase e Infura presentan ciertas restricciones en sus versiones sin costo que podrían limitar la operatividad al escalar la aplicación.
+FiraBase en su versión gratuita ofrece 1 GiB de almacenamiento, que bien es un limitante, y soporta hasta 50000 usuarios activos mensuales.
+Por otro lado, Infura proporciona 100000 peticiones diarias gratuitamente.
+
+Considerando un escenario de total éxito en el lanzamiento de la aplicación, donde se estimen unos 200.000 usuarios activos mensuales, las necesidades podrían requerir una gran ampliación de almacenamiento, lo cual vendría acompañado de un gran volumen de operaciones sobre la base de datos.
+Para Infura se contemplaría la necesidad de escalar al plan más avanzado, que permite hasta 5 millones de peticiones diarias.
+Los costos, inicialmente en dólares han sido convertidos a euros a 0,92€
+
+\tablaSmallSinColores{Coste total del Software}{p{0.7\textwidth} | p{0.3\textwidth}}{Coste total del Software}
+	{\textbf{Concepto} & \textbf{Coste (€)} \\}{
+    Infura & 917,90 \\
+    190.500.000 operaciones lectura & 113 \\
+    999 GiB Almacenamiento & 165,22 \\
+    53.100.000 operaciones escritura & 86,74 \\
+    200.000 usuarios activos & 633,35 \\\hline
+    \textbf{Coste total mensual} & 1916,21 \\
+}
+
+\subsubsection{Beneficios}
+
+El proyecto no se ha realizado con el objetivo de obtener un beneficio económico. Este producto ha sido desarrollado con el fin de implementar una herramienta para abordar los desafíos del mercado laboral, especialmente en sectores afectados por la informalidad como la agricultura y los servicios domésticos.
+Se considera por tanto que este proyecto tiene un carácter social, destinado a mejorar las condiciones laborales y a promover la equidad en el trabajo. 
+
+Se considera que la financiación del proyecto debería provenir principalmente de inversores interesados en la optimización y reducción de costos del proceso de contratación.
+Adicionalmente, el gobierno español representa un potencial inversor clave, ya que podría promover activamente el uso de esta aplicación para fomentar prácticas laborales adecuadas y combatir la economía sumergida. 
+
+
 \subsection{Viabilidad legal}
+
+Esta sección se centra en analizar los aspectos legales asociados con el desarrollo y distribución de una solución basada en blockchain.
+Los puntos claves que incluyen el análisis de las licencias de software y el cumplimiento de las leyes vigentes.
+
+\subsection{Licencias de software}
+
+En el proyecto se emplea diversas bibliotecas y frameworks que están regidos bajo licencias de software específicas, que definen los términos y condiciones para su uso, modificación y distribución.
+A continuación, se va a listar las diferentes licencias de cada dependencia de mi proyecto, en orden de menos restrictiva a mas restrictiva:
+
+\begin{itemize}
+
+\item \textbf{Licencia MIT:} No impone restricciones significativas, permitiendo uso comercial, modificación, distribución y uso privado.
+
+\item \textbf{Licencia Apache 2.0:} Similar a la licencia MIT, pero también proporciona una protección explícita contra patentes.
+
+\item \textbf{Términos de servicio de Google:} Específicos para los productos de Google, no son licencias de software per se, pero regulan cómo se pueden usar los servicios.
+
+\item \textbf{GNU GPL:} Permite uso comercial, modificación, distribución y uso privado, pero cualquier versión modificada debe también ser libre.
+
+\item \textbf{GNU GPL-3.0:} Similar a la GPL pero con términos adicionales para cerrar algunas brechas legales en ciertos escenarios.
+
+\end{itemize}
+
+
+\tablaSmallSinColores{Dependencias del proyecto y licencias bajo las cuales están registradas}{p{0.7\textwidth} | p{0.3\textwidth}}{Dependencias del proyecto y licencias bajo las cuales están registradas}
+	{\textbf{Dependencia} & \textbf{Licencia} \\}{
+    React Native & Licencia MIT \\
+    Expo & Licencia MIT \\
+    Firebase & términos de servicio de Google \\
+    Solidity & Licencia GPL-3.0 \\
+    Remix & Licencia GPL-3.0 \\
+    Truffle & Licencia MIT \\
+    Ganache & Licencia MIT \\
+    MetaMask & Licencia GPL-3.0 \\
+    WalletConnect & Licencia MIT \\
+    Node.js & Licencia MIT \\
+    OpenZeppelin & Licencia Apache 2.0 \\
+    web3 & Licencia MIT \\
+    ethers & Licencia MIT \\
+}
+
+
+\subsection{Regulación legal}
+
+Debido a que este proyecto implicará la gestión de datos personales, es fundamental cumplir con el Reglamento General de Protección de Datos (RGPD) de la UE y la legislación española correspondiente, como la Ley Orgánica de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD). Esto implica garantizar la protección adecuada de los datos personales y obtener consentimientos claros por parte de los usuarios para usar sus datos.
+
+Actualmente no hay ninguna legislación vigente en España en cuanto a los contratos inteligentes. Sin embargo, estos debería de cumplir con el código civil en términos de formación de contratos, capacidad para contratar y consentimiento.
+Por su puesto, la aplicación deberá cumplir con la legislación laboral española, asegurando que los contratos creados cumplan con las normativas de trabajo, incluyendo las mínimas garantías y derechos para los trabajadores.
