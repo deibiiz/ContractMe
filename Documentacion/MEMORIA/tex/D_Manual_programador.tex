@@ -2,10 +2,140 @@
 
 \section{Introducción}
 
+En esta sección se describe la estructura del proyecto, el proceso de instalación y las herramientas necesarias para desarrollar el trabajo. También se explica cómo realizar la instalación de dependencias, la compilación, la ejecución del proyecto y el despliegue en Expo.
+
 \section{Estructura de directorios}
+
+En el primer nivel, se encuentran dos directorios, \textbf{Documentacion} y \textbf{Code}. El primero de ellos recoge los archivos de documentación sobre el proyecto, como la memoria y sus anexos, por otra parte, el segundo recoge la lógica de la aplicación.
+
+Dentro de Code, el directorio \textbf{AppContractMe} contiene todo el código fuente necesario para la interfaz de usuario de la aplicación. Se divide en varios subdirectorios que organizan los recursos y scripts de manera lógica, siendo \textbf{scr} el más importante, incluyendo:
+
+\begin{itemize}
+
+\item \textbf{AppLogin:} Contiene los componentes para la autenticación y gestión de sesiones de usuario.
+
+\item \textbf{ContractConexion:} Incluye las funciones que facilitan la conexión y la interacción con los contratos inteligentes.
+
+\item \textbf{Screens:} Agrupa las diferentes pantallas de la aplicación, permitiendo la navegación al usuario.
+
+\item \textbf{components:} Reúne elementos reutilizables que se emplean en diversas partes de la aplicación, como botones y ciertas funcionalidades.
+
+\end{itemize}
+
+Por otro lado, también existe el directorio \textbf{SmartContract} que recoge toda la lógica del contrato inteligente e incluye:
+
+\begin{itemize}
+
+\item \textbf{build:} Contiene los archivos compilados de los contratos, que son necesarios para su despliegue y ejecución en la blockchain.
+
+\item \textbf{constracts:} Alberga los scripts de los contratos inteligentes.
+
+\item \textbf{migrations:} Gestiona el scripts que ayuda en la migración y despliegue de los contratos en la blockchain.
+
+\item \textbf{node\_modules:} Directorio que incluye las dependencias de Node.js utilizadas en el proyecto.
+
+\item \textbf{test:} Contiene los tests escritos en java para asegurar el correcto funcionamiento de los contratos inteligentes.
+
+\end{itemize}
+
+Finalmente hay otro directorio llamada \textbf{ganache\_db} el cual se utiliza para almacenar la configuración y los datos de la base de datos de Ganache,
+
 
 \section{Manual del programador}
 
+Este apartado servirá de ayuda y referencia a futuros desarrolladores que quieran replicar el proyecto. 
+Por ello se detallará los requisitos necesarios y el proceso de instalación para el desarrollo de la aplicación. 
+
+\subsection{Entorno desarrollo}
+
+Antes de explicar la instalación de los programas y herramientas para el desarrollo de la aplicación es necesario detallar unas especificaciones mínimas en cuanto al equipo de desarrollo para poder trabajar con el proyecto.
+
+\begin{enumerate}
+
+\item\textbf{Procesador (CPU):}
+	\begin{itemize}
+	\item\textbf{Mínimo:} Procesador con arquitectura x86\_64, 2º generación de Intel o procesador AMD que
+	 soporte \"Hypervisor FrameWork\", Permitiendo una compilación rápida de código y emular un dispositivo 	
+	 móvil para pruebas.
+	\item\textbf{Recomendado:} Intel Core i7 o AMD ryzen 7, con 6-8 núcleos.
+	\end{itemize}
+	
+\item\textbf{Memoria RAM:}
+	\begin{itemize}
+	\item\textbf{Mínimo:} 8 GB de RAM como mínimo, para manejar diversas tareas y la ejecución de
+	simuladores.
+	\item\textbf{Recomendado:} 16 GB de RAM o más, pudiendo mantener múltiples dispositivos emulados
+	simultáneamente.
+	\end{itemize}
+	
+\item\textbf{Sistema operativo:}
+	\begin{itemize}
+	\item\textbf{Mínimo:} Windows 10 64-bit.
+	\item\textbf{Recomendado:} Windows 11.
+	\end{itemize}
+
+\end{enumerate}
+
+Por otro lado, aunque no es un requisito obligatorio, se recomienda contar con un dispositivo Android físico para ejecutar la aplicación y hacer uso de funcionalidades nativas como el reconocimiento de huella, siendo necesario las siguientes especificaciones.
+
+\begin{enumerate}
+
+\item\textbf{Versión Android:}
+	\begin{itemize}
+	\item\textbf{Mínimo:}  Android 6.0 (Marshmallow)
+	\item\textbf{Recomendado:} Android 9.0 (Pie) o superior.
+	\end{itemize}
+	
+\item\textbf{Procesador (CPU):}
+	\begin{itemize}
+	\item\textbf{Mínimo:} Quad-core 1.2 GHz.
+	\item\textbf{Recomendado:} Octa-core 2.0 GHz o superior.
+	\end{itemize}
+	
+\item\textbf{RAM:}
+	\begin{itemize}
+	\item\textbf{Mínimo:} 2 GB de RAM.
+	\item\textbf{Recomendado:} 4-8 GB de RAM.
+	\end{itemize}
+	
+\item\textbf{Compatibilidad con características nativas:}
+	\begin{itemize}
+	\item\textbf{Huella digital:} El dispositivo debe contar con un sensor de huellas dactilares compatible con
+	las API de Android para autenticación biométrica.
+	\item\textbf{Reconocimiento facial:} cámara interior con capacidad de reconocimiento facial.
+	\item\textbf{Cámara trasera:} Cámara de al menos 8 MP para la lectura de códigos QR.
+	\end{itemize}
+
+\end{enumerate}
+
+
 \section{Compilación, instalación y ejecución del proyecto}
+
+\subsection{Instalación}
+
+Seguidamente se detallará como configurar un entorno de desarrollo para poder trabajar en la aplicación \"ContractMe\".
+
+\begin{enumerate}
+
+\item \textbf{Node.js:} Node.js es una plataforma de ejecución para JavaScript del lado del servidor y es esencial para la gestión de paquetes y la ejecución de varias herramientas de desarrollo. 
+Para instalar Node.js es necesario dirigirse a la \href{https://nodejs.org/en}{pagina oficial de Node.js}.y seleccionar el instalador para Windows. Ver imagen \ref{fig:InstalarNodejs}.
+
+Al ejecutar el instalador que se ha descargado, es necesario seleccionar la opción que permite instalar npm y añadir Node.js a tu path. Ver imagen \ref{fig:NodejsSetUp}.  
+En concreto la versión utilizada de Node.js para el desarrollo del proyecto ha sido la v18.18.2 y la versión utilizada de npm ha sido la 10.2.2.
+
+\imagen{InstalarNodejs}{Descarga de Node.js}{1}
+\imagen{NodejsSetUp}{Instalar Node.js y npm}{1}
+
+\item \textbf{Truffle Suite}: Teniendo Node.js y npm instalados, procederemos a instalar Truffle globalmente, para ello desde la terminal ejecutaremos el siguiente comando: \texttt{npm install -g truffle} lo cual nos permitirá usar el comando 
+
+\item \textbf{React Native CLI}
+
+\item \textbf{Expo CLI}
+
+
+
+\item \textbf{Ganache}
+
+\end{enumerate}
 
 \section{Pruebas del sistema}
