@@ -1,7 +1,7 @@
 \capitulo{4}{Técnicas y herramientas}
 
-En esta sección se expone las herramientas y bibliotecas que se han aprendido y utilizado a lo largo del desarrollo del proyecto.
-A lo largo del ciclo de su ciclo de vida, el proyecto experimentó varios cambios, incluyendo la sustitución o eliminación de algunas bibliotecas. Sin embargo, es importante destacar todas estas herramientas, ya que cada una ha tenido un impacto significativo en el proyecto y han sido fundamentales en diferentes etapas del mismo.
+En esta sección se exponen las herramientas y bibliotecas que se han aprendido y utilizado a lo largo del desarrollo del proyecto.
+A lo largo del ciclo de vida del proyecto, el proyecto experimentó varios cambios, incluyendo la sustitución o eliminación de algunas bibliotecas. Sin embargo, es importante destacar todas estas herramientas, ya que cada una ha tenido un impacto significativo en el proyecto y han sido fundamentales en diferentes etapas del mismo.
 
 \section{Herramientas}
 
@@ -9,10 +9,10 @@ Se muestra a continuación las herramientas usadas a lo largo del desarrollo del
 
 \subsection{React Native}
 
-La elección del framework adecuado juega un papel crucial en el éxito de un proyecto. Dicha elección se complica aún más cuando se carece de experiencia previa en el desarrollo de aplicaciones móviles. Dentro del gran abanico de posibilidades React Native y Flutter emergen como grandes líderes en el sector gracias a sus grandes comunidades y la abundancia de recursos en línea. Por otro lado se pueden descartar directamente opciones como el entorno de desarrollo de iOS(por ejemplo, el uso de Swift y Cocoa Touch) debido a su exclusividad para aplicaciones para iOS debido a que el objetivo de este proyecto es desarrollar una aplicación para Android.
+La elección del framework adecuado juega un papel crucial en el éxito de un proyecto. Dicha elección se complica aún más cuando se carece de experiencia previa en el desarrollo de aplicaciones móviles. Dentro del gran abanico de posibilidades React Native y Flutter emergen como grandes líderes en el sector gracias a sus grandes comunidades y la abundancia de recursos en línea. Por otro lado se pueden descartar directamente opciones como el entorno de desarrollo de iOS (por ejemplo, el uso de Swift y Cocoa Touch) debido a su exclusividad para aplicaciones para iOS debido a que el objetivo de este proyecto es desarrollar una aplicación para Android.
 
-React Native se presenta como mi elección favorita, este es un framework de código abierto creado por Facebook orientado a la creación de aplicaciones nativas tanto en iOS como en Android. React Native esta basado en JavaScript y React, una biblioteca de JavaScript destinada a la creación de interfaces de usuario. Fue lanzado en 2015 con el propósito de superar las limitaciones del desarrollo de aplicaciones móviles basado solo en HTML5, en las que simplemente se adapta aplicaciones web a un entorno móvil. React Native utiliza componentes nativos en lugar de WebViews para la interfaz de usuario, esto conlleva a que las aplicaciones se sientan y actúen como en una aplicación nativa.
-Uno de los elementos mas importantes de este framework es el "React Native Bridge", el cual facilita la comunicación entre el código JavaScript y los elementos nativos del dispositivos. El puente maneja de forma paralela dos flujos de trabajo, uno ejecuta la lógica de la aplicación en JavaScript y otro gestiona las operaciones de la interfaz de usuario nativa. Esto permite que las aplicaciones en React Native accedan a las características del dispositivo como la cámara o la ubicación, ofreciendo una experiencia fluida para el usuario gracias a características como el "hot reload"
+React Native se presenta como mi elección favorita. Este es un framework de código abierto creado por Facebook orientado a la creación de aplicaciones nativas tanto en iOS como en Android. React Native está basado en JavaScript y React, una biblioteca de JavaScript destinada a la creación de interfaces de usuario. Fue lanzado en 2015 con el propósito de superar las limitaciones del desarrollo de aplicaciones móviles basado solo en HTML5, en las que simplemente se adapta aplicaciones web a un entorno móvil. React Native utiliza componentes nativos en lugar de WebViews para la interfaz de usuario, esto conlleva a que las aplicaciones se sientan y actúen como en una aplicación nativa.
+Uno de los elementos más importantes de este framework es el "React Native Bridge", el cual facilita la comunicación entre el código JavaScript y los elementos nativos del dispositivos. El \"puente\" maneja de forma paralela dos flujos de trabajo, uno ejecuta la lógica de la aplicación en JavaScript y otro gestiona las operaciones de la interfaz de usuario nativa. Esto permite que las aplicaciones en React Native accedan a las características del dispositivo como la cámara o la ubicación, ofreciendo una experiencia fluida para el usuario gracias a características como el "hot reload".
 
 \imagen{puenteRN}{Flujo de trabajo y arquitectura de una aplicación React Native}{1}
 
@@ -34,7 +34,7 @@ Consta de un entorno y herramientas listas para usar, eliminando la necesidad de
 Ofrece un conjunto de APIs disponibles a través de módulos que se pueden invocar directamente desde el código JavaScript las cuales cubren funcionalidades comunes del dispositivo, como cámara, geolocalización o notificaciones sin requerir de configuración adicional. 
 
 Expo ha sido fundamental en el proyecto para desarrollar la interfaz de usuario permitiendo probar y visualizar cambios en tiempo real en diferentes plataformas.
-Una de las funcionalidades significativas de Expo ha sido su capacidad para facilitar la ejecución y testeo de la aplicación directamente en dispositivos móviles personales sin necesidad de configurar emuladores. Esto se logra mediante el uso de la aplicación ExpoGo en el teléfono móvil y escaneando un código QR generado por el entorno de desarrollo Expo.
+Una de las funcionalidades significativas de Expo ha sido su capacidad para facilitar la ejecución y testeo de la aplicación directamente en dispositivos móviles personales sin necesidad de configurar emuladores. Esto se logra mediante el uso de la aplicación Expo Go en el teléfono móvil y escaneando un código QR generado por el entorno de desarrollo Expo.
 Expo ha tenido un papel fundamental en las fases de prueba y depuración, permitiendo probar la aplicación en un entorno real y ajustar la interfaz de usuario con un ciclo de retroalimentación casi instantáneo.
 
 
@@ -43,11 +43,11 @@ Expo ha tenido un papel fundamental en las fases de prueba y depuración, permit
 Firebase es una plataforma de Google creada para el desarrollo de aplicaciones móviles y web.
 Cuenta con un amplio conjunto de servicios integrados que permiten crear aplicaciones robustas y de alta calidad sin necesidad de gestionar la infraestructura subyacente.
 
-Ente el amplio abanico de servicios que ofrecen, destacan los siguientes:
+Ente el amplio abanico de servicios que ofrece, destacan los siguientes:
  
 \begin{itemize}
 
-\item \textbf{FireBase Authentication:} Provee diversos servicios de autenticación de usuarios, como inicio de sesión con correo electrónico, Google, FaceBook, X y Github entre otros. Facilitando la implementación de una amplia gama de servicios de autenticación sin necesidad de manejar detalles complicados de seguridad.
+\item \textbf{FireBase Authentication:} Provee diversos servicios de autenticación de usuarios, como inicio de sesión con correo electrónico, Google, FaceBook y Github entre otros. Facilitando la implementación de una amplia gama de servicios de autenticación sin necesidad de manejar detalles complicados de seguridad.
 
 \item \textbf{FireStore:} Ofrece soluciones de bases de datos en tiempo real y basadas en la nube. Esto permite sincronizar datos entre los usuarios en tiempo real, a parte, FireStore ofrece una estructura fácilmente escalable.
 
@@ -57,7 +57,7 @@ Ente el amplio abanico de servicios que ofrecen, destacan los siguientes:
 Permitiendo rastrear eventos específicos, obtener información demográfica de los usuarios, analizar la duración y frecuencia de las sesiones, y monitorear la retención y la ejecución de objetivos preestablecidos.
 
 \item \textbf{FireBase Cloud Functions:} Permite ejecutar código backend en respuesta a eventos desencadenados por alguno de los servicios de Firebase.
-Es de gran utilidad para para ejecutar ciertas tareas en el lado del servidor, como procesamiento de pagos o el envió de correos electrónicos. 
+Es de gran utilidad para ejecutar ciertas tareas en el lado del servidor, como procesamiento de pagos o el envió de correos electrónicos. 
 
 \end{itemize}
 
@@ -103,7 +103,7 @@ Truffle consiste en una suite de desarrollo avanzada para Ethereum, ofreciendo u
 Truffle ofrece un entorno de desarrollo estructurado generando una jerarquía de carpetas para favorecer la implementación de proyectos blockchain complejos.
 Ahorra mucho tiempo con su sistema de migraciones y scripts de despliegue el cual automatiza y simplifica el proceso de lanzamiento de contratos.
 
-Aunque Remix es una excelente herramienta, Truffle eleva la posibilidad de hacer pruebas unitarias a otro nivel con un marco de prueba mucho mas sofisticado, permitiendo ejecutar test en Solidity o JavaScript.Esta capacidad ampliada para realizar pruebas unitarias contribuye de manera crucial a la calidad y seguridad del código de los Smart Contracts.
+Aunque Remix es una excelente herramienta, Truffle eleva la posibilidad de hacer pruebas unitarias a otro nivel con un marco de prueba mucho más sofisticado, permitiendo ejecutar test en Solidity o JavaScript.Esta capacidad ampliada para realizar pruebas unitarias contribuye de manera crucial a la calidad y seguridad del código de los Smart Contracts.
 
 Finalmente, uno de las mayores ventajas de usar Truffle en el desarrollo de aplicaciones descentralizadas es en cómo simplifica el proceso de unir el trabajo que se realiza en el backend con el frontend. Truffle proporciona herramientas que que promueven una conexión mas directa y menos propensa a errores entre Smart Contracts y las aplicaciones móviles.
 
@@ -133,7 +133,7 @@ Finalmente una característica definitiva de Metamask a diferencia de otras bill
 
 \subsection{WalletConnect}
 
-Wallet Connect es protocolo de código abierto que facilita la conexión segura entre billeteras móviles y aplicaciones descentralizadas.
+Wallet Connect es un protocolo de código abierto que facilita la conexión segura entre billeteras móviles y aplicaciones descentralizadas.
 Cuando un usuario quiere interactuar con una dApp, Wallet Connect genera un código QR o un enlace directo utilizado por la billetera descargada en el dispositivo del usuario. Esto establece una conexión cifrada y autoriza a la dApp para enviar solicitudes de transacción a la cartera.
 
 El usuario puede entonces administrar las transacciones directamente desde su billetera, garantizando que mantiene el control total sobre sus claves privadas y, por ende, sobre sus activos. 
@@ -171,7 +171,7 @@ Convertirse en un minero para obtener ETH de prueba es una opción más compleja
 
 Existen diversas faucets que proveen una cantidad de ETH de prueba diaria, pero en la mayoría para verificar la autenticidad del usuario se requiere que dicho usuario cuente con una pequeña cantidad de ETH reales en su billetera y por lo tanto obligan a hacer una pequeña inversión.
 Sin embargo, existe una faucet llamada Sepolia PoW Faucet que verifica la autenticidad del usuario mediante el mecanismo de prueba de trabajo (PoW), eliminando la necesidad de poseer ETH reales.
-Este enfoque requiere que los usuarios realicen un trabajo de cómputo, específicamente generando hashes que cumplan con ciertos criterios preestablecidos, para demostrar su esfuerzo y recibir ETH de prueba a cambio. 
+Este enfoque requiere que los usuarios realicen un trabajo de cómputo, específicamente generando hashes que cumplan con ciertos criterios preestablecidos para demostrar su esfuerzo y recibir ETH de prueba a cambio. 
 
 
 \section{Bibliotecas}
@@ -189,7 +189,7 @@ Su uso ha sido crucial para el desarrollo de mi proyecto, usando el estándar ER
 \item \textbf{web3:} Biblioteca formada por un conjunto de módulos que permite a las aplicaciones cliente interactuar con una blockchain local o remota a través del protocolo Ethereum. 
 Cuenta con un conjunto de características más amplio que la biblioteca ethers, haciéndola algo más compleja, pero en la practica son bibliotecas muy parecidas.
 
-\item \textbf{react-native-get-random-values:} Polifill que proporciona valores aleatorios seguros para criptografía en React Native, crucial para generar claves y tokens únicos de forma segura.
+\item \textbf{react-native-get-random-values:} Polyfill que proporciona valores aleatorios seguros para criptografía en React Native, crucial para generar claves y tokens únicos de forma segura.
 
 \item \textbf{ethersproject/shims:} Facilita la compatibilidad de ethers.js en React Native, permitiendo el desarrollo de dApps mediante la provisión de funciones de criptografía y blockchain en dispositivos móviles.
 
@@ -279,7 +279,7 @@ Esta sección incluye herramientas y programas que tienen una relevancia secunda
 \item \textbf{icons.expo.fyi:} Recurso en línea ofrece una visualización completa de los íconos disponibles en la biblioteca @expo/vector-icons.
 Facilita la integración rápida de los ícono al proporcionar el nombre exacto y el código de importación necesario para cada ícono.
 
-\item \textbf{CoinGecko:} Página web para el análisis de criptomonedas. Se utiliza en el proyecto su API para acceder a la información actualizada sobre el precio del Ethereum. 
+\item \textbf{CoinGecko:} Página web para el análisis de criptomonedas. Se utiliza su API en el proyecto para acceder a la información actualizada sobre el precio del Ethereum. 
 
 \item \textbf{TEXStudio:} IDE para LaTeX.
 

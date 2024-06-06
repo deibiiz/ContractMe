@@ -58,7 +58,8 @@ module.exports = {
    */
 
   networks: {
-    // Useful for testing. The `development` name is special - truffle uses it by default
+    // Useful for testing. T,  // 20 gwei (in wei) (default: 100 gwei)
+    //   from: <address>,        he `development` name is special - truffle uses it by default
     // if it's defined here and no other network is specified at the command line.
     // You should run a client (like ganache, geth, or parity) in a separate terminal
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
@@ -75,8 +76,7 @@ module.exports = {
     //   port: 8777,             // Custom port
     //   network_id: 1342,       // Custom network
     //   gas: 8500000,           // Gas sent with each transaction (default: ~6700000)
-    //   gasPrice: 20000000000,  // 20 gwei (in wei) (default: 100 gwei)
-    //   from: <address>,        // Account to send transactions from (default: accounts[0])
+    //   gasPrice: 20000000000// Account to send transactions from (default: accounts[0])
     //   websocket: true         // Enable EventEmitter interface for web3 (default: false)
     // },
     //
@@ -125,7 +125,7 @@ module.exports = {
     solc: {
       version: "0.8.20",      // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      settings: {          // See the solidity docs for advice about optimization and evmVersion
+      settings: {             // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
           enabled: true,
           runs: 200

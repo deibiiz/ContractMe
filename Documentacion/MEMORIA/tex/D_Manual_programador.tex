@@ -55,7 +55,7 @@ Antes de explicar la instalación de los programas y herramientas para el desarr
 \item\textbf{Procesador (CPU):}
 	\begin{itemize}
 	\item\textbf{Mínimo:} Procesador con arquitectura x86\_64, 2º generación de Intel o procesador AMD que
-	 soporte \"Hypervisor FrameWork\", Permitiendo una compilación rápida de código y emular un dispositivo 	
+	 soporte "Hypervisor FrameWork", Permitiendo una compilación rápida de código y emular un dispositivo 	
 	 móvil para pruebas.
 	\item\textbf{Recomendado:} Intel Core i7 o AMD ryzen 7, con 6-8 núcleos.
 	\end{itemize}
@@ -113,7 +113,7 @@ Por otro lado, aunque no es un requisito obligatorio, se recomienda contar con u
 
 \subsection{Instalación}
 
-Seguidamente se detallará como configurar un entorno de desarrollo para poder trabajar en la aplicación \"ContractMe\".
+Seguidamente se detallará como configurar un entorno de desarrollo para poder trabajar en la aplicación "ContractMe".
 
 \begin{enumerate}
 
@@ -123,18 +123,102 @@ Para instalar Node.js es necesario dirigirse a la \href{https://nodejs.org/en}{p
 Al ejecutar el instalador que se ha descargado, es necesario seleccionar la opción que permite instalar npm y añadir Node.js a tu path. Ver imagen \ref{fig:NodejsSetUp}.  
 En concreto la versión utilizada de Node.js para el desarrollo del proyecto ha sido la v18.18.2 y la versión utilizada de npm ha sido la 10.2.2.
 
-\imagen{InstalarNodejs}{Descarga de Node.js}{1}
-\imagen{NodejsSetUp}{Instalar Node.js y npm}{1}
+\imagen{InstalarNodejs}{Descarga de Node.js}
+\imagen{NodejsSetUp}{Instalar Node.js y npm}
 
-\item \textbf{Truffle Suite}: Teniendo Node.js y npm instalados, procederemos a instalar Truffle globalmente, para ello desde la terminal ejecutaremos el siguiente comando: \texttt{npm install -g truffle} lo cual nos permitirá usar el comando 
+\item \textbf{Truffle Suite}: Teniendo Node.js y npm instalados, procederemos a instalar Truffle globalmente, para ello desde la terminal ejecutaremos el siguiente comando: \texttt{npm install -g truffle} lo cual nos permitirá usar el comando \textit{truffle} desde cualquier lugar en la terminal.
 
-\item \textbf{React Native CLI}
+Una vez instalado Truffle, el siguiente paso es configurar el proyecto, para ello dentro del directorio \textit{SmartContract}, se encuentra la estructura de carpetas generadas por Truffle, incluyendo \textit{contracts} para almacenar la lógica de los contratos, \textit{migrations} para almacenar el script de migración y \textit{test} para las pruebas.
 
-\item \textbf{Expo CLI}
+Truffle también crea un archivo de configuración llamado \textit{truffle-config.js}, el cual se usa para configurar las redes sobre las cuales se desplegarán los contratos inteligentes.
+En este caso se usa la red de Ganache, que normalmente se ejecuta en \textit{localhost} en el ordenador. Debido a que la aplicación se ejecutará en un dispositivo móvil independiente del ordenador, la configuración \textit{localhost} no será suficiente. 
+En su lugar, se usará la dirección IP del ordenador la cual actuará como servidor para Ganache. Esto permitirá que otros dispositivos de nuestra misma red local se conecten a la blockchain simulada por Ganache.
+Ganache por defecto usa el puerto 8545, aunque este podría ser reemplazado por cualquier puerto que se encontrase vacío.
+Siguiendo los pasos previamente mencionados, el archivo \textit{truffle-config.js} debería verse como en la imagen \ref{fig:TruffleGanache}.
+
+\imagen{TruffleGanache}{Configuración red Ganache en truffle-config.js}{1}
+
+Dentro del archivo \textit{truffle-config.js} también será necesario realizar la configuración de compiladores para especificar como los contratos inteligentes deben de ser compilados, optimizados y ejecutados en la máquina virtual de Ethereum.
+Se deberá especificar la versión \textbf{0.8.20}, la cual usará Truffle para compilar los contratos, esta versión coincide con la versión que se ha usado de Solidity para desarrollar los contratos inteligentes.
+Dentro de Settings se ha de especificar algunas opciones que afectan a la compilación de los contratos. La opción \textit{optimizer} debe marcarse como \textit{true}, ayudándonos a reducir el código de byte de los contratos y hacerlos más eficientes en términos de gas.
+Por otro lado, las runs se deben de establecer en 200, un número más alto puede resultar en un código más optimizado en términos de gas, pero con un proceso de compilación más lento. ver imagen \ref{fig:TruffleCompiler}.
+
+\imagen{TruffleCompiler}{Configuración del compilador en truffle-config.js}{1}
+
+\item \textbf{Ganache}: Como hemos comentado, en el proyecto se usa la red de \textit{Ganache}. Por simplicidad hemos usado la versión de consola, por tanto para instalarla de forma global en nuestro ordenador será necesario ejecutar el siguiente comando: \texttt{npm install -g ganache-cli}.
+
+\item \textbf{Expo CLI}: Del mismo modo que hemos realizado con \textit{Ganache}, previamente es necesario descargar \textit{Expo CLI}, el cual es necesario para iniciar, desarrollar y probar el proyecto.
+Utilizando el comando \texttt{npm install -g expo-cli} lo descargamos globalmente.
+
+\item \textbf{Expo Go}: Para visualizar la aplicación se usará Expo Go permitiéndonos ejecutar la aplicación directamente en nuestra dispositivo móvil.
+Para ello, desde el un dispositivo móvil Android utilizando \textit{Google Play Store}, se buscará en la barra de búsqueda "Expo Go".  Seguidamente se procederá a descargar dicha aplicación.
+
+\item \textbf{Descarga del repositorio}: ??????????????????????????????????????????????????????????????
 
 
+\end{enumerate}
 
-\item \textbf{Ganache}
+
+\subsection{Ejecución del proyecto}
+
+En este apartado se detallará como ejecutar el proyecto. Es muy importante que durante la ejecución tanto el ordenador como el dispositivo móvil se encuentren en la misma red.
+
+\begin{enumerate}
+
+\item \textbf{Levantar Ganache}: Antes de proceder a ejecutar la aplicación es necesario que la red Ganache se encuentre previamente en funcionamiento.
+Como hemos comentado anteriormente, la red debe de ser levantada sobre la dirección IP local de nuestro ordenador. Por ejemplo, suponiendo que la IP local de mi ordenador es 192.168.1.33, deberemos de ejecutar desde cualquier parte de la terminal, el siguiente comando: 
+\begin{verbatim}
+ganache-cli --host 192.168.1.33 -d --db ganache_db
+\end{verbatim}
+
+\texttt{-d} es una abreviatura de deterministic, lo que hace que Ganache genere las mismas cuentas y claves privadas cada vez que se ejecuta.
+\texttt{--db ganache\_db} es una opción que permite que Ganache guarde el estado de la red en un directorio específico, en este caso el directorio será llamado ganache\_db y se creará en la rama actual donde se encuentre el usuario en la terminal.
+Esto permite que la blockchain simulada mantenga su estado entre reinicios de \textit{Ganache}.
+
+\imagen{ganache-cli}{Levantar red local usando Ganache}
+
+\item \textbf{Compilar, probar y migrar contrato}: el contrato debe de ser compilado, probado y migrado antes de poder utilizarlo, para ello se utiliza Truffle.
+
+	\begin{itemize}
+	\item \textbf{Compilar}: Es necesario convertir el código Solidity de los contratos en bytecode que pueda
+	ser ejecutado por la Máquina Virtual de Ethereum (EVM).
+	Para ello desde el directorio \textit{SmartContract} donde se almacena toda la lógica de los contratos
+	inteligentes, se debe ejecutar el comando \texttt{truffle compile}.
+	
+	\imagen{TruffleCompile}{Compilar SmartContract usando Truffle}
+	\end{itemize}
+	
+	\begin{itemize}
+	\item \textbf{Probar}: Cómo paso opcional y para comprobar el correcto funcionamiento del contrato se 
+	pude ejecutar previamente una batería de test que asegurarán que todas las funciones estén conformes.
+	Para ello se usa el comando \texttt{truffle test} desde el directorio \textit{SmartContract}.
+	
+	\imagen{TruffleTest}{Pruebas unitarias sobre el SmartContract usando Truffle}
+	\end{itemize}
+	
+	\begin{itemize}
+	\item \textbf{Migrar}: Finalmente, el último paso es desplegar el contrato en la blockchain.
+	Esto se realiza desde el directorio \textit{SmartContract} usando el comando \texttt{truffle migrate}.
+	Este comando desplegará los contratos inteligentes en la red configurada, en este caso Ganache y generará
+	los archivos necesarios en el directorio \textit{build/contracts}.
+	Tras una correcta migración, se mostrará la dirección del contrato, la cuenta del creador, el costo total
+	del despliegue, etcétera. 
+	
+	\imagen{TruffleMigrate}{Despliegue del contrato en la red de Ganache usando Truffle}
+	\end{itemize}
+	
+	
+\item \textbf{Configuración conexión contrato}: Una vez hayamos desplegado un nuevo contrato en la blockchain, debemos actualizar la información de la aplicación para que esta pueda interactuar con él.
+Para ello, necesitamos dos cosas: la dirección del contrato, que se nos ha proporcionado en la terminal al migrarlo, y el archivo JSON del contrato que se encuentra en \texttt{SmartContract/build}.
+	
+Con el archivo JSON del contrato, es necesario copiarlo y pegarlo en la carpeta \texttt{AppContract/src/ContractConexion}. 
+Por otro lado con la dirección del contrato, también es necesario copiarla, y actualizar la referencia \texttt{contractAddress} que se encuentra en el archivo \texttt{EtherProvider.js}.
+	
+\imagen{ContractConexion}{Configuración de conexión con el contrato}
+
+\item \textbf{Iniciar aplicación}: Desde el directorio raíz de la aplicación, \texttt{/Code/AppContract}, en la terminal ejecutamos el comando \texttt{npx expo start} para iniciar el servidor. Esto mostrará un código QR en la terminal. Será necesario comprobar que la opción Expo Go se encuentre activa.
+Seguidamente desde la aplicación Expo Go en el dispositivo móvil, se procederá a escanear el código QR que aparece en la terminal.
+La aplicación Expo Go cargará y mostrará la aplicación en el dispositivo móvil.
 
 \end{enumerate}
 

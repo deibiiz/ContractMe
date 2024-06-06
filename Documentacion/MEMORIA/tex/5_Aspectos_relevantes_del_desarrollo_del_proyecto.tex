@@ -1,13 +1,13 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-En este apartado se pretende resumir los aspectos más relevantes que se han tratado y como se han resuelto las diferentes dificultades encontradas a lo largo de su desarrollo.
+En este apartado se pretende resumir los aspectos más relevantes que se han tratado y cómo se han resuelto las diferentes dificultades encontradas a lo largo de su desarrollo.
 
 
 
 \section{Dificultades encontradas en el desarrollo}
 
 Este proyecto se ha caracterizado por las diversas dificultades que se han encontrado primordialmente exacerbadas por las incompatibilidades de diversas librerías y herramientas en el desarrollo móvil.
-A continuación, describo alguno de los problemas más significativos y como se han abordado.
+A continuación, describo alguno de los problemas más significativos y cómo los he abordado.
 
 \subsection{Incompatibilidad con biblioteca Web3}
 
@@ -23,7 +23,7 @@ El problema no se había solucionado ya que dicho error solo desapareció dejand
 
 \textit{ReferenceError: Property 'TextEncoder' doesn't exist, js engine: hermes.}
 
-React native no implementa todas las API web estándar que se encuentran en los navegadores modernos, por lo que es necesario agregar dicha característica de forma manual. Para ello ha hecho uso de un polyfill, que es una biblioteca que pretente proporcionar una implmentación alternativa a la API de funciones nativas.
+React native no implementa todas las API web estándar que se encuentran en los navegadores modernos, por lo que es necesario agregar dicha característica de forma manual. Para ello he hecho uso de un polyfill, que es una biblioteca que pretente proporcionar una implmentación alternativa a la API de funciones nativas.
 Por tanto, se ha instalado 'text-encoding', que es un polyfill para la API de 'TextEncoder'.
 Seguidamente se ha creado un nuevo archivo en la raíz del proyecto al que he llamado 'globals.js', en este archivo se ha asignado 'TextEncoder' de 'text-encoding' a 'global.TextEncoder'. Es decir, que he agregado 'TextEnoder' al objeto global 'global' que actúa de forma similar al objeto 'window' en los navegadores.
 
@@ -41,7 +41,7 @@ En una de estas iteraciones, al intentar migrar el contrato, apareció un error 
 
 \textit{Warning: Contract code size is 26466 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.}
 
-con el objetivo de que el contrato sea menor de esos 26576 bytes y así mantener toda la funcionalidad en un único contrato facilitando así su gestión y uso, se aplicaron diversas técnicas.
+Con el objetivo de que el contrato sea menor de esos 26576 bytes y así mantener toda la funcionalidad en un único contrato facilitando así su gestión y uso, se aplicaron diversas técnicas.
 En una primera instancia, se hizo una revisión del código para identificar y eliminar redundancias, optimizar las funciones existentes, y donde fue posible, integrar librerías externas que reemplazaran bloques de código repetitivos.
 Por otro lado, se habilitó el optimizador del compilador de Solidity, ajustando el número de 'runs' a un valor bajo, con la intención de reducir significativamente el tamaño del bytecode generado al optimizar la compilación con base en la frecuencia esperada de ejecución del código.
 
@@ -54,25 +54,25 @@ La modularización no solo ayudó a gestionar mejor el tamaño del contrato, sin
 \subsection{Problemas implementación MetaMask}
 
 La integración de una billetera de terceros en el proyecto ha presentado un gran desafío, con la idea de implementar una solución que permitiera al usuario gestionar sus cuentas, se exploraron diferentes posibilidades.
-En este caso, se opto por la opción implementar MetaMask, debido a ser la billetera ampliamente más conocida y usada por la comunidad. 
+En este caso, se optó por la opción implementar MetaMask, debido a ser la billetera ampliamente más conocida y usada por la comunidad. 
 Por lo tanto, la idea era usar los servicios de MetaMask para que los usuarios pudieran acceder a la aplicación móvil con su cuenta personal y más adelante poder interactuar con dicha cuenta.
 
-Inicialmente, se hicieron diferentes pruebas para establecer una conexión entre MetaMask y mi aplicación. Estas pruebas se centraron en utilizar la extensión de navegador de MetaMask con el objetivo de establecer la conexión, donde se consiguió establecer una conexión estable y continua permitiendo interactuar con la billetera libremente. Aunque está implementación solo aseguraba el funcionamiento de la aplicación en un entorno de navegador.
+Inicialmente, se hicieron diferentes pruebas para establecer una conexión entre MetaMask y mi aplicación. Estas pruebas se centraron en utilizar la extensión de navegador de MetaMask con el objetivo de establecer la conexión, donde se consiguió establecer una conexión estable y continua permitiendo interactuar con la billetera libremente. Aunque esta implementación solo aseguraba el funcionamiento de la aplicación en un entorno de navegador.
 
 Partiendo de su correcto funcionamiento en navegador se quiso expandir la funcionalidad para que fuera compatible en la aplicación móvil.
-Este paso resulto ser considerablemente más complejo debido a la incompatibilidad directa de las extensiones de navegador en los entornos móviles. 
+Este paso resultó ser considerablemente más complejo debido a la incompatibilidad directa de las extensiones de navegador en los entornos móviles. 
 Inicialmente se intentó usar el SDK de MetaMask, recientemente lanzado, empleando un enfoque de enlaces profundos para interacción directa con la aplicación de MetaMask en dispositivos móviles.
 La idea era, que una vez el usuario hubiera configurado correctamente sus cuentas en la app de Metamask, cuando quisiera realizar alguna operación que requeriese de la billetera, la aplicación móvil generaría un URI de MetaMask que abriría directamente la aplicación de MetaMask instalada en el dispositivo del usuario. Desde allí el usuario podría autorizar la operación.
 No obstante, este método enfrentó grandes obstáculos técnicos, impidiendo establecer una conexión con la aplicación móvil de MetaMask.
 
-A raíz de este problema se investigaron alternativas para poder ofrecer una conexión estable entre la aplicación y la billetera móvil. De esta forma se planteó la utilización de 'WalletConnect', un protocolo de código abierto altamente utilizado por la comunidad y que que facilita la comunicación entre billeteras móviles y aplicaciones descentralizadas mediante enlaces seguros. Trás un largo proceso de desarrollo, se logró implementar WalletConnect con la posibilidad de establecer conexiones no solo con MetaMask sino con otras cientos de billeteras.
+A raíz de este problema se investigaron alternativas para poder ofrecer una conexión estable entre la aplicación y la billetera móvil. De esta forma se planteó la utilización de 'WalletConnect', un protocolo de código abierto altamente utilizado por la comunidad y que facilita la comunicación entre billeteras móviles y aplicaciones descentralizadas mediante enlaces seguros. Tras un largo proceso de desarrollo, se logró implementar WalletConnect con la posibilidad de establecer conexiones no solo con MetaMask sino con otras cientos de billeteras.
 
-Sin embargo, la aplicación aún no era capaz de realizar operaciones a través de esta nueva configuración. Durante un par de sprints dedicados principalmente a este problema, se identificó que la necesidad de una revisión completa de la arquitectura de la aplicación. 
-Para ello se abandonó la biblioteca Web3, que había sido la la pieza fundamental de conexión entre los contrato inteligente y el frontEnd.
+Sin embargo, la aplicación aún no era capaz de realizar operaciones a través de esta nueva configuración. Durante un par de sprints dedicados principalmente a este problema, se identificó la necesidad de una revisión completa de la arquitectura de la aplicación. 
+Para ello se abandonó la biblioteca Web3, que había sido la pieza fundamental de conexión entre los contratos inteligentes y el frontEnd.
 En su lugar, se adaptó la aplicación para usar las bibliotecas Ethers, Wagmi y Viem, que ofrecían una mayor flexibilidad y compatibilidad con WalletConnect.
 
 Esto proceso fue bastante tedioso ya que implicó establecer una nueva conexión con el contrato mediante el nuevo provedor, así como actualizar todas las llamadas al contrato inteligente para que estas puedan ser ejecutadas correctamente por la billetera configurada en WalletConnect.
-Está transformación no solo resolvió los problemas iniciales, sino que también se mejoró la accesibilidad de la aplicación permitiendo la integración de cientos de billeteras.
+Esta transformación no solo resolvió los problemas iniciales, sino que también se mejoró la accesibilidad de la aplicación permitiendo la integración de cientos de billeteras.
 
 
 
@@ -88,7 +88,7 @@ Sin embargo, he encontrado un problema al realizar este proceso en la aplicació
 
 \textit{Could not fetch chain ID. Is your RPC URL correct?}
 
-Este mensaje indica que no se puede recuperar el ID de la cadena, el cual es un identificador único de cada blockchain, crucial para la seguridad, utilizado por las billeteras para asegurar que interactuan con la red correcta.
+Este mensaje indica que no se puede recuperar el ID de la cadena, el cual es un identificador único de cada blockchain, crucial para la seguridad, utilizado por las billeteras para asegurar que interactúan con la red correcta.
 Este problema radica en que comúnmente, Ganache despliega la red usando HTTP en un entorno local, lo cual es apto para la extensión de navegador, pero no para la aplicación móvil ya que requiere HTTPS.
 Este es un problema recurrente para muchos desarrolladores y aún no cuenta con una solución directa. Una solución temporal es crear un túnel seguro y exponer la red Ganache local usando herramientas como ngrok, que proporciona una URL HTTPS temporal. De esta forma se expone un servidor local a internet a través de un túnel seguro, permitiendo así que la aplicación de MetaMask establezca una conexión segura.
 Bien es cierto, que esto soluciona en cierta parte el problema, pero es solo una solución temporal y no es ideal para entornos de producción.
@@ -100,7 +100,7 @@ Dada la imposibilidad de utilizar Ganache en conjunto con MetaMask,se hizo neces
 En el proceso de investigación para resolver este problema, se dedujo que la única opción para poder usar MetaMask era desplegar el contrato en una red blockchain real.
 
 Para poder integrar MetaMask en el proyecto y realizar operaciones sin que suponga ningún coste económico real, se decidió usar la red de Sepolia, que es una red de prueba de Ethereum. 
-Esta idea, finalmente acabó complicando el proyecto notablemente, siendo necesaria una adaptación de todo el código que llevo varías semanas de trabajo.
+Esta idea, finalmente acabó complicando el proyecto notablemente, siendo necesaria una adaptación de todo el código que llevó varías semanas de trabajo.
 Para usar la red de Sepolia, fue necesario desplegar el contrato en dicha red. El primer paso fue obtener ETH de Sepolia, necesarios para cubrir los costes del despliegue, lo cual es un proceso lento debido a las pequeña cantidad que se puede obtener diariamente. 
 Además, para interactuar con una red real, fue esencial establecer un proveedor de servicios de terceros. Para esta tarea se seleccionó Infura. La cual mediante una URL permite interactuar con la red Ethereum sin la necesidad de ejecutar un nodo de Ethereum propio. 
 
@@ -125,7 +125,7 @@ Ante la acumulación de desafíos y la falta de tiempo, se tomó la decisión de
 \section{Incompatibilidad Firebase}
 
 Durante la fase inicial del proyecto se optó por implementar una base de datos para la autenticación de los usuarios.
-Se decidió usar Firebase, debido a ser una herramienta muy poderosa y robusta, y mi interés de aprender a utilizarla. Entre las funcionalidades previstas estaban la autenticación de usuarios, el almacenamiento de datos y un servicio sólido de mensajería para funciones como el restablecimiento de contraseña y la verificación de dos factores.
+Se decidió usar Firebase, debido a que es una herramienta muy poderosa y robusta, y mi interés de aprender a utilizarla. Entre las funcionalidades previstas estaban la autenticación de usuarios, el almacenamiento de datos y un servicio sólido de mensajería para funciones como el restablecimiento de contraseña y la verificación de dos factores.
 Además, se contempló la posibilidad de permitir iniciar sesión con google, una funcinalidad nativa de esta base de datos.
 
 En una primera instancia se implementó correctamente las funcionalidades de registro, verificación y recuperación de contraseña.
