@@ -177,23 +177,18 @@ Esto permite que la blockchain simulada mantenga su estado entre reinicios de \t
 
 \imagen{ganache-cli}{Levantar red local usando Ganache}
 
-\item \textbf{Compilar, probar y migrar contrato}: el contrato debe de ser compilado, probado y migrado antes de poder utilizarlo, para ello se utiliza Truffle.
+\item \textbf{Compilar y migrar contrato}: el contrato debe de ser compilado, probado y migrado antes de poder utilizarlo, para ello se utiliza Truffle.
 
 	\begin{itemize}
-	\item \textbf{Compilar}: Es necesario convertir el código Solidity de los contratos en bytecode que pueda
+	\item \textbf{Compilar}: Es necesario convertir el código
+	Solidity de los contratos en bytecode que pueda
 	ser ejecutado por la Máquina Virtual de Ethereum (EVM).
-	Para ello desde el directorio \textit{SmartContract} donde se almacena toda la lógica de los contratos
-	inteligentes, se debe ejecutar el comando \texttt{truffle compile}.
+	Para ello desde el directorio \textit{SmartContract} donde se
+	almacena toda la lógica de los contratos
+	inteligentes, se debe ejecutar el comando \texttt{truffle
+	compile}.
 	
 	\imagen{TruffleCompile}{Compilar SmartContract usando Truffle}
-	\end{itemize}
-	
-	\begin{itemize}
-	\item \textbf{Probar}: Cómo paso opcional y para comprobar el correcto funcionamiento del contrato se 
-	pude ejecutar previamente una batería de test que asegurarán que todas las funciones estén conformes.
-	Para ello se usa el comando \texttt{truffle test} desde el directorio \textit{SmartContract}.
-	
-	\imagen{TruffleTest}{Pruebas unitarias sobre el SmartContract usando Truffle}
 	\end{itemize}
 	
 	\begin{itemize}
@@ -223,3 +218,24 @@ La aplicación Expo Go cargará y mostrará la aplicación en el dispositivo mó
 \end{enumerate}
 
 \section{Pruebas del sistema}
+
+\begin{itemize}
+
+\item \textbf{Probar}: Como paso opcional, pero altamente recomendado, para comprobar el correcto funcionamiento del contrato, se puede ejecutar una batería de tests. Estos tests están diseñados para asegurar que todas las funciones del contrato inteligente operen conforme a las especificaciones establecidas y para identificar cualquier posible falla antes de la implementación en un entorno de producción.
+	
+\item \textbf{Proceso de ejecución de pruebas}: Para llevar a cabo estas pruebas unitarias, es necesario utilizar el comando \texttt{truffle test} en la terminal. Este comando debe ejecutarse desde el directorio \textit{SmartContract}, donde se encuentran almacenados todos los scripts de prueba necesarios para la evaluación del contrato.
+
+\item \textbf{Descripción de los tests}: 
+Los tests verifican cada función y transacción que el
+contrato inteligente puede realizar, incluyendo la creación,
+transferencia y administración de los contratos.
+Cada test está diseñado para garantizar que el contrato responda adecuadamente en cualquier situación.
+
+\item \textbf{Interpretación de resultados}: Al finalizar la ejecución de los tests, \texttt{truffle} proporcionará un reporte detallado que incluirá el resultado de cada prueba individual.
+Un test exitoso indica que la función correspondiente del contrato cumple con los requisitos y funciona como se espera. 
+Para ver un ejemplo de cómo se presentan estos resultados, ver la imagen \ref{fig:TruffleTest}.
+
+\end{itemize}
+
+\imagen{TruffleTest}{Pruebas unitarias sobre el SmartContract usando Truffle}
+
