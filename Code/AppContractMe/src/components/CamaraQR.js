@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Alert } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { LogBox } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useAccount } from "../components/ContextoCuenta";
-import { MyContract } from "../ContractConexion/EtherProvider";
+import { getMyContract } from "../ContractConexion/EtherProvider";
 
 
 export default function CamaraQR() {
@@ -37,7 +37,8 @@ export default function CamaraQR() {
             }
             setScanned(true);
 
-            await MyContract.methods.signContract(tokenId).send({ from: selectedAccount });
+            const MyContract = await getMyContract();
+            await MyContract.methods.signContract(tokenId).send({ from: selectedAccount, gas: 1000000 });
 
             alert(`Contrato ${tokenId} Firmado con éxito.`);
             navigation.navigate("Home1");

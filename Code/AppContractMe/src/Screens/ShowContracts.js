@@ -286,6 +286,7 @@ const styles = StyleSheet.create({
         alignItems: "stretch",
     },
     text: {
+        padding: 10,
         fontSize: 17,
         fontStyle: "italic",
         textAlign: "center",

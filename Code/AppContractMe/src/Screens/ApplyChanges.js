@@ -10,7 +10,6 @@ const ContractAlertScreen = ({ route }) => {
     const navigation = useNavigation();
     const { selectedAccount } = useAccount();
 
-
     const rejectChanges = async () => {
         try {
             if (!selectedAccount) {
@@ -42,9 +41,6 @@ const ContractAlertScreen = ({ route }) => {
             alert("Error al aceptar los cambios.");
         }
     }
-
-    console.log(oldContractDetails);
-    console.log(newContractDetails);
 
     return (
         <ScrollView style={styles.scrollView}>
@@ -163,6 +159,7 @@ const ContractAlertScreen = ({ route }) => {
                 </View>
             </View>
         </ScrollView >
+
     );
 }
 

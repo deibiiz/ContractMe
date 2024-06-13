@@ -23,8 +23,7 @@ const ModifyContract = ({ route, navigation }) => {
     const [mode, setMode] = useState("date");
     const [show, setShow] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date(endDateSeconds * 1000));
-    const [secondsToFinish, setSecondsToFinish] = useState(endDateSeconds);
-
+    const [secondsToFinish, setSecondsToFinish] = useState(contractDetails.duration);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate;
@@ -105,7 +104,7 @@ const ModifyContract = ({ route, navigation }) => {
                         style={styles.input}
                         value={salary}
                         onChangeText={setSalary}
-                        maxLength={8}
+                        maxLength={15}
                         keyboardType="numeric"
                     />
 

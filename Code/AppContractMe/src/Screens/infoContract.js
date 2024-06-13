@@ -15,8 +15,6 @@ const ContractDetailsScreen = ({ route }) => {
     const { esAutenticado, AutenticarConHuella } = useAuthentication();
     const [contractSigned, setContractSigned] = useState(false);
 
-    console.log(tokenId, fromWorkerSection);
-
     const fetchContractDetailsCallback = React.useCallback(() => {
         const fetchContractDetails = async () => {
             const MyContract = await getMyContract();
@@ -27,10 +25,10 @@ const ContractDetailsScreen = ({ route }) => {
             const changeProposoal = await MyContract.methods.changeProposals(tokenId).call();
             const salaryInEther = web3.utils.fromWei(details.salary, 'ether');
             const startDate = new Date(Number(details.startDate) * 1000).toLocaleString();
+            const endDateSeconds = Number(details.startDate) + Number(details.duration);
             const endDate = new Date(Number(details.startDate) * 1000 + Number(details.duration) * 1000).toLocaleString();
             const pauseTime = new Date(Number(details.pauseTime) * 1000).toLocaleString();
             const isFinished = await MyContract.methods.isContractFinished(tokenId).call();
-
 
             setContractDetails({
                 ...details,
@@ -47,10 +45,11 @@ const ContractDetailsScreen = ({ route }) => {
                 tokenId: tokenId,
                 isPending: changeProposoal.isPending,
                 employer: employer,
+                worker: details.worker,
+                isPaused: details.isPaused,
                 isSigned: details.isSigned,
             });
         };
-
         fetchContractDetails();
     }, [tokenId]);
     useFocusEffect(fetchContractDetailsCallback);
@@ -82,7 +81,6 @@ const ContractDetailsScreen = ({ route }) => {
             if (!selectedAccount) {
                 alert('Por favor, inicia sesión con tu billetera y selecciona una cuenta.');
             } else {
-                console.log(tokenId);
                 const MyContract = await getMyContract();
 
                 await MyContract.methods.cancelContract(tokenId).send({ from: selectedAccount });
@@ -173,47 +171,36 @@ const ContractDetailsScreen = ({ route }) => {
             const MyContract = await getMyContract();
             const web3 = await getWeb3();
 
-            const details = await MyContract.methods.contractDetails(tokenId).call();
             const proposal = await MyContract.methods.changeProposals(tokenId).call();
-            const employer = await MyContract.methods.getOwnerOfContract(tokenId).call();
 
-            const newTitle = proposal.newTitle ? proposal.newTitle : details.title;
-
-            const salaryInEther = web3.utils.fromWei(details.salary, 'ether');
-            const newSalaryInEther = proposal.newSalary ? web3.utils.fromWei(proposal.newSalary, 'ether') : salaryInEther;
-
-            const startDate = new Date(Number(details.startDate) * 1000).toLocaleString();
-            const endDate = new Date((Number(details.startDate) + Number(details.duration)) * 1000).toLocaleString();
-            const newEndDate = proposal.newDuration ? new Date((Number(details.startDate) + Number(proposal.newDuration)) * 1000).toLocaleString() : endDate;
-
-            const newDescription = proposal.newDescription ? proposal.newDescription : details.description;
-            const newIsPaused = proposal.isPaused ? proposal.isPaused : details.isPaused;
-
-
+            const newTitle = proposal.newTitle;
+            const newSalaryInEther = web3.utils.fromWei(proposal.newSalary, 'ether');
+            const newEndDate = new Date((Number(proposal.newDuration) + contractDetails.startSeconds) * 1000).toLocaleString();
+            const newDescription = proposal.newDescription;
+            const newIsPaused = proposal.isPaused;
 
             const oldContractData = {
                 tokenId: tokenId,
-                title: details.title,
-                startDate: startDate,
-                endDate: endDate,
-                salary: salaryInEther,
-                description: details.description,
-                isPaused: details.isPaused,
-                employer: employer,
-                worker: details.worker,
+                title: contractDetails.title,
+                startDate: contractDetails.startDate,
+                endDate: contractDetails.endDate,
+                salary: contractDetails.salary,
+                description: contractDetails.description,
+                isPaused: contractDetails.isPaused,
+                employer: contractDetails.employer,
+                worker: contractDetails.worker,
             };
 
             const newContractData = {
                 tokenId: tokenId,
                 newTitle: newTitle,
-                startDate: startDate,
-                endDate: endDate,
+                startDate: contractDetails.startDate,
                 newSalary: newSalaryInEther,
                 newEndDate: newEndDate,
                 newDescription: newDescription,
                 newIsPaused: newIsPaused,
-                employer: employer,
-                worker: details.worker,
+                employer: contractDetails.employer,
+                worker: contractDetails.worker,
             };
 
             return { oldDetails: oldContractData, newDetails: newContractData }

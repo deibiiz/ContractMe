@@ -4,8 +4,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Boton from "../components/Boton.js";
 import { useAccount } from "../components/ContextoCuenta.js";
 import { getMyContract, getWeb3 } from "../ContractConexion/EtherProvider";
-import { Picker } from "@react-native-picker/picker";
-import { Country, City } from "country-state-city";
 
 
 
