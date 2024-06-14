@@ -2,11 +2,124 @@
 
 \section{Introducción}
 
-Este apéndice proporciona una descripción detallada de cómo se ha diseñado y estructurado la aplicación , abarcando desde la organización de los datos hasta la arquitectura del software.
+En este apéndice se explicarán los distintos diseños de la aplicación, desde la organización de los datos hasta la arquitectura del software.
 
 \section{Diseño de datos}
 
+A continuación se describirá cómo se ha desarrollado el diseño de datos de la aplicación.
+Para implementar la persistencia, a parte del uso de la blockchain, se ha decidido utilizar una base de datos de FireBase, para almacenar datos sobre los usuarios y gestionar su autenticación.
 
+\subsection{Base de datos}
+
+El uso de FireStore en la aplicación se dirige a lo los datos que no requieren las propiedades de inmutabilidad de la blockchain. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
+Al delegar la gestión de datos no críticos a Firestore, se minimiza la carga sobre la blockchain, lo que resulta en una reducción significativa en el consumo de gas durante las transacciones. Esta optimización no solo mejora la eficiencia de los contratos inteligentes sino que también reduce los costos operativos para los usuarios, haciendo que la aplicación sea más accesible y económicamente viable.
+La elección de FireBase como plataforma de gestión de bases de datos NoSQL de debe a su escalabilidad automática y rendimiento en tiempo real.
+Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la blockchain para transacciones críticas.
+
+La colección \texttt{users} incluye los siguientes atributos:
+\begin{itemize}
+ 	\item \textbf{nombre} (\texttt{string}): Nombre de pila del usuario.
+    \item \textbf{apellido1} (\texttt{string}): Primer apellido del
+     usuario.
+    \item \textbf{apellido2} (\texttt{string}): Segundo apellido del
+     usuario.
+    \item \textbf{pais} (\texttt{string}): Pais de residencia del usuario
+    \item \textbf{paisCode} (\texttt{string}): Código del país de
+     residencia en formato iso.
+    \item \textbf{ciudad} (\texttt{string}): Ciudad de residencia del
+     usuario.
+    \item \textbf{direccion} (\texttt{string}): Dirección física donde vive
+     el usuario.
+    \item \textbf{dni} (\texttt{string}): Documento Nacional de Identidad
+     del usuario.
+    \item \textbf{fecha} (\texttt{timeStamp}): Fecha de nacimiento del
+     usuario. Formato: día de mes de año, hora:minuto:segundo AM/PM
+     UTC+offset.
+    \item \textbf{telefono} (\texttt{number}): Número de teléfono del
+     usuario.
+    \item \textbf{ganache} (\texttt{string}): Dirección de la billetera del
+     usuario en la red blockchain.
+
+
+\end{itemize}
+
+Como clave primaria del documento se usa el ID del usuario, generado automáticamente con la creación del mismo, que proporciona un identificador único para cada usuario.
+
+Por otro lado, dentro de la colección \texttt{users} se ha definido una regla que asegura que los usuarios solo puedan acceder y modificar sus propios datos, protegiendo la privacidad y manteniendo la integridad de los datos personales.
+
+\imagen{FireBaseRegla}{Regla definida en FireBase para el control de acceso a los datos.}
+
+
+\subsection{Blockchain}
+
+Dentro de los contratos inteligentes los datos se estructuran utilizando estructuras y mapeos que facilitan la gestión y el acceso eficiente de la información. 
+
+Los atributos del contrato recogidos en  \texttt{ContractDetails} incluyen:
+\begin{itemize}
+    \item \textbf{salary} (\texttt{uint256}): Salario acordado para el
+ 	 contrato, manejado en wei.
+    \item \textbf{startDate} (\texttt{uint256}): Fecha de inicio del
+     contrato representada en segundos.
+    \item \textbf{duration} (\texttt{uint256}): Duración total del contrato
+     en segundos.
+    \item \textbf{title} (\texttt{string}): Título del contrato.
+    \item \textbf{description} (\texttt{string}): Descripción del
+     contrato.
+    \item \textbf{isSigned} (\texttt{bool}): Estado que indica si el
+     contrato ha sido firmado.
+    \item \textbf{worker} (\texttt{address}): Dirección Ethereum del
+     trabajador asignado al contrato.
+    \item \textbf{isFinished} (\texttt{bool}): Estado que indica si el
+     contrato ha concluido.
+    \item \textbf{isReleased} (\texttt{bool}): Estado que señala si el pago
+     ha sido liberado.
+    \item \textbf{isPaused} (\texttt{bool}): Indica si el contrato está
+     actualmente pausado.
+    \item \textbf{pauseTime} (\texttt{uint256}): Tiempo en segundos que
+     indica cuando el contrato fue pausado.
+    \item \textbf{pauseDuration} (\texttt{uint256}): Acumulación de tiempo
+     de pausas durante la ejecución del contrato en segundos.
+\end{itemize}
+
+La estructura \texttt{ChangeProposal} se utiliza para gestionar propuestas de cambio en el contrato y contiene los siguientes campos:
+\begin{itemize}
+    \item \textbf{newTitle} (\texttt{string}): Nuevo título propuesto para
+     el contrato.
+    \item \textbf{newSalary} (\texttt{uint256}): Nuevo salario propuesto,
+     expresado en wei.
+    \item \textbf{newDuration} (\texttt{uint256}): Nueva duración propuesta
+     para el contrato, expresada en segundos.
+    \item \textbf{newDescription} (\texttt{string}): Nueva descripción
+     detallada propuesta para el contrato.
+    \item \textbf{isPaused} (\texttt{bool}): Indica si la propuesta incluye
+     una pausa del contrato.
+    \item \textbf{isPending} (\texttt{bool}): Estado que indica si la
+     propuesta está pendiente de aprobación.
+\end{itemize}
+
+
+1. Mapeos y Arrays de Usuarios
+Incluir detalles sobre cómo se manejan los usuarios y sus relaciones con los contratos en el sistema:
+
+contractsOwner: Mapeo de los propietarios de los contratos y sus respectivos contratos.
+activeContractsOfWorker: Mapeo que guarda los contratos activos asignados a un trabajador.
+unsignedContractsOfWorker: Mapeo que lista los contratos no firmados de cada trabajador.
+tokenManagersList:
+Estas estructuras ayudan a rastrear la asignación y el estado de los contratos entre diferentes partes.
+
+
+
+2. Eventos del Contrato
+Detallar los eventos definidos para emitir notificaciones o registros de acciones clave dentro del contrato:
+
+ContractSigned
+ContractFinalized
+SalaryReleased
+TokenMinted
+ContractCancelled
+ChangeProposed
+ApprovalChanges
+RejectChanges
 
 \section{Diseño procedimental}
 
@@ -14,4 +127,7 @@ Este apéndice proporciona una descripción detallada de cómo se ha diseñado y
 
 \section{Diseño arquitectónico}
 
+
+
+\section{Diseño de interfaces}
 

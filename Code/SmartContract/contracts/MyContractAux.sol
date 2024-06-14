@@ -73,3 +73,4 @@ contract MyContractAux is MyContractManagement, MyContractChanges {
         return ownerOf(_tokenID);
     }
 }
+
