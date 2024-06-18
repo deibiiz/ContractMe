@@ -46,9 +46,14 @@ La colección \texttt{users} incluye los siguientes atributos:
 
 Como clave primaria del documento se usa el ID del usuario, generado automáticamente con la creación del mismo, que proporciona un identificador único para cada usuario.
 
-Por otro lado, dentro de la colección \texttt{users} se ha definido una regla que asegura que los usuarios solo puedan acceder y modificar sus propios datos, protegiendo la privacidad y manteniendo la integridad de los datos personales.
+Por otro lado, dentro de la colección \texttt{users} se ha definido una regla que asegura que los usuarios solo puedan acceder y modificar sus propios datos, protegiendo la privacidad y manteniendo la integridad de los datos personales. La regla se puede ver en la imagen \ref{img:FireBaseRegla}.
 
-\imagen{FireBaseRegla}{Regla definida en FireBase para el control de acceso a los datos.}
+\begin{figure}[h]
+	\label{img:FireBaseRegla}
+	\centering
+	\includegraphics[width=\textwidth]{FireBaseRegla}
+	\caption[Regla Firebase]{Regla definida en FireBase para el control de acceso a los datos.}
+\end{figure}
 
 
 \subsection{Blockchain}
@@ -116,17 +121,35 @@ En los contratos inteligentes, se usa mapeos y arrays para organizar y relaciona
 
 \item \textbf{mapping(uint256 => mapping(address => bool)) public tokenManagers}: Determina qué direcciones tienen permisos de gestión sobre un contrato específico, facilitando la administración.
 
+En la imagen \ref{img:EntidadRelacion} se puede observar el diagrama entidad-relación que muestra como las diferentes entidades se relacionan entre sí. 
+
 \end{itemize}
 
-\imagen{EntidadRelacion}{Diagrama entidad-relación}
+\begin{figure}[h]
+	\label{img:EntidadRelacion}
+	\centering
+	\includegraphics[width=\textwidth]{EntidadRelacion}
+	\caption[Diagrama entidad-relación]{Diagrama entidad-relación.}
+\end{figure}
+
 
 \section{Diseño procedimental}
 
 En esta sección se mostrarán los diagramas de secuencia de las dos tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato} y firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}.
 
-\imagen{SecuenciaCrearContrato}{Diagrama de secuencia para crear un contrato}
+\begin{figure}[h]
+	\label{img:SecuenciaCrearContrato}
+	\centering
+	\includegraphics[width=\textwidth]{SecuenciaCrearContrato}
+	\caption[Diagrama secuencia creación contrato]{Diagrama de secuencia para crear un contrato.}
+\end{figure}
 
-\imagen{SecuenciaFirmarContrato}{Diagrama de secuencia para firmar un contrato}
+\begin{figure}[h]
+	\label{img:SecuenciaFirmarContrato}
+	\centering
+	\includegraphics[width=\textwidth]{SecuenciaFirmarContrato}
+	\caption[Diagrama secuencia firmar contrato]{Diagrama de secuencia para firmar un contrato.}
+\end{figure}
 
 \section{Diseño arquitectónico}
 
