@@ -13,23 +13,23 @@ A continuación, describo alguno de los problemas más significativos y cómo lo
 
 En el momento en el que se intentó realizar la primera conexión con el contrato desde la aplicación móvil, surgió un problema con la biblioteca Web3, esencial para la interacción entre el frontend y el contrato inteligente.
 El error se producía a la hora de ejecutar la aplicación de forma nativa en el dispositivo móvil.
-El error describía un problema 'ReferenceError' indicando que la propiedad 'EventTarget' no existía en el motor de JavaScript Hermes utilizado por React Native. 
+El error describía un problema 'ReferenceError' indicando que la propiedad `EventTarget' no existía en el motor de JavaScript Hermes utilizado por React Native. 
 
-\textit{ReferenceError: Property 'EventTarget' doesn't exist, js engine: hermes ERROR Invariant Violation: "main" has not been registered.}
+\texttt{ReferenceError: Property `EventTarget' doesn't exist, js engine: hermes ERROR Invariant Violation: `main' has not been registered.}
 
 Sin embargo, desplegando la aplicación en un entorno web desde el navegador de mi ordenador esta biblioteca no producía ningún error y se consiguió establecer conexión exitosamente con el contrato inteligente.
-Este fue un problema que se alargó a lo largo de los dos siguientes sprints y se investigó de forma reiterada. Temiendo que se debía a un error de incompatibilidad con las versiones de las bibliotecas en mi proyecto, se fue probando diferentes combinaciones hasta que usando la versión 4.1 de la biblioteca Web3 ese error desapareció.
+Este fue un problema que se alargó durante los dos siguientes \textit{sprints} y se investigó de forma reiterada. Temiendo que se debía a un error de incompatibilidad con las versiones de las bibliotecas en mi proyecto, se fue probando diferentes combinaciones hasta que usando la versión 4.1 de la biblioteca Web3 ese error desapareció.
 El problema no se había solucionado ya que dicho error solo desapareció dejando paso a un nuevo error, en este caso el error describía un problema de reconocimiento similar al anterior pero con la propiedad 'TextEncoder' la cual es parte de la API de codificación que proporciona una forma de codificar texto en varios formatos, comúnmente utilizados en entornos web.
 
-\textit{ReferenceError: Property 'TextEncoder' doesn't exist, js engine: hermes.}
+\texttt{ReferenceError: Property `TextEncoder' doesn't exist, js engine: hermes.}
 
-React native no implementa todas las API web estándar que se encuentran en los navegadores modernos, por lo que es necesario agregar dicha característica de forma manual. Para ello he hecho uso de un polyfill, que es una biblioteca que pretente proporcionar una implmentación alternativa a la API de funciones nativas.
-Por tanto, se ha instalado 'text-encoding', que es un polyfill para la API de 'TextEncoder'.
-Seguidamente se ha creado un nuevo archivo en la raíz del proyecto al que he llamado 'globals.js', en este archivo se ha asignado 'TextEncoder' de 'text-encoding' a 'global.TextEncoder'. Es decir, que he agregado 'TextEnoder' al objeto global 'global' que actúa de forma similar al objeto 'window' en los navegadores.
+React native no implementa todas las API web estándar que se encuentran en los navegadores modernos, por lo que es necesario agregar dicha característica de forma manual. Para ello he hecho uso de un \textit{polyfill}, que es una biblioteca que pretente proporcionar una implmentación alternativa a la API de funciones nativas.
+Por tanto, se ha instalado `text-encoding', que es un polyfill para la API de `TextEncoder'.
+Seguidamente se ha creado un nuevo archivo en la raíz del proyecto al que he llamado `globals.js', en este archivo se ha asignado `TextEncoder' de `text-encoding' a `global.TextEncoder'. Es decir, que he agregado 'TextEnoder' al objeto global `global' que actúa de forma similar al objeto `window' en los navegadores.
 
-\textit{global.TextEncoder = require('text-encoding').TextEncoder;}
+\texttt{global.TextEncoder = require(`text-encoding').TextEncoder;}
 
-Luego importando 'globals.js' en mi archivo 'App,js' aseguro que 'TextEncoder' este disponible globalmente antes que cualquier otro objeto que dependa de él, evitando errores de referencia.
+Luego importando `globals.js' en mi archivo `App.js' aseguro que `TextEncoder' este disponible globalmente antes que cualquier otro objeto que dependa de él, evitando errores de referencia.
 
 
 \subsection{Tamaño de contrato muy grande}
@@ -37,13 +37,13 @@ Luego importando 'globals.js' en mi archivo 'App,js' aseguro que 'TextEncoder' e
 Durante el desarrollo en Solidity del contrato inteligente surgió un desafío inesperado relacionado con el tamaño del código del contrato.
 El proceso de desarrollo del contrato inteligente se ha realizado de forma iterativa, empezando con funciones básicas y gradualmente se fue implementando funcionalidades más complejas. Después de cada adición significativa, se procedía a migrar y testear el contrato para asegurar su correcto funcionamiento y rendimiento.
 
-En una de estas iteraciones, al intentar migrar el contrato, apareció un error que exponía un problema de que el código había superado los 24,576 bytes de tamaño, un límite establecido por la actualización "Spurious Dragon" de Ethereum. Este límite fue introducido para mitigar riesgos de ataques de denegación de servicio (DoS) que podrían ocurrir si se permitiera desplegar contratos de tamaño excesivamente grande.
+En una de estas iteraciones, al intentar migrar el contrato, apareció un error que exponía un problema de que el código había superado los 24576 bytes de tamaño, un límite establecido por la actualización "Spurious Dragon" de Ethereum. Este límite fue introducido para mitigar riesgos de ataques de denegación de servicio (DoS) que podrían ocurrir si se permitiera desplegar contratos de tamaño excesivamente grande.
 
-\textit{Warning: Contract code size is 26466 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.}
+\textit{code size is 26466 bytes and exceeds 24576 bytes (a limit introduced in Spurious Dragon). This contract may not be deployable on Mainnet. Consider enabling the optimizer (with a low "runs" value!), turning off revert strings, or using libraries.}
 
-Con el objetivo de que el contrato sea menor de esos 26576 bytes y así mantener toda la funcionalidad en un único contrato facilitando así su gestión y uso, se aplicaron diversas técnicas.
+Con el objetivo de que el contrato sea menor de esos 24576 bytes y así mantener toda la funcionalidad en un único contrato facilitando así su gestión y uso, se aplicaron diversas técnicas.
 En una primera instancia, se hizo una revisión del código para identificar y eliminar redundancias, optimizar las funciones existentes, y donde fue posible, integrar librerías externas que reemplazaran bloques de código repetitivos.
-Por otro lado, se habilitó el optimizador del compilador de Solidity, ajustando el número de 'runs' a un valor bajo, con la intención de reducir significativamente el tamaño del bytecode generado al optimizar la compilación con base en la frecuencia esperada de ejecución del código.
+Por otro lado, se habilitó el optimizador del compilador de Solidity, ajustando el número de \textit{runs} a un valor bajo, con la intención de reducir significativamente el tamaño del bytecode generado al optimizar la compilación con base en la frecuencia esperada de ejecución del código.
 
 Sin embargo, a medida que el proyecto evolucionaba y con la aparición de nuevas funcionalidades para implementar, esta estrategia de optimización dejó de ser sostenible y fue necesario modularizar el código. 
 Para ello se dividió el contrato en múltiples contratos más pequeños que interactúen entre sí mediante herencia o mediante llamadas a funciones de otros contratos.
@@ -67,7 +67,7 @@ No obstante, este método enfrentó grandes obstáculos técnicos, impidiendo es
 
 A raíz de este problema se investigaron alternativas para poder ofrecer una conexión estable entre la aplicación y la billetera móvil. De esta forma se planteó la utilización de 'WalletConnect', un protocolo de código abierto altamente utilizado por la comunidad y que facilita la comunicación entre billeteras móviles y aplicaciones descentralizadas mediante enlaces seguros. Tras un largo proceso de desarrollo, se logró implementar WalletConnect con la posibilidad de establecer conexiones no solo con MetaMask sino con otras cientos de billeteras.
 
-Sin embargo, la aplicación aún no era capaz de realizar operaciones a través de esta nueva configuración. Durante un par de sprints dedicados principalmente a este problema, se identificó la necesidad de una revisión completa de la arquitectura de la aplicación. 
+Sin embargo, la aplicación aún no era capaz de realizar operaciones a través de esta nueva configuración. Durante un par de \textit{sprints} dedicados principalmente a este problema, se identificó la necesidad de una revisión completa de la arquitectura de la aplicación. 
 Para ello se abandonó la biblioteca Web3, que había sido la pieza fundamental de conexión entre los contratos inteligentes y el frontEnd.
 En su lugar, se adaptó la aplicación para usar las bibliotecas Ethers, Wagmi y Viem, que ofrecían una mayor flexibilidad y compatibilidad con WalletConnect.
 
@@ -80,13 +80,13 @@ Esta transformación no solo resolvió los problemas iniciales, sino que tambié
 
 Entre los problemas que han surgido debido a incompatibilidades con la aplicación móvil, se ha identificado un error el cual imposibilita crear y conectar una red Ganache desde la aplicación móvil de MetaMask. Al igual que sucedía con la biblioteca Web3, este problema no existe en el desarrollo web.
 
-Como he mencionado anteriormente, para la ejecución de mi proyecto es necesario desplegar una red Ganache la cual normalmente se despliega en localhost. Sin embrago, para que el resto de dispositivos de la red puedan interactuar con ella, es neceario asignarle una dirección IP específica, en este caso la dirección IP de mi ordenador.
+Como he mencionado anteriormente, para la ejecución de mi proyecto es necesario desplegar una red Ganache la cual normalmente se despliega en \textit{localhost}. Sin embrago, para que el resto de dispositivos de la red puedan interactuar con ella, es neceario asignarle una dirección IP específica, en este caso la dirección IP de mi ordenador.
 Al desplegar Ganache se muestran datos importantes como la URL RPC y la ID de la cadena, las cuales son esenciales para configurar una red personaliada en MetaMask.
 A partir de esta configuración, Metamask permite importar cuentas disponibles en el entorno local de Ganache a través de su clave privada, replicando de esta forma un uso realista en el entorno de prueba de como se realizarían las interacciones mediante la billetera, la cual funciona como interfaz para interactuar con la blockchain.
 
 Sin embargo, he encontrado un problema al realizar este proceso en la aplicación móvil de MetaMask, a diferencia de la extensión de nevagador, la aplicación móvil no soporta de manera uniforme las redes HTTP Y HTTPS, devolviendome el siguiente error:
 
-\textit{Could not fetch chain ID. Is your RPC URL correct?}
+\texttt{Could not fetch chain ID. Is your RPC URL correct?}
 
 Este mensaje indica que no se puede recuperar el ID de la cadena, el cual es un identificador único de cada blockchain, crucial para la seguridad, utilizado por las billeteras para asegurar que interactúan con la red correcta.
 Este problema radica en que comúnmente, Ganache despliega la red usando HTTP en un entorno local, lo cual es apto para la extensión de navegador, pero no para la aplicación móvil ya que requiere HTTPS.
@@ -112,13 +112,13 @@ A pesar de los múltiples problemas enfrentados con la biblioteca Web3 durante t
 Por otro lado, para el correcto funcionamiento de la aplicación en una red blockchain real, fue necesario modificar todo el código donde se realizase alguna operación sobre el contrato.
 Una vez configurado todo, y en combinación con WalletConnect, se realizaron las primeras operaciones. Sin embargo, los tiempos de espera para la confirmación de acciones y las operaciones de lectura se vieron significativamente afectados por la latencia de la red principal, lo cual requirió de ajustes adicionales en la aplicación para mejorar la fluidez y la experiencia del usuario.
 
-A pesar de los éxitos iniciales, surgieron problemas al desplegar el contrato inteligente nuevamente en la red Sepolia, La API de Infura reportó que se había superado el límite de llamadas. 
+A pesar de los éxitos iniciales, surgieron problemas al desplegar el contrato inteligente nuevamente en la red Sepolia, la API de Infura reportó que se había superado el límite de llamadas. 
 Este fue un problema inesperado, debido que hasta el momento se había logrado desplegar el contrato en varias ocasiones. 
 No puedo asegurar el origen del problema, pero seguramente tenga que ver con que días antes la empresa reportó una alta demanda y se realizaron limitaciones en los servicios de IPFS. 
 Hasta día de hoy la API sigue devolviendo dicho error, por lo que esto llevó a explorar alternativas como Alchemy, que ofrecía límites más generosos en sus consultas. 
 A pesar de lograr desplegar el contrato usando Alchemy, se encontraron dificultades para interactuar desde la aplicación con el contrato a través de este proveedor.
 
-Ante la acumulación de desafíos y la falta de tiempo, se tomó la decisión de regresar a la implementación inicial utilizando Ganache, lo que resultó en una aplicación más estable y manejable para la detección de errores, pero sin la posibilidad de implementar el inicio de sesión con una billetera. Este cambio, aunque marcó un retroceso en algunos aspectos, permitió un contacto valioso con la red Ethereum real y abrió caminos para el futuro desarrollo del proyecto, dejando establecida una base de código preparada para operar en este entorno.
+Ante la acumulación de desafíos y la falta de tiempo, se tomó la decisión de regresar a la implementación inicial utilizando Ganache, lo que resultó en una aplicación más estable y manejable para la detección de errores, pero sin la posibilidad de implementar el inicio de sesión con una billetera. Este cambio, aunque marcó un retroceso en a etapas anteriores del diseño e implementación de la aplicación, permitió un contacto valioso con la red Ethereum real y abrió caminos para el futuro desarrollo del proyecto, dejando establecida una base de código preparada para operar en este entorno.
 
 
 
@@ -133,13 +133,18 @@ Sin embargo, en el momento que se importaba la biblioteca de Web3, la aplicació
 
 A medida que el proyecto evolucionaba, surgió la idea de establecer un inicio de sesión usando billeteras como MetaMask y más adelante WalletConnect. Considerando esta integración, mantener la autenticación de Firebase parecía redundante, por lo que se decidió prescindir de la idea de realizar la autenticación de usuario con firebase en favor de la autenticación basada en billeteras.
  
-No obstante, en las últimas semanas de desarrollo del proyecto como bien se ha comentado anterioridad, tras enfrentar múltiples dificultades con la implementación de las billeteras y descartar dicha posibilidad, la necesidad de implementar una autenticación de usuario volvió resurgió.
+No obstante, en las últimas semanas de desarrollo del proyecto como bien se ha comentado anterioridad, tras enfrentar múltiples dificultades con la implementación de las billeteras y descartar dicha posibilidad, la necesidad de implementar una autenticación de usuario resurgió.
 Por lo tanto, se reanudó la investigación sobre la incompatibilidad de Firebase y la biblioteca Web3, debido a un error específico que se desencadenaba por la presencia de Web3 en el proyecto, afectando la verificación de usuarios.
 
-Tras un análisis y varias pruebas, se ideó una solución que consistía en implementar la importación "perezosa" de Web3. Esto implica cargar Web3 sólo después de que la autenticación de usuario fuera exitosa. Para llevar a cabo esta estrategia, se utilizó la técnica de "dynamic imports" de JavaScript, que permite cargar módulos de manera condicional y asíncrona. 
+Tras un análisis y varias pruebas, se ideó una solución que consistía en implementar la importación `perezosa' de Web3 (ver imagen \ref{img:CodeWeb3Lazy}). Esto implica cargar Web3 sólo después de que la autenticación de usuario fuera exitosa. Para llevar a cabo esta estrategia, se utilizó la técnica de `dynamic imports' de JavaScript, que permite cargar módulos de manera condicional y asíncrona. 
 Para ello, en vez de importar la biblioteca Web3, se llamará a este fragmento de código, el cual primero verifica si ya existe una instancia de Web3, devolviendo esta instancia si está disponible. En caso de que no haya una instancia previa, se procede a importar Web3 de manera dinámica solo cuando el usuario necesite realizar una acción que involucre dicha biblioteca.
 Además, el uso de promesas asegura que la carga del módulo se maneje de manera asíncrona  sin interrumpir la interacción del usuario.
 
-\imagen{CodeWeb3Lazy}{Importación perezosa Web3}{1}
+\begin{figure}[h]
+	\label{img:CodeWeb3Lazy}
+	\centering
+	\includegraphics[width=\textwidth]{CodeWeb3Lazy}
+	\caption[Importación perezosa Web3]{Importación perezosa Web3.}
+\end{figure}
 
 Este ajuste no sólo resolvió el problema técnico, sino que también permitió mantener el diseño inicial del proyecto, aprovechando la escalabilidad, seguridad y facilidad de uso de Firebase para la gestión de usuarios, mientras se mantiene la capacidad de integrar Web3 para futuras funcionalidades relacionadas con blockchain.

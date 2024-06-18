@@ -14,7 +14,8 @@ Para implementar la persistencia, a parte del uso de la blockchain, se ha decidi
 El uso de FireStore en la aplicación se dirige a lo los datos que no requieren las propiedades de inmutabilidad de la blockchain. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
 Al delegar la gestión de datos no críticos a Firestore, se minimiza la carga sobre la blockchain, lo que resulta en una reducción significativa en el consumo de gas durante las transacciones. Esta optimización no solo mejora la eficiencia de los contratos inteligentes sino que también reduce los costos operativos para los usuarios, haciendo que la aplicación sea más accesible y económicamente viable.
 La elección de FireBase como plataforma de gestión de bases de datos NoSQL de debe a su escalabilidad automática y rendimiento en tiempo real.
-Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la blockchain para transacciones críticas.
+Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la blockchain para transacciones críticas. 
+El diagrama Entidad-Relación se puede observar en \ref{fig:EntidadRelacion}.
 
 La colección \texttt{users} incluye los siguientes atributos:
 \begin{itemize}
@@ -97,37 +98,134 @@ La estructura \texttt{ChangeProposal} se utiliza para gestionar propuestas de ca
      propuesta está pendiente de aprobación.
 \end{itemize}
 
+En los contratos inteligentes, se usa mapeos y arrays para organizar y relacionar de manera eficiente a los usuarios con los contratos.
 
-1. Mapeos y Arrays de Usuarios
-Incluir detalles sobre cómo se manejan los usuarios y sus relaciones con los contratos en el sistema:
+\begin{itemize}
 
-contractsOwner: Mapeo de los propietarios de los contratos y sus respectivos contratos.
-activeContractsOfWorker: Mapeo que guarda los contratos activos asignados a un trabajador.
-unsignedContractsOfWorker: Mapeo que lista los contratos no firmados de cada trabajador.
-tokenManagersList:
-Estas estructuras ayudan a rastrear la asignación y el estado de los contratos entre diferentes partes.
+\item \textbf{mapping(uint256 => ContractDetails)}: almacena los datos de cada contrato mediante el \texttt{tokenId}, que es un identificador único.
 
+\item \textbf{mapping(uint256 => ChangeProposal)}: almacena las propuestas de cambios en contratos mediante el \texttt{tokenId}, que es un identificador único.
 
+\item \textbf{mapping(address => uint256[]) public contractsOwner}: relaciona cada empleador con una lista de \texttt{tokenIds} que representa los contratos que ha emitido.
 
-2. Eventos del Contrato
-Detallar los eventos definidos para emitir notificaciones o registros de acciones clave dentro del contrato:
+\item \textbf{mapping(address => uint256[]) public activeContractsOfWorker}: Mantiene un registro de los contratos activos asignados a cada trabajador.
 
-ContractSigned
-ContractFinalized
-SalaryReleased
-TokenMinted
-ContractCancelled
-ChangeProposed
-ApprovalChanges
-RejectChanges
+\item \textbf{mapping(address => uint256[]) public unsignedContractsOfWorker}: Lista los contratos que han sido ofrecidos a un trabajador pero que aún no han sido firmados.
+
+\item \textbf{mapping(uint256 => address[]) public tokenManagersList}: Almacena una lista de direcciones que tienen permisos de gestión para un contrato.
+
+\item \textbf{mapping(uint256 => mapping(address => bool)) public tokenManagers}: Determina qué direcciones tienen permisos de gestión sobre un contrato específico, facilitando la administración.
+
+\end{itemize}
+
+\imagen{EntidadRelacion}{Diagrama entidad-relación}
 
 \section{Diseño procedimental}
 
+En esta sección se mostrarán los diagramas de secuencia de las dos tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato} y firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}.
 
+\imagen{SecuenciaCrearContrato}{Diagrama de secuencia para crear un contrato}
+
+\imagen{SecuenciaFirmarContrato}{Diagrama de secuencia para firmar un contrato}
 
 \section{Diseño arquitectónico}
 
+En este apartado se hablará de los patrones y estructuras que se han empleado en el proyecto.
 
+\subsection{Estructura de la aplicación}
+
+Antes de adentrarnos en los patrones de diseño específicos que estructuran el proyecto, es necesario comprender la arquitectura subyacente de la aplicación. 
+Esta estructura no solo define la organización lógica y física de los componentes del software, sino que también establece las bases para un sistema robusto y escalable.
+
+La aplicación está dividida en varios módulos principales, cada uno con responsabilidades claras y bien definidas. Esta separación facilita tanto el desarrollo como el mantenimiento. Además, tal estructura modular hace que el sistema sea más manejable y menos propenso a errores.
+
+\subsection{Patrón Singleton}
+
+El patrón Singleton es un diseño software que se utiliza para restringir la instanciación de una clase a un solo objeto. El patrón Singleton se implementa al crear una clase con un método que crea una nueva instancia de la clase si una no existe. En caso de que la instancia ya exista, simplemente devuelve una referencia a ese objeto.
+
+En nuestro proyecto, el patrón Singleton se aplica en la clase \textit{EtherProvider} (ver imagen \ref{img:singleton}) para manejar tanto la conexión a la \textit{blockchain} mediante Web3 como la instancia del contrato inteligente, garantizando que ambos sean únicos y globalmente accesibles.
+
+\begin{figure}[h]
+	\label{img:singleton}
+	\centering
+	\includegraphics[width=\textwidth]{singleton}
+	\caption[Diagrama Singleton]{Diagrama UML de la estructura del Singleton.}
+\end{figure}
+
+La implementación de patrón Singleton en el proyecto ofrece ventajas significativas: 
+
+\begin{itemize}
+\item \textbf{Eficiencia de recursos}: Solo se crea una instancia, ahorrando recursos y evitando la sobrecarga de establecer múltiples conexiones a la red.
+
+\item \textbf{Consistencia}: Se mantiene una única conexión a lo largo de toda la aplicación, asegurando que todas las operaciones sobre la \textit{blockchain} se manejan de manera consistente.
+
+\item \textbf{Gestión Centralizada}: Facilita la gestión y acceso a la red \textit{blockchain}, ya que los cambios en la conexión se manejan en un único lugar.
+\end{itemize}
+
+\subsection{Patrón Módulo}
+
+El Patrón de Módulos es una pieza fundamental en la estructura de diseño y organización del código, permitiendo una clara división y encapsulación de funcionalidades dentro de la aplicación. Este patrón se manifiesta a través de la separación lógica de diferentes áreas de funcionalidad en directorios y archivos específicos, cada uno destinado a manejar distintos aspectos del sistema, facilitando así tanto el desarrollo como el mantenimiento de la aplicación.
+
+Por ejemplo, la aplicación incluye directorios como `Contracts', `components', `Screens' o `AppLogin', cada uno abordando un conjunto específico de responsabilidades dentro de la aplicación:
+
+\begin{itemize}
+\item \textbf{Contracts}: Gestiona toda la lógica relacionada con los contratos inteligentes.
+
+\item \textbf{AppLogin}: Maneja la autenticación de usuarios.
+
+\item \textbf{Components}: Contiene elementos de UI reutilizables como botones.
+
+\item \textbf{Screens}: Encapsula los componentes de UI para cada pantalla de la aplicación.
+\end{itemize}
+
+Esta modularización asegura que los cambios dentro de un módulo específico puedan realizarse sin afectar a otras partes del sistema. Al mantener cada módulo independiente, se mejora significativamente la legibilidad y la mantenibilidad del código.
 
 \section{Diseño de interfaces}
 
+Antes del desarrollo de la interfaz de la aplicación, se experimentó y depuró un prototipo de la misma.
+Las interfaces fueron diseñadas teniendo en cuenta la usabilidad de la aplicación, priorizando un diseño simple que permitiera que la aplicación fuera intuitiva, con una curva de aprendizaje suave.
+También se ha considerado que la aplicación sea adaptable a una amplia variedad de pantallas, ya que puede ser utilizada tanto en dispositivos móviles como en tabletas.
+
+El diseño de los prototipos para la aplicación incluye varias pantallas clave: pantalla de inicio de sesión, permitiendo la autenticación de los usuarios (ver imagen \ref{img:prototipoLogin}); la pantalla principal, que actúa como punto de entrada intuitivo (ver imagen \ref{img:prototipoHome}); la pantalla de creación de contratos, donde los usuarios pueden interactuar de manera clara y directa para establecer acuerdos(ver imagen \ref{img:prototipoCrearContrato}); la pantalla de visualización de contratos , diseñada para proporcionar una experiencia fluida al revisar contratos existentes (ver imagen \ref{img:prototipoVerContratos}); la pantalla de información y utilidades, que ofrece recursos y herramientas fácilmente accesibles (ver imagen \ref{img:prototipoInfo}); y la pantalla de estado de cuenta, que muestra de manera clara y concisa la información financiera relevante del usuario (ver imagen \ref{img:prototipoCartera}). 
+
+\begin{figure}[h]
+	\label{img:prototipoLogin}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoLogin}
+	\caption[Prototipo pantalla inicio de sesión]{Prototipo pantalla inicio de sesión.}
+\end{figure}
+
+\begin{figure}[h]
+	\label{img:prototipoHome}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoHome}
+	\caption[Prototipo pantalla principal]{Prototipo pantalla principal.}
+\end{figure}
+
+\begin{figure}[h]
+	\label{img:prototipoCrearContrato}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoCrearContrato}
+	\caption[Prototipo pantalla crear contrato]{Prototipo pantalla crear contrato.}
+\end{figure}
+
+\begin{figure}[h]
+	\label{img:prototipoVerContratos}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoVerContratos}
+	\caption[Prototipo pantalla ver contratos del usuario]{Prototipo pantalla ver contratos del usuario.}
+\end{figure}
+
+\begin{figure}[h]
+	\label{img:prototipoInfo}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoInfo}
+	\caption[Prototipo pantalla información y utilidades]{Prototipo pantalla información y utilidades.}
+\end{figure}
+
+\begin{figure}[h]
+	\label{img:prototipoCartera}
+	\centering
+	\includegraphics[width=0.55\textwidth]{prototipoCartera}
+	\caption[Prototipo pantalla estado cuenta del usuario]{Prototipo pantalla estado cuenta del usuario.}
+\end{figure}
