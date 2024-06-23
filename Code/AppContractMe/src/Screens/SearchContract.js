@@ -35,6 +35,7 @@ export default function SearchContracts() {
                     setUnsignedContracts(filteredContracts);
                 } catch (error) {
                     console.error("Error al obtener contratos sin firmar:", error);
+                    alert("Error al obtener contratos sin firmar.");
                 }
             };
 

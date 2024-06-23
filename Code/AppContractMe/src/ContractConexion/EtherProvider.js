@@ -6,7 +6,7 @@ let myContractInstance = null;
 export async function getWeb3() {
     if (!web3Instance) {
         const { default: Web3 } = await import("web3");
-        const Url = "http://192.168.1.33:8545";
+        const Url = "http://192.168.1.33:8545"; //sustituir 192.168.1.33 por tu IP
         web3Instance = new Web3(new Web3.providers.HttpProvider(Url));
     }
     return web3Instance;

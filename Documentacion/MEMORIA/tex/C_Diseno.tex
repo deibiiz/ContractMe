@@ -7,15 +7,16 @@ En este apéndice se explicarán los distintos diseños de la aplicación, desde
 \section{Diseño de datos}
 
 A continuación se describirá cómo se ha desarrollado el diseño de datos de la aplicación.
-Para implementar la persistencia, a parte del uso de la blockchain, se ha decidido utilizar una base de datos de FireBase, para almacenar datos sobre los usuarios y gestionar su autenticación.
+Para implementar la persistencia, a parte del uso de la \textit{blockchain}, se ha decidido utilizar una base de datos de Firebase, para almacenar datos sobre los usuarios y gestionar su autenticación.
 
 \subsection{Base de datos}
 
-El uso de FireStore en la aplicación se dirige a lo los datos que no requieren las propiedades de inmutabilidad de la blockchain. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
-Al delegar la gestión de datos no críticos a Firestore, se minimiza la carga sobre la blockchain, lo que resulta en una reducción significativa en el consumo de gas durante las transacciones. Esta optimización no solo mejora la eficiencia de los contratos inteligentes sino que también reduce los costos operativos para los usuarios, haciendo que la aplicación sea más accesible y económicamente viable.
-La elección de FireBase como plataforma de gestión de bases de datos NoSQL de debe a su escalabilidad automática y rendimiento en tiempo real.
-Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la blockchain para transacciones críticas. 
-El diagrama Entidad-Relación se puede observar en \ref{fig:EntidadRelacion}.
+El uso de Firestore en la aplicación se dirige a lo los datos que no requieren las propiedades de inmutabilidad de la \textit{blockchain}. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
+Al delegar la gestión de datos no críticos en Firestore, se minimiza la carga sobre la \textit{blockchain}, lo que resulta en una reducción significativa en el consumo de gas durante las transacciones. Esta optimización no solo mejora la eficiencia de los contratos inteligentes sino que también reduce los costos operativos para los usuarios, haciendo que la aplicación sea más accesible y económicamente viable.
+La elección de Firebase como plataforma de gestión de bases de datos NoSQL de debe a su escalabilidad automática y rendimiento en tiempo real.
+Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la \textit{blockchain} para transacciones críticas. 
+El diagrama Entidad-Relación se puede observar en \ref{img:EntidadRelacion}.
+
 
 La colección \texttt{users} incluye los siguientes atributos:
 \begin{itemize}
@@ -24,7 +25,7 @@ La colección \texttt{users} incluye los siguientes atributos:
      usuario.
     \item \textbf{apellido2} (\texttt{string}): Segundo apellido del
      usuario.
-    \item \textbf{pais} (\texttt{string}): Pais de residencia del usuario
+    \item \textbf{pais} (\texttt{string}): País de residencia del usuario
     \item \textbf{paisCode} (\texttt{string}): Código del país de
      residencia en formato iso.
     \item \textbf{ciudad} (\texttt{string}): Ciudad de residencia del
@@ -34,14 +35,11 @@ La colección \texttt{users} incluye los siguientes atributos:
     \item \textbf{dni} (\texttt{string}): Documento Nacional de Identidad
      del usuario.
     \item \textbf{fecha} (\texttt{timeStamp}): Fecha de nacimiento del
-     usuario. Formato: día de mes de año, hora:minuto:segundo AM/PM
-     UTC+offset.
-    \item \textbf{telefono} (\texttt{number}): Número de teléfono del
+     usuario. Formato: día de mes de año, hora:minuto:segundo.
+    \item \textbf{teléfono} (\texttt{number}): Número de teléfono del
      usuario.
     \item \textbf{ganache} (\texttt{string}): Dirección de la billetera del
-     usuario en la red blockchain.
-
-
+     usuario en la red \textit{blockchain}.
 \end{itemize}
 
 Como clave primaria del documento se usa el ID del usuario, generado automáticamente con la creación del mismo, que proporciona un identificador único para cada usuario.
@@ -52,7 +50,7 @@ Por otro lado, dentro de la colección \texttt{users} se ha definido una regla q
 	\label{img:FireBaseRegla}
 	\centering
 	\includegraphics[width=\textwidth]{FireBaseRegla}
-	\caption[Regla Firebase]{Regla definida en FireBase para el control de acceso a los datos.}
+	\caption[Regla Firebase]{Regla definida en Firebase para el control de acceso a los datos.}
 \end{figure}
 
 
@@ -103,7 +101,7 @@ La estructura \texttt{ChangeProposal} se utiliza para gestionar propuestas de ca
      propuesta está pendiente de aprobación.
 \end{itemize}
 
-En los contratos inteligentes, se usa mapeos y arrays para organizar y relacionar de manera eficiente a los usuarios con los contratos.
+En los contratos inteligentes, se usa mapeos y \textit{arrays} para organizar y relacionar de manera eficiente a los usuarios con los contratos.
 
 \begin{itemize}
 
@@ -135,7 +133,7 @@ En la imagen \ref{img:EntidadRelacion} se puede observar el diagrama entidad-rel
 
 \section{Diseño procedimental}
 
-En esta sección se mostrarán los diagramas de secuencia de las dos tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato} y firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}.
+En esta sección se mostrarán los diagramas de secuencia de las dos tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato}) y firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}).
 
 \begin{figure}[h]
 	\label{img:SecuenciaCrearContrato}
@@ -166,7 +164,7 @@ La aplicación está dividida en varios módulos principales, cada uno con respo
 
 El patrón Singleton es un diseño software que se utiliza para restringir la instanciación de una clase a un solo objeto. El patrón Singleton se implementa al crear una clase con un método que crea una nueva instancia de la clase si una no existe. En caso de que la instancia ya exista, simplemente devuelve una referencia a ese objeto.
 
-En nuestro proyecto, el patrón Singleton se aplica en la clase \textit{EtherProvider} (ver imagen \ref{img:singleton}) para manejar tanto la conexión a la \textit{blockchain} mediante Web3 como la instancia del contrato inteligente, garantizando que ambos sean únicos y globalmente accesibles.
+En nuestro proyecto, el patrón Singleton se aplica en la clase \texttt{EtherProvider} (ver imagen \ref{img:singleton}) para manejar tanto la conexión a la \textit{blockchain} mediante Web3 como la instancia del contrato inteligente, garantizando que ambos sean únicos y globalmente accesibles.
 
 \begin{figure}[h]
 	\label{img:singleton}
@@ -189,7 +187,7 @@ La implementación de patrón Singleton en el proyecto ofrece ventajas significa
 
 El Patrón de Módulos es una pieza fundamental en la estructura de diseño y organización del código, permitiendo una clara división y encapsulación de funcionalidades dentro de la aplicación. Este patrón se manifiesta a través de la separación lógica de diferentes áreas de funcionalidad en directorios y archivos específicos, cada uno destinado a manejar distintos aspectos del sistema, facilitando así tanto el desarrollo como el mantenimiento de la aplicación.
 
-Por ejemplo, la aplicación incluye directorios como `Contracts', `components', `Screens' o `AppLogin', cada uno abordando un conjunto específico de responsabilidades dentro de la aplicación:
+Por ejemplo, la aplicación incluye directorios como \texttt{Contracts}, \texttt{components}, \texttt{Screens} o \texttt{AppLogin}, cada uno abordando un conjunto específico de responsabilidades dentro de la aplicación:
 
 \begin{itemize}
 \item \textbf{Contracts}: Gestiona toda la lógica relacionada con los contratos inteligentes.
@@ -214,41 +212,41 @@ El diseño de los prototipos para la aplicación incluye varias pantallas clave:
 \begin{figure}[h]
 	\label{img:prototipoLogin}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoLogin}
+	\includegraphics[width=0.40\textwidth]{prototipoLogin}
 	\caption[Prototipo pantalla inicio de sesión]{Prototipo pantalla inicio de sesión.}
 \end{figure}
 
 \begin{figure}[h]
 	\label{img:prototipoHome}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoHome}
+	\includegraphics[width=0.40\textwidth]{prototipoHome}
 	\caption[Prototipo pantalla principal]{Prototipo pantalla principal.}
 \end{figure}
 
 \begin{figure}[h]
 	\label{img:prototipoCrearContrato}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoCrearContrato}
+	\includegraphics[width=0.40\textwidth]{prototipoCrearContrato}
 	\caption[Prototipo pantalla crear contrato]{Prototipo pantalla crear contrato.}
 \end{figure}
 
 \begin{figure}[h]
 	\label{img:prototipoVerContratos}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoVerContratos}
+	\includegraphics[width=0.40\textwidth]{prototipoVerContratos}
 	\caption[Prototipo pantalla ver contratos del usuario]{Prototipo pantalla ver contratos del usuario.}
 \end{figure}
 
 \begin{figure}[h]
 	\label{img:prototipoInfo}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoInfo}
+	\includegraphics[width=0.40\textwidth]{prototipoInfo}
 	\caption[Prototipo pantalla información y utilidades]{Prototipo pantalla información y utilidades.}
 \end{figure}
 
 \begin{figure}[h]
 	\label{img:prototipoCartera}
 	\centering
-	\includegraphics[width=0.55\textwidth]{prototipoCartera}
+	\includegraphics[width=0.40\textwidth]{prototipoCartera}
 	\caption[Prototipo pantalla estado cuenta del usuario]{Prototipo pantalla estado cuenta del usuario.}
 \end{figure}

@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Boton from "../components/Boton";
 
 
-
 const LoginScreen = () => {
 
     const [user, setUser] = useState(null);
@@ -19,8 +18,8 @@ const LoginScreen = () => {
         console.log(data, "async")
 
         try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            //const response = await signInWithEmailAndPassword(auth, "admin2@gmail.com", "admin2");
+            //const response = await signInWithEmailAndPassword(auth, email, password);
+            const response = await signInWithEmailAndPassword(auth, "admin8@gmail.com", "admin8");
             setUser(response.user);
             setError("");
 
@@ -28,11 +27,11 @@ const LoginScreen = () => {
                 console.log("Usuario logueado");
             }
         } catch (err) {
-            setError(err.message);
+            const errorMessage = "Error al iniciar sesión. Por favor intentelo de nuevo."
+            setError(errorMessage);
             console.log(err.message);
         }
     };
-
 
 
     return (

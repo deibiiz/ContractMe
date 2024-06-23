@@ -84,7 +84,7 @@ contract("MyContract", accounts => {
 
     it("Comprueba que un manager pueda modificar un contrato", async () => {
         const contract = await MyContract.deployed();
-        const newSalary = web3.utils.toWei("2", "ether");
+        const newSalary = web3.utils.toWei("0.5", "ether");
         const newDuration = 20;
         const nwedescription = "Nuevo Contrato de prueba";
         const newTitle = "Nuevo titulo de prueba";

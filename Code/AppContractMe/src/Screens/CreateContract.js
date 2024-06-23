@@ -97,7 +97,7 @@ export default function CreateContract() {
             }
 
             if (_to === selectedAccount) {
-                alert("No puedes crear un contrato con tu propia dirección");
+                alert("No puedes crear un contrato con tu propia dirección.");
                 return;
             }
 
