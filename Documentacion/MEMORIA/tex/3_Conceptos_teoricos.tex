@@ -115,7 +115,7 @@ El mecanismo de consenso en una \textit{blockchain} es fundamental para mantener
 Actualmente existen dos categorías amplias de protocolos de consenso, los de finalidad probabilística, representados fundamentalmente por \textbf{Proof of work} (PoW), implica que la confirmación de una transacción se vuelve más segura a medida que se van confirmando bloques sucesivos.
 Por otro lado, los protocolos con finalidad absoluta, como \textbf{Proof of Stake} (PoS) aseguran la finalización de las transacciones de manera definitiva una vez se agregan a la \textit{blockchain}.
 
-El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las \textit{blockchains}. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complejo, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado \textit{nonce} que cuando se combina con los datos del bloque y se procesa a través de una función \textit{hash} produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del \textit{hash}.
+El protocolo Proof of Work se destaca como el mecanismo de consenso más empleado en las \textit{blockchains}. En PoW, los participantes de la red, conocidos como mineros, compiten para resolver un problema criptográfico complejo, el cual requiere un considerable poder computacional. Este problema implica encontrar un valor llamado \textit{nonce}\footnote{El \textit{nonce} es un valor arbitrario que se utiliza en la minería de criptomonedas para encontrar un hash criptográfico válido bajo el protocolo Proof of Work. Es fundamental en el proceso de minería, ya que se ajusta repetidamente para generar diferentes hashes hasta que se consigue uno que cumpla con los criterios de la red.} que cuando se combina con los datos del bloque y se procesa a través de una función \textit{hash} produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del \textit{hash}. que cuando se combina con los datos del bloque y se procesa a través de una función \textit{hash} produce un resultado que cumple con una criterio especifico, generalmente que contenga un cierto número de ceros al principio del \textit{hash}.
 Este proceso, conocido como minería, garantiza que alterar un bloque ya minado sea computacionalmente inviable, proporcionando así seguridad e inmutabilidad a la cadena de bloques. A su vez, la dificultad de este problema se ajusta periódicamente para mantener un tiempo objetivo entre la creación de bloques consecutivos, asegurando la estabilidad y previsibilidad de la generación de nuevos bloques.
 La labor de los mineros en la \textit{blockchain} no es altruista, este poder de cómputo es recompensado de tal manera que el primer minero en resolver el problema es recompensado con una cantidad fijada de criptomonedas~\cite{PoW}.
 
@@ -326,13 +326,13 @@ Sin embargo, se enfrentan a desafíos en cuanto a cuestiones legales, la necesid
 
 
 
-\section{Tokenización}
+\section{\textit{Tokenización}}
 
-La tokenización~\cite{tokenización} es el proceso de convertir la información delicada o activos del mundo real en representaciones digitales denominadas \textit{tokens}, dentro del ecosistema \textit{blockchain}.
+La \textit{tokenización}~\cite{tokenización} es el proceso de convertir la información delicada o activos del mundo real en representaciones digitales denominadas \textit{tokens}, dentro del ecosistema \textit{blockchain}.
 Este procedimiento juega un papel crucial en la protección de datos confidenciales al reemplazar la información original con un \textit{token} único, el cual no tiene valor fuera de su contexto específico de uso.
 
-La información sensible se almacena en la `bóveda de tokenización'~\cite{bóvedaTokenización} una infraestructura de almacenamiento segura donde los datos originales se cifran y aíslan. El acceso a la bóveda es solo posible a través de rigurosos controles de seguridad y claves de descifrado específicas.
-A diferencia de los métodos de cifrado que utilizan un algoritmo matemático para transformar datos en un formato ilegible que puede ser revertido usando un clave concreta, la tokenizción no mantiene una relación algorítmica con los datos originales. En consecuencia, los \textit{tokens} generados no pueden ser revertidos sin un acceso autorizado a la bóveda de tokenización, lo que proporciona una capa adicional de seguridad.
+La información sensible se almacena en la `bóveda de \textit{tokenización}'~\cite{bóvedaTokenización} una infraestructura de almacenamiento segura donde los datos originales se cifran y aíslan. El acceso a la bóveda es solo posible a través de rigurosos controles de seguridad y claves de descifrado específicas.
+A diferencia de los métodos de cifrado que utilizan un algoritmo matemático para transformar datos en un formato ilegible que puede ser revertido usando un clave concreta, la \textit{tokenización} no mantiene una relación algorítmica con los datos originales. En consecuencia, los \textit{tokens} generados no pueden ser revertidos sin un acceso autorizado a la bóveda de \textit{tokenización}, lo que proporciona una capa adicional de seguridad.
 Por lo tanto, mientras los datos originales se almacenan en una bóveda de \textit{tokens} segura, los \textit{tokens} se distribuyen en sistemas internos para su utilización diaria.
 
 Un elemento importante de los \textit{tokens} es que, fuera de la relación financiera específica para la que fueron creados, carecen totalmente de valor. Ya que una función de los mismos es representar un valor específico en una relación determinada. Esta característica los distingue de las criptomonedas y otros activos digitales que pueden tener un valor en el mercado abierto.
@@ -367,7 +367,7 @@ El ejemplo más conocido es Bitcoin, convirtiéndolo en una herramienta poderosa
 Los NFT han emergido como una innovación disruptiva en el ámbito del comercio electrónico, especialmente en el mundo del arte digital.
 A diferencia de los tokens fungibles, cada NFT es una certificación criptográfica que contiene información y códigos de identificación únicos que los hacen irremplazables e intercambiables.
 Esta característica los hace particularmente adecuados para representar activos digitales únicos y derechos de propiedad en el mundo digital.
-En el contexto de los contratos laborales, los NFT pueden ser utilizados para tokenizar y asegurar la autenticidad de contratos individuales, garantizando que los términos acordados sean únicos y vinculados inequívocamente a las partes involucradas~\cite{NFTintroducción}.
+En el contexto de los contratos laborales, los NFT pueden ser utilizados para \textit{tokenizar} y asegurar la autenticidad de contratos individuales, garantizando que los términos acordados sean únicos y vinculados inequívocamente a las partes involucradas~\cite{NFTintroducción}.
 
 
 \subsubsection{ERC-721}
@@ -378,7 +378,7 @@ Abriendo las puertas a una nueva dimensión de activos digitales únicos, a dife
 La creación del estándar ERC-721 fue motivada por la creciente demanda de tokens digitales que pudieran representar de manera única activos individuales.
 La singularidad de los tokens ERC-721 les dota de gran utilidad en aplicaciones donde el ámbito de autenticidad y la propiedad exclusiva son cruciales.
 Su uso mas popular se enfoca en el mundo del arte, asegurando la autenticidad y unicidad de diferentes obras, aunque también ha tomado gran relevancia en el ámbito legal. 
-Poniendo de ejemplo este proyecto, con el uso del estándar ERC-721 se puede tokenizar y autenticar contratos laborales, asegurando la transparencia y la inmutabilidad de los términos acordados, verificando el cumplimiento de los acuerdos.
+Poniendo de ejemplo este proyecto, con el uso del estándar ERC-721 se puede \textit{tokenizar} y autenticar contratos laborales, asegurando la transparencia y la inmutabilidad de los términos acordados, verificando el cumplimiento de los acuerdos.
 
 Este estándar cuenta con una serie de propiedades técnicas que lo hacen versátil. Algunas de estas propiedades son la asignación de un nombre, la definición de un balance de tokens dentro de una dirección y la implementación de funciones que permiten la transferencia segura de la propiedad.
 
