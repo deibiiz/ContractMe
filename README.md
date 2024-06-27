@@ -42,15 +42,15 @@ garantizando la seguridad de todos los trámites.
     3. Asegurar que el modo activo es 'Expo Go' y no 'development build'.
     4. Escanear el código QR desde la aplicación móvil Expo Go.
 
-## Contact
+## Contacto
 
 Email [dmb1004@alu.ubu.es](mailto:dbm1004@alu.ubu.es)
 
-## Authors and acknowledgment
+## Autores y agradecimientos
 
 En colaboración con la [Universidad de Burgos](https://www.ubu.es/) y [HP SCDS](https://hpscds.com/innovacion/observatorio-tecnologico/)
 
-## License
+## Licencia
 
 Este proyecto esta bajo la [Licencia MIT](https://gitlab.com/HP-SCDS/Observatorio/2023-2024/contractme/ubu-contractme/-/blob/main/LICENSE)
 
