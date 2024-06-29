@@ -40,20 +40,20 @@ Por otro lado, también existe el directorio \textbf{SmartContract} que recoge t
 
 Finalmente hay otro directorio llamada \textbf{ganache\_db} el cual se utiliza para almacenar la configuración y los datos de la base de datos de Ganache.
 
-Toda la jerarquía de la aplicación se puede observar en la imagen \ref{img:FolderTree}.
+Toda la jerarquía de la aplicación se puede observar en la imagen \ref{fig:FolderTree}.
 
 \begin{figure}[h]
-	\label{img:FolderTree}
 	\centering
 	\includegraphics[width=\textwidth]{FolderTree}
 	\caption[Directorios del proyecto]{Directorios del proyecto.}
+	\label{fig:FolderTree}
 \end{figure}
 
 
 \section{Manual del programador}
 
 Este apartado servirá de ayuda y referencia a futuros desarrolladores que quieran replicar el proyecto. 
-Por ello se detallará los requisitos necesarios y el proceso de instalación para el desarrollo de la aplicación. 
+Por ello se detallarán los requisitos necesarios y el proceso de instalación para el desarrollo de la aplicación. 
 
 \subsection{Entorno desarrollo}
 
@@ -85,7 +85,7 @@ Antes de explicar la instalación de los programas y herramientas para el desarr
 
 \end{enumerate}
 
-Por otro lado, aunque no es un requisito obligatorio, se recomienda contar con un dispositivo Android físico para ejecutar la aplicación y hacer uso de funcionalidades nativas como el reconocimiento de huella, siendo necesario las siguientes especificaciones.
+Por otro lado, aunque no es un requisito obligatorio, se recomienda contar con un dispositivo Android físico para ejecutar la aplicación y hacer uso de funcionalidades nativas como el reconocimiento de huella, siendo necesarias las siguientes especificaciones:
 
 \begin{enumerate}
 
@@ -119,7 +119,6 @@ Por otro lado, aunque no es un requisito obligatorio, se recomienda contar con u
 
 
 \section{Compilación, instalación y ejecución del proyecto}
-\label{instalacionProyecto}
 
 \subsection{Instalación}
 
@@ -134,34 +133,34 @@ Al ejecutar el instalador que se ha descargado, es necesario seleccionar la opci
 En concreto la versión utilizada de Node.js para el desarrollo del proyecto ha sido la v18.18.2 y la versión utilizada de npm ha sido la 10.2.2.
 
 \begin{figure}[h]
-	\label{img:InstalarNodejs}
 	\centering
 	\includegraphics[width=\textwidth]{InstalarNodejs}
 	\caption[Descarga de Node.js]{Descarga de Node.js.}
+	\label{fig:InstalarNodejs}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:NodejsSetUp}
 	\centering
 	\includegraphics[width=\textwidth]{NodejsSetUp}
 	\caption[Instalar Node.js y npm]{Instalar Node.js y npm.}
+	\label{fig:NodejsSetUp}
 \end{figure}
 
 \item \textbf{Truffle Suite}: Teniendo Node.js y npm instalados, procederemos a instalar Truffle globalmente, para ello desde la terminal ejecutaremos el siguiente comando: \texttt{npm install -g truffle} lo cual nos permitirá usar el comando \texttt{truffle} desde cualquier lugar en la terminal.
 
 Una vez instalado Truffle, el siguiente paso es configurar el proyecto, para ello dentro del directorio \textit{Smart Contract}, se encuentra la estructura de carpetas generadas por Truffle, incluyendo \textit{contracts} para almacenar la lógica de los contratos, \textit{migrations} para almacenar el \textit{migrations} de migración y \textit{test} para las pruebas.
 
-Truffle también crea un archivo de configuración llamado \texttt{truffle-config.js}, el cual se usa para configurar las redes sobre las cuales se desplegarán los contratos inteligentes.
+Truffle también crea un archivo llamado \texttt{truffle-config.js}, el cual se usa para configurar las redes sobre las cuales se desplegarán los contratos inteligentes.
 En este caso se usa la red de Ganache, que normalmente se ejecuta en \texttt{localhost} en el ordenador. Debido a que la aplicación se ejecutará en un dispositivo móvil independiente del ordenador, la configuración \textit{localhost} no será suficiente. 
 En su lugar, se usará la dirección IP del ordenador la cual actuará como servidor para Ganache. Esto permitirá que otros dispositivos de nuestra misma red local se conecten a la \textit{blockchain} simulada por Ganache.
 Ganache por defecto usa el puerto 8545, aunque este podría ser reemplazado por cualquier puerto que se encontrase vacío.
 Siguiendo los pasos previamente mencionados, el archivo \texttt{truffle-config.js} debería verse como en la imagen \ref{fig:TruffleGanache}.
 
 \begin{figure}[h]
-	\label{img:TruffleGanache}
 	\centering
 	\includegraphics[width=\textwidth]{TruffleGanache}
 	\caption[Configuración Ganache Truffle]{Configuración red Ganache en truffle-config.js.}
+	\label{fig:TruffleGanache}
 \end{figure}
 
 Dentro del archivo \texttt{truffle-config.js} también será necesario realizar la configuración de compiladores para especificar como los contratos inteligentes deben de ser compilados, optimizados y ejecutados en la máquina virtual de Ethereum.
@@ -170,10 +169,10 @@ Dentro de \textit{Settings} se ha de especificar algunas opciones que afectan a 
 Por otro lado, las \textit{runs} se deben de establecer en 200, un número más alto puede resultar en un código más optimizado en términos de gas, pero con un proceso de compilación más lento. ver imagen \ref{fig:TruffleCompiler}.
 
 \begin{figure}[h]
-	\label{img:TruffleCompiler}
 	\centering
 	\includegraphics[width=\textwidth]{TruffleCompiler}
 	\caption[Configuración compilador Truffle]{Configuración del compilador en truffle-config.js.}
+	\label{fig:TruffleCompiler}
 \end{figure}
 
 \item \textbf{Ganache}: Como hemos comentado, en el proyecto se usa la red de Ganache. Por simplicidad hemos usado la versión de consola, por tanto para instalarla de forma global en nuestro ordenador será necesario ejecutar el siguiente comando: \texttt{npm install -g ganache-cli}.
@@ -191,7 +190,7 @@ Para ello, desde el un dispositivo móvil Android utilizando Google Play Store, 
 
 \subsection{Ejecución del proyecto}
 
-En este apartado se detallará como ejecutar el proyecto. Es muy importante que durante la ejecución tanto el ordenador como el dispositivo móvil se encuentren en la misma red.
+En este apartado se detallará cómo ejecutar el proyecto. Es muy importante que durante la ejecución tanto el ordenador como el dispositivo móvil se encuentren en la misma red.
 
 \begin{enumerate}
 
@@ -205,13 +204,13 @@ ganache-cli --host 192.168.1.33 -d --db ganache_db
 \texttt{--db ganache\_db} es una opción que permite que Ganache guarde el estado de la red en un directorio específico, en este caso el directorio será llamado `ganache\_db' y se creará en la rama actual donde se encuentre el usuario en la terminal.
 Esto permite que la \textit{blockchain} simulada mantenga su estado entre reinicios de Ganache.
 
-En la imagen \ref{img:ganache-cli} se muestra el resultado de levantar exitosamente una red Ganache desde la terminal.
+En la imagen \ref{fig:ganache-cli} se muestra el resultado de levantar exitosamente una red Ganache desde la terminal.
 
 \begin{figure}[h]
-	\label{img:ganache-cli}
 	\centering
 	\includegraphics[width=\textwidth]{ganache-cli}
 	\caption[Levantar red Ganache]{Levantar red local usando Ganache.}
+	\label{fig:ganache-cli}
 \end{figure}
 
 \item \textbf{Compilar y migrar contrato}: el contrato debe de ser compilado, probado y migrado antes de poder utilizarlo, para ello se utiliza Truffle.
@@ -224,14 +223,14 @@ En la imagen \ref{img:ganache-cli} se muestra el resultado de levantar exitosame
 	almacena toda la lógica de los contratos
 	inteligentes, se debe ejecutar el comando \texttt{truffle
 	compile}.
-	Ver imagen \ref{img:TruffleCompiler}.
+	Ver imagen \ref{fig:TruffleCompile}.
 	\end{itemize}
 	
 \begin{figure}[h]
-	\label{img:TruffleCompile}
 	\centering
 	\includegraphics[width=\textwidth]{TruffleCompile}
-	\caption[Compilar smart contract]{Compilar \textit{cmart contract} usando Truffle.}
+	\caption[Compilar smart contract]{Compilar \textit{smart contract} usando Truffle.}
+	\label{fig:TruffleCompile}
 \end{figure}	
 	
 	\begin{itemize}
@@ -241,14 +240,14 @@ En la imagen \ref{img:ganache-cli} se muestra el resultado de levantar exitosame
 	los archivos necesarios en el directorio \texttt{build/contracts}.
 	Tras una correcta migración, se mostrará la dirección del contrato, la cuenta del creador, el costo total
 	del despliegue, etcétera. 	
-Ver imagen \ref{img:TruffleMigrate}.
+Ver imagen \ref{fig:TruffleMigrate}.
 	\end{itemize}
 	
 \begin{figure}[h]
-	\label{img:TruffleMigrate}
 	\centering
 	\includegraphics[width=\textwidth]{TruffleMigrate}
 	\caption[Despliegue smart contract]{Despliegue del contrato en la red de Ganache usando Truffle.}
+	\label{fig:TruffleMigrate}
 \end{figure}	
 	
 	
@@ -256,17 +255,17 @@ Ver imagen \ref{img:TruffleMigrate}.
 Para ello, necesitamos dos cosas: la dirección del contrato, que se nos ha proporcionado en la terminal al migrarlo, y el archivo JSON del contrato que se encuentra en \texttt{SmartContract/build}.
 	
 Con el archivo JSON del contrato, es necesario copiarlo y pegarlo en la carpeta \texttt{AppContract/src/ContractConexion}. 
-Por otro lado con la dirección del contrato, también es necesario copiarla, y actualizar la referencia \texttt{contractAddress} que se encuentra en el archivo \texttt{EtherProvider.js}.
-Ver imagen \ref{img:ContractConexion}.
+Por otro lado, con la dirección del contrato, también es necesario copiarla, y actualizar la referencia \texttt{contractAddress} que se encuentra en el archivo \texttt{EtherProvider.js}.
+Ver imagen \ref{fig:ContractConexion}.
 
 \begin{figure}[h]
-	\label{img:ContractConexion}
 	\centering
 	\includegraphics[width=\textwidth]{ContractConexion}
 	\caption[Conexión con el contrato]{Configuración de conexión con el contrato.}
+	\label{fig:ContractConexion}
 \end{figure}	
 
-\item \textbf{Iniciar aplicación}: Desde el directorio raíz de la aplicación, \texttt{/Code/AppContract}, en la terminal ejecutamos el comando \texttt{npx expo start} para iniciar el servidor. Esto mostrará un código QR en la terminal. Será necesario comprobar que la opción Expo Go se encuentre activa.
+\item \textbf{Iniciar aplicación}: Desde el directorio raíz, \texttt{/Code/AppContract}, en la terminal ejecutamos el comando \texttt{npx expo start} para iniciar el servidor. Esto mostrará un código QR en la terminal. Será necesario comprobar que la opción Expo Go se encuentre activa.
 Seguidamente desde la aplicación Expo Go en el dispositivo móvil, se procederá a escanear el código QR que aparece en la terminal.
 La aplicación Expo Go cargará y mostrará la aplicación en el dispositivo móvil.
 
@@ -280,7 +279,7 @@ La aplicación Expo Go cargará y mostrará la aplicación en el dispositivo mó
 	
 \item \textbf{Proceso de ejecución de pruebas}: Para llevar a cabo estas pruebas unitarias, es necesario utilizar el comando \texttt{truffle test} en la terminal. Este comando debe ejecutarse desde el directorio \textit{Smart Contract}, donde se encuentran almacenados todos los \textit{scripts} de prueba necesarios para la evaluación del contrato.
 
-\item \textbf{Descripción de los \textit{tesst}}: 
+\item \textbf{Descripción de los \textit{tests}}: 
 Los \textit{tests} verifican cada función y transacción que el
 contrato inteligente puede realizar, incluyendo la creación,
 transferencia y administración de los contratos.
@@ -293,9 +292,9 @@ Para ver un ejemplo de cómo se presentan estos resultados, ver la imagen \ref{f
 \end{itemize}
 
 \begin{figure}[h]
-	\label{img:TruffleTest}
 	\centering
 	\includegraphics[width=\textwidth]{TruffleTest}
 	\caption[Pruebas sobre el contrato]{Pruebas unitarias sobre el Smart Contract usando Truffle.}
+	\label{fig:TruffleTest}
 \end{figure}	
 

@@ -19,7 +19,9 @@ const LoginScreen = () => {
 
         try {
             //const response = await signInWithEmailAndPassword(auth, email, password);
-            const response = await signInWithEmailAndPassword(auth, "admin8@gmail.com", "admin8");
+            const response = await signInWithEmailAndPassword(auth, "admin5@gmail.com", "admin5");
+            //const response = await signInWithEmailAndPassword(auth, "admin8@gmail.com", "admin8");
+
             setUser(response.user);
             setError("");
 

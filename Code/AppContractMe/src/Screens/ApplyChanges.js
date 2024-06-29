@@ -32,7 +32,7 @@ const ContractAlertScreen = ({ route }) => {
                 alert("Por favor, inicia sesión en MetaMask y selecciona una cuenta.");
             } else {
                 const MyContract = await getMyContract();
-                await MyContract.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount });
+                await MyContract.methods.applyChange(newContractDetails.tokenId).send({ from: selectedAccount, gas: 1000000 });
                 alert("Cambios aceptados correctamente.");
                 navigation.navigate("infoContract", { tokenId: newContractDetails.tokenId, fromWorkerSection: true });
             }

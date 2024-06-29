@@ -3,7 +3,6 @@
 En este apartado se pretende resumir los aspectos más relevantes que se han tratado y cómo se han resuelto las diferentes dificultades encontradas a lo largo de su desarrollo.
 
 
-
 \section{Dificultades encontradas en el desarrollo}
 
 Este proyecto se ha caracterizado por las diversas dificultades que se han encontrado primordialmente exacerbadas por las incompatibilidades de diversas librerías y herramientas en el desarrollo móvil.
@@ -122,7 +121,7 @@ Ante la acumulación de desafíos y la falta de tiempo, se tomó la decisión de
 
 
 
-\section{Incompatibilidad Firebase}
+\subsection{Incompatibilidad Firebase}
 
 Durante la fase inicial del proyecto se optó por implementar una base de datos para la autenticación de los usuarios.
 Se decidió usar Firebase, debido a que es una herramienta muy poderosa y robusta, y mi interés de aprender a utilizarla. Entre las funcionalidades previstas estaban la autenticación de usuarios, el almacenamiento de datos y un servicio sólido de mensajería para funciones como el restablecimiento de contraseña y la verificación de dos factores.
@@ -136,15 +135,15 @@ A medida que el proyecto evolucionaba, surgió la idea de establecer un inicio d
 No obstante, en las últimas semanas de desarrollo del proyecto como bien se ha comentado anterioridad, tras enfrentar múltiples dificultades con la implementación de las billeteras y descartar dicha posibilidad, la necesidad de implementar una autenticación de usuario resurgió.
 Por lo tanto, se reanudó la investigación sobre la incompatibilidad de Firebase y la biblioteca Web3, debido a un error específico que se desencadenaba por la presencia de Web3 en el proyecto, afectando la verificación de usuarios.
 
-Tras un análisis y varias pruebas, se ideó una solución que consistía en implementar la importación `perezosa' de Web3 (ver imagen \ref{img:CodeWeb3Lazy}). Esto implica cargar Web3 sólo después de que la autenticación de usuario fuera exitosa. Para llevar a cabo esta estrategia, se utilizó la técnica de `dynamic imports' de JavaScript, que permite cargar módulos de manera condicional y asíncrona. 
+Tras un análisis y varias pruebas, se ideó una solución que consistía en implementar la importación `perezosa' de Web3 (ver imagen \ref{fig:CodeWeb3Lazy}). Esto implica cargar Web3 sólo después de que la autenticación de usuario fuera exitosa. Para llevar a cabo esta estrategia, se utilizó la técnica de `dynamic imports' de JavaScript, que permite cargar módulos de manera condicional y asíncrona. 
 Para ello, en vez de importar la biblioteca Web3, se llamará a este fragmento de código, el cual primero verifica si ya existe una instancia de Web3, devolviendo esta instancia si está disponible. En caso de que no haya una instancia previa, se procede a importar Web3 de manera dinámica solo cuando el usuario necesite realizar una acción que involucre dicha biblioteca.
 Además, el uso de promesas asegura que la carga del módulo se maneje de manera asíncrona  sin interrumpir la interacción del usuario.
 
 \begin{figure}[h]
-	\label{img:CodeWeb3Lazy}
 	\centering
 	\includegraphics[width=\textwidth]{CodeWeb3Lazy}
 	\caption[Importación perezosa Web3]{Importación perezosa Web3.}
+	\label{fig:CodeWeb3Lazy}
 \end{figure}
 
 Este ajuste no sólo resolvió el problema técnico, sino que también permitió mantener el diseño inicial del proyecto, aprovechando la escalabilidad, seguridad y facilidad de uso de Firebase para la gestión de usuarios, mientras se mantiene la capacidad de integrar Web3 para futuras funcionalidades relacionadas con blockchain.

@@ -7,15 +7,15 @@ En este apéndice se explicarán los distintos diseños de la aplicación, desde
 \section{Diseño de datos}
 
 A continuación se describirá cómo se ha desarrollado el diseño de datos de la aplicación.
-Para implementar la persistencia, a parte del uso de la \textit{blockchain}, se ha decidido utilizar una base de datos de Firebase, para almacenar datos sobre los usuarios y gestionar su autenticación.
+Para implementar la persistencia, aparte del uso de la \textit{blockchain}, se ha decidido utilizar una base de datos de Firebase, para almacenar datos sobre los usuarios y gestionar su autenticación.
 
 \subsection{Base de datos}
 
-El uso de Firestore en la aplicación se dirige a lo los datos que no requieren las propiedades de inmutabilidad de la \textit{blockchain}. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
+El uso de Firestore en la aplicación se dirige a los datos que no requieren las propiedades de inmutabilidad de la \textit{blockchain}. Este enfoque estratégico permite desacoplar la gestión de información que es dinámica y mutable, como los datos de usuario y las sesiones de autenticación, de aquella que requiere una integridad absoluta, como los contratos laborales y sus transacciones asociadas.
 Al delegar la gestión de datos no críticos en Firestore, se minimiza la carga sobre la \textit{blockchain}, lo que resulta en una reducción significativa en el consumo de gas durante las transacciones. Esta optimización no solo mejora la eficiencia de los contratos inteligentes sino que también reduce los costos operativos para los usuarios, haciendo que la aplicación sea más accesible y económicamente viable.
 La elección de Firebase como plataforma de gestión de bases de datos NoSQL de debe a su escalabilidad automática y rendimiento en tiempo real.
 Este diseño híbrido de manejo de datos aprovecha las fortalezas de ambas tecnologías: la flexibilidad y la escalabilidad de Firestore para datos operativos y la seguridad y la inmutabilidad de la \textit{blockchain} para transacciones críticas. 
-El diagrama Entidad-Relación se puede observar en \ref{img:EntidadRelacion}.
+El diagrama Entidad-Relación se puede observar en \ref{fig:EntidadRelacion}.
 
 
 La colección \texttt{users} incluye los siguientes atributos:
@@ -44,13 +44,13 @@ La colección \texttt{users} incluye los siguientes atributos:
 
 Como clave primaria del documento se usa el ID del usuario, generado automáticamente con la creación del mismo, que proporciona un identificador único para cada usuario.
 
-Por otro lado, dentro de la colección \texttt{users} se ha definido una regla que asegura que los usuarios solo puedan acceder y modificar sus propios datos, protegiendo la privacidad y manteniendo la integridad de los datos personales. La regla se puede ver en la imagen \ref{img:FireBaseRegla}.
+Por otro lado, dentro de la colección \texttt{users} se ha definido una regla que asegura que los usuarios solo puedan acceder y modificar sus propios datos, protegiendo la privacidad y manteniendo la integridad de los datos personales. La regla se puede ver en la imagen \ref{fig:FireBaseRegla}.
 
 \begin{figure}[h]
-	\label{img:FireBaseRegla}
 	\centering
 	\includegraphics[width=\textwidth]{FireBaseRegla}
 	\caption[Regla Firebase]{Regla definida en Firebase para el control de acceso a los datos.}
+	\label{fig:FireBaseRegla}
 \end{figure}
 
 
@@ -101,7 +101,7 @@ La estructura \texttt{ChangeProposal} se utiliza para gestionar propuestas de ca
      propuesta está pendiente de aprobación.
 \end{itemize}
 
-En los contratos inteligentes, se usa mapeos y \textit{arrays} para organizar y relacionar de manera eficiente a los usuarios con los contratos.
+En los contratos inteligentes, se usan mapeos y \textit{arrays} para organizar y relacionar de manera eficiente a los usuarios con los contratos.
 
 \begin{itemize}
 
@@ -119,34 +119,48 @@ En los contratos inteligentes, se usa mapeos y \textit{arrays} para organizar y 
 
 \item \textbf{mapping(uint256 => mapping(address => bool)) public tokenManagers}: Determina qué direcciones tienen permisos de gestión sobre un contrato específico, facilitando la administración.
 
-En la imagen \ref{img:EntidadRelacion} se puede observar el diagrama entidad-relación que muestra como las diferentes entidades se relacionan entre sí. 
+En la imagen \ref{fig:EntidadRelacion} se puede observar el diagrama entidad-relación que muestra cómo las diferentes entidades se relacionan entre sí. 
 
 \end{itemize}
 
 \begin{figure}[h]
-	\label{img:EntidadRelacion}
 	\centering
 	\includegraphics[width=\textwidth]{EntidadRelacion}
 	\caption[Diagrama entidad-relación]{Diagrama entidad-relación.}
+	\label{fig:EntidadRelacion}
 \end{figure}
 
 
 \section{Diseño procedimental}
 
-En esta sección se mostrarán los diagramas de secuencia de las dos tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato}) y firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}).
+En esta sección se mostrarán los diagramas de secuencia de las tareas principales de la aplicación; crear un contrato (ver figura \ref{fig:SecuenciaCrearContrato}), firmar un contrato (ver figura \ref{fig:SecuenciaFirmarContrato}), proponer una modificación (ver figura \ref{fig:SecuenciaModificar}) y aceptar una modificación (ver figura \ref{fig:SecuenciaAceptar}).
 
 \begin{figure}[h]
-	\label{img:SecuenciaCrearContrato}
 	\centering
 	\includegraphics[width=\textwidth]{SecuenciaCrearContrato}
 	\caption[Diagrama secuencia creación contrato]{Diagrama de secuencia para crear un contrato.}
+	\label{fig:SecuenciaCrearContrato}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:SecuenciaFirmarContrato}
 	\centering
 	\includegraphics[width=\textwidth]{SecuenciaFirmarContrato}
 	\caption[Diagrama secuencia firmar contrato]{Diagrama de secuencia para firmar un contrato.}
+	\label{fig:SecuenciaFirmarContrato}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{SecuenciaModificar}
+	\caption[Diagrama secuencia proponer modificación]{Diagrama de secuencia para proponer una modificación.}
+	\label{fig:SecuenciaModificar}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{SecuenciaAceptar}
+	\caption[Diagrama secuencia aceptar cambios]{Diagrama de secuencia para aceptar una propuesta de modificación.}
+	\label{fig:SecuenciaAceptar}
 \end{figure}
 
 \section{Diseño arquitectónico}
@@ -164,13 +178,13 @@ La aplicación está dividida en varios módulos principales, cada uno con respo
 
 El patrón Singleton es un diseño software que se utiliza para restringir la instanciación de una clase a un solo objeto. El patrón Singleton se implementa al crear una clase con un método que crea una nueva instancia de la clase si una no existe. En caso de que la instancia ya exista, simplemente devuelve una referencia a ese objeto.
 
-En nuestro proyecto, el patrón Singleton se aplica en la clase \texttt{EtherProvider} (ver imagen \ref{img:singleton}) para manejar tanto la conexión a la \textit{blockchain} mediante Web3 como la instancia del contrato inteligente, garantizando que ambos sean únicos y globalmente accesibles.
+En nuestro proyecto, el patrón Singleton se aplica en la clase \texttt{EtherProvider} (ver imagen \ref{fig:singleton}) para manejar tanto la conexión a la \textit{blockchain} mediante Web3 como la instancia del contrato inteligente, garantizando que ambos sean únicos y globalmente accesibles.
 
 \begin{figure}[h]
-	\label{img:singleton}
 	\centering
 	\includegraphics[width=\textwidth]{singleton}
 	\caption[Diagrama Singleton]{Diagrama UML de la estructura del Singleton.}
+	\label{fig:singleton}
 \end{figure}
 
 La implementación de patrón Singleton en el proyecto ofrece ventajas significativas: 
@@ -201,52 +215,72 @@ Por ejemplo, la aplicación incluye directorios como \texttt{Contracts}, \texttt
 
 Esta modularización asegura que los cambios dentro de un módulo específico puedan realizarse sin afectar a otras partes del sistema. Al mantener cada módulo independiente, se mejora significativamente la legibilidad y la mantenibilidad del código.
 
+
+\section{Arquitectura aplicación}
+
+La siguiente representación es un diagrama de arquitectura, ver imagen \ref{fig:DiagramaArquitectura}. Este esquema destaca la interconexión entre la interfaz de usuario, el backend y la estructura blockchain, proporcionando un marco visual para entender cómo estos componentes se integran para soportar operaciones descentralizadas.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{DiagramaArquitectura}
+	\caption[Diagrama arquitectura]{Diagrama arquitectura de la aplicación.}
+	\label{fig:DiagramaArquitectura}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{\textit{Blockchain}}: Este segmento del diagrama representa la estructura de la \textit{blockchain} simulada por Ganache. Se muestran varios nodos y contratos inteligentes, cada uno con su propia instancia de la Máquina Virtual de Ethereum (EVM). Estos nodos interactúan entre sí, facilitando el procesamiento y la validación de transacciones
+
+\item \textbf{\textit{Backend}}: La lógica de negocio se procesa aquí, utilizando un sistema de gestión de bases de datos (DBMS) y Web3, que permiten interactuar con un nodo local o remoto de Ethereum, facilitando así la comunicación entre la interfaz de usuario y la blockchain.
+
+\item \textbf{Interfaz de Usuario}: La interfaz de usuario está diseñada para dispositivos Android, proporcionando una UI (Interfaz de Usuario) que permite a los usuarios interactuar fácilmente con la aplicación.
+\end{itemize}
+
 \section{Diseño de interfaces}
 
 Antes del desarrollo de la interfaz de la aplicación, se experimentó y depuró un prototipo de la misma.
 Las interfaces fueron diseñadas teniendo en cuenta la usabilidad de la aplicación, priorizando un diseño simple que permitiera que la aplicación fuera intuitiva, con una curva de aprendizaje suave.
 También se ha considerado que la aplicación sea adaptable a una amplia variedad de pantallas, ya que puede ser utilizada tanto en dispositivos móviles como en tabletas.
 
-El diseño de los prototipos para la aplicación incluye varias pantallas clave: pantalla de inicio de sesión, permitiendo la autenticación de los usuarios (ver imagen \ref{img:prototipoLogin}); la pantalla principal, que actúa como punto de entrada intuitivo (ver imagen \ref{img:prototipoHome}); la pantalla de creación de contratos, donde los usuarios pueden interactuar de manera clara y directa para establecer acuerdos(ver imagen \ref{img:prototipoCrearContrato}); la pantalla de visualización de contratos , diseñada para proporcionar una experiencia fluida al revisar contratos existentes (ver imagen \ref{img:prototipoVerContratos}); la pantalla de información y utilidades, que ofrece recursos y herramientas fácilmente accesibles (ver imagen \ref{img:prototipoInfo}); y la pantalla de estado de cuenta, que muestra de manera clara y concisa la información financiera relevante del usuario (ver imagen \ref{img:prototipoCartera}). 
+El diseño de los prototipos para la aplicación incluye varias pantallas clave: pantalla de inicio de sesión, permitiendo la autenticación de los usuarios (ver imagen \ref{fig:prototipoLogin}); la pantalla principal, que actúa como punto de entrada intuitivo (ver imagen \ref{fig:prototipoHome}); la pantalla de creación de contratos, donde los usuarios pueden interactuar de manera clara y directa para establecer acuerdos(ver imagen \ref{fig:prototipoCrearContrato}); la pantalla de visualización de contratos , diseñada para proporcionar una experiencia fluida al revisar contratos existentes (ver imagen \ref{fig:prototipoVerContratos}); la pantalla de información y utilidades, que ofrece recursos y herramientas fácilmente accesibles (ver imagen \ref{fig:prototipoInfo}); y la pantalla de estado de cuenta, que muestra de manera clara y concisa la información financiera relevante del usuario (ver imagen \ref{fig:prototipoCartera}). 
 
 \begin{figure}[h]
-	\label{img:prototipoLogin}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoLogin}
 	\caption[Prototipo pantalla inicio de sesión]{Prototipo pantalla inicio de sesión.}
+	\label{fig:prototipoLogin}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:prototipoHome}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoHome}
 	\caption[Prototipo pantalla principal]{Prototipo pantalla principal.}
+	\label{fig:prototipoHome}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:prototipoCrearContrato}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoCrearContrato}
 	\caption[Prototipo pantalla crear contrato]{Prototipo pantalla crear contrato.}
+	\label{fig:prototipoCrearContrato}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:prototipoVerContratos}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoVerContratos}
-	\caption[Prototipo pantalla ver contratos del usuario]{Prototipo pantalla ver contratos del usuario.}
+	\caption[Prototipo pantalla ver contratos del usuario]{Prototipo pantalla ver contratos del usuario.}ç
+	\label{fig:prototipoVerContratos}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:prototipoInfo}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoInfo}
 	\caption[Prototipo pantalla información y utilidades]{Prototipo pantalla información y utilidades.}
+	\label{fig:prototipoInfo}
 \end{figure}
 
 \begin{figure}[h]
-	\label{img:prototipoCartera}
 	\centering
 	\includegraphics[width=0.40\textwidth]{prototipoCartera}
 	\caption[Prototipo pantalla estado cuenta del usuario]{Prototipo pantalla estado cuenta del usuario.}
+	\label{fig:prototipoCartera}
 \end{figure}

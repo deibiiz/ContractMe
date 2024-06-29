@@ -15,6 +15,7 @@ const ContractDetailsScreen = ({ route }) => {
     const { esAutenticado, AutenticarConHuella } = useAuthentication();
     const [contractSigned, setContractSigned] = useState(false);
 
+
     const fetchContractDetailsCallback = React.useCallback(() => {
         const fetchContractDetails = async () => {
             const MyContract = await getMyContract();
@@ -29,6 +30,9 @@ const ContractDetailsScreen = ({ route }) => {
             const endDate = new Date(Number(details.startDate) * 1000 + Number(details.duration) * 1000).toLocaleString();
             const pauseTime = new Date(Number(details.pauseTime) * 1000).toLocaleString();
             const isFinished = await MyContract.methods.isContractFinished(tokenId).call();
+
+            console.log("salary", details.salary);
+            console.log("duration", details.duration);
 
             setContractDetails({
                 ...details,

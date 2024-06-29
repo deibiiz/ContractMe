@@ -66,6 +66,8 @@ const ModifyContract = ({ route, navigation }) => {
                 const parsedSalary = web3.utils.toWei(salary, "ether");
 
                 MyContract.methods.proposeChange(tokenId, title, parsedSalary, secondsToFinish, description, isPaused).send({ from: selectedAccount, value: parsedSalary, gas: 1000000 });
+                console.log("tokenID", contractDetails.tokenId, "title", contractDetails.title, "salary", contractDetails.salary, "diration", contractDetails.duration, "description", contractDetails.description, "isPaused", contractDetails.isPaused);
+                console.log("tokenID", tokenId, "title", title, "salary", parsedSalary, "secondsToFinish", secondsToFinish, "description", description, "isPaused", isPaused);
                 alert("Solicitud de cambios enviada correctamente.");
                 navigation.navigate("ShowContract", { tokenId: tokenId });
             }

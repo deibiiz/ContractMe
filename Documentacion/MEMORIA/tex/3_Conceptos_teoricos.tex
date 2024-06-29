@@ -19,13 +19,13 @@ La \textit{blockchain} demostró su capacidad para contabilizar y transferir val
 Los nodos en \textit{blockchain} son dispositivos, generalmente computadoras, que participan en una red \textit{blockchain}. Estos dispositivos ejecutan el software del protocolo \textit{blockchain}, lo que les permite ayudar a validar transacciones y mantener la seguridad de la red~\cite{IntroducciónNodo}.
 
 Para lograr esto, los nodos se comunican entre sí por medio de protocolos \textit{peer-to-peer}(P2P). En un sistema P2P, cada nodo se conecta directamente a otros nodos sin necesidad de intermediarios. Cada nodo actúa tanto como cliente como servidor, compartiendo la carga de procesamiento de datos y la transmisión de información.
-Esta arquitectura (ver imagen ~\ref{img:BCdescentralizada}) permite desarrollar un red robusta y descentralizada donde cada nodo contribuye al mantenimiento y seguridad de la red. Siendo extremadamente difícil censurar o bloquear el acceso a la red, ya que no hay un punto central de control.
+Esta arquitectura (ver imagen ~\ref{fig:BCdescentralizada}) permite desarrollar un red robusta y descentralizada donde cada nodo contribuye al mantenimiento y seguridad de la red. Siendo extremadamente difícil censurar o bloquear el acceso a la red, ya que no hay un punto central de control.
 
 \begin{figure}[h]
-	\label{img:BCdescentralizada}
 	\centering
 	\includegraphics[width=0.75\textwidth]{BCdescentralizada}
 	\caption[Tipos de redes]{Diferencias entre una red centralidad y descentralizada~\cite{tiposRedes}.}
+	\label{fig:BCdescentralizada}
 \end{figure}
 
 
@@ -62,13 +62,13 @@ Para este proyecto se ha utilizado Ethereum la cual utiliza una gran variedad de
 La tecnología \textit{blockchain} funciona como un libro mayor digital (DTL) que registra transacciones en múltiples nodos de manera que cada registro es inalterable e irreversible. 
 Este registro se organiza en bloques de datos que están interconectados de manera cronológica formando una cadena~\cite{wiki:DTL}.
 Una vez un bloque es añadido a la cadena, se distribuye a todos los nodos de la red, actualizando así el libro mayor en cada nodo. Esta distribución asegura una redundancia que la hace segura contra la manipulación, ya que alterar un registro requeriría cambiar el bloque correspondiente y todos los bloques posteriores en la mayoría de los nodos de la red, una tarea casi imposible debido a la demanda de cómputo~\cite{BlockchainFuncionamiento}.
- Una representación gráfica se puede observar en la imagen \ref{img:DTL}.
+ Una representación gráfica se puede observar en la imagen \ref{fig:DTL}.
 
 \begin{figure}[h]
-	\label{img:DTL}
 	\centering
 	\includegraphics[width=\textwidth]{DTL}
 	\caption[Libro mayor digital]{Proceso de actualización del libro mayor~\cite{BlockchainFuncionamiento}.}
+	\label{fig:DTL}
 \end{figure}
 
 \subsection{Encadenamiento de bloques}
@@ -77,13 +77,13 @@ Cada bloque contiene un numero determinado de transacciones y está formado por 
 Los bloques se enlazan mediante el \textit{hash} formado por los datos del bloque anterior.
 El algoritmo \textit{hash} más usado en la \textit{blockchain} es SHA-256~\cite{sha256} desarrollado por la Agencia de Seguridad Nacional (NAS) en el año 1997. Es conocido por ser lento en comparación con otras funciones \textit{hash}, pero a pesar de esto destaca por su seguridad por lo que lo hace adecuado para aplicaciones financieras.
 El \textit{hash} consiste en una función criptográfica que produce una salida de longitud fija a partir de una entrada de longitud variable. Cualquier cambio en el contenido de un bloque anterior requeriría recalcular todos los \textit{hashes} subsiguientes, lo cual es computacionalmente costoso y prácticamente imposible de realizar sin ser detectado.
-Ver imagen \ref{img:enlaceBloques}.
+Ver imagen \ref{fig:enlaceBloques}.
 
 \begin{figure}[h]
-	\label{img:enlaceBloques}
 	\centering
 	\includegraphics[width=\textwidth]{enlaceBloques}
 	\caption[Encadenamiento bloques blockchain]{Encadenamiento de bloques en la \textit{blockchain}~\cite{BlockchainFuncionamiento}.}
+	\label{fig:enlaceBloques}
 \end{figure}
 
 \subsection{Wallet y transacciones}
@@ -92,13 +92,13 @@ Para iniciar una transacción en la \textit{blockchain} se debe de emplear una \
 Este monedero genera una y almacena un par de claves criptográficas, una clave pública que actúa como una dirección a la cual otros pueden enviar activos, y una clave privada, que se utiliza para firmar digitalmente las transacciones, asegurando que solo el propietario de la clave privada pueda autorizar la transferencia de sus activos.
 
 Por tanto, cuando se desea realizar una transacción, el monedero electrónico firma la transacción utilizando su clave privada. Esta firma digital, generada a través de algoritmos de criptografía asimétrica como el RSA, es esencialmente un \textit{hash} criptográfico de la transacción encriptado con la clave privada del monedero.
-Seguidamente, los nodos de la red al recibir la transacción, emplean la clave pública del firmante para descifrar la firma digital. Este proceso no solo autentifica que la transacción fue creada por el poseedor de la clave privada correspondiente, sino que también asegura que la transacción no haya sido modificada, ya que cualquier cambio en los datos de la transacción resultaría en una discrepancia al verificar la firma con la clave pública. Ver imagen \ref{img:firmaDigital}.
+Seguidamente, los nodos de la red al recibir la transacción, emplean la clave pública del firmante para descifrar la firma digital. Este proceso no solo autentifica que la transacción fue creada por el poseedor de la clave privada correspondiente, sino que también asegura que la transacción no haya sido modificada, ya que cualquier cambio en los datos de la transacción resultaría en una discrepancia al verificar la firma con la clave pública. Ver imagen \ref{fig:firmaDigital}.
 
 \begin{figure}[h]
-	\label{img:firmaDigital}
 	\centering
 	\includegraphics[width=\textwidth]{firmaDigital}
 	\caption[Transacción blockchain]{Transacción encriptada con firma digital~\cite{BlockchainFuncionamiento}.}
+	\label{fig:firmaDigital}
 \end{figure}
 
 A diferencia de los sistemas financieros tradicionales, la \textit{blockchain} no registra los saldos de las cuentas de manera directa. En su lugar, mantiene un registro detallado de todas las transacciones que han sido verificadas y aprobadas en la red.
@@ -133,7 +133,7 @@ Es por esto que los mecanismos de consenso únicamente son efectivos en redes gr
 \section{Tipos de \textit{blockchain}}
 
 Existen diferentes tipos de redes, cada una diseñada para satisfacer unas necesidades en cuanto a la privacidad, gobernanza y accesibilidad. 
-Se pueden clasificar en cuatro categorías (ver tabla \ref{tabla_blockchain_caracteristicas}) principales~\cite{introducciónBlockchain}:
+Se pueden clasificar en cuatro categorías (ver tabla \ref{tab:tabla_blockchain_caracteristicas}) principales~\cite{introducciónBlockchain}:
 
 \begin{itemize}
 \item \textbf{\textit{blockchains} públicas:} Son completamente abiertas y cualquier persona puede unirse. Bitcoin y Ethereum son buenos ejemplos de \textit{blockchains} públicas, donde las transacciones y los datos son visibles para todos, manteniendo al mismo tiempo el anonimato de los usuarios. Han marcado el camino para un ecosistema de aplicaciones descentralizadas (dApps) y finanzas descentralizadas (DeFi).
@@ -168,7 +168,7 @@ Un ejemplo real sería R3 Corda, que facilita transacciones eficientes y seguras
 		\end{tabular}
 \end{centering}
 \caption{Resumen de Tipos de \textit{blockchain} y sus Características.}
-\label{tabla_blockchain_caracteristicas}	
+\label{tab:tabla_blockchain_caracteristicas}	
 \end{table}
 
 
@@ -190,14 +190,14 @@ La seguridad es otro de los pilares fundamentales de la \textit{blockchain}, ya 
 Desde el punto de vista operativo, la \textit{blockchain} ofrece eficiencias significativas al eliminar los intermediarios, reduciendo tanto los tiempos de procesamiento como los costos asociados, a parte de minimizar las posibilidades de error.
 Este aspecto es crucial en sectores como el financiero, donde los contratos inteligentes facilitan la ejecución automatizada y segura de acuerdos sin la necesidad de intermediarios, redefiniendo las prácticas comerciales y financieras en la era digital.
 
-Dentro de este entorno de Web3, las aplicaciones descentralizadas (ver imagen \ref{img:DAPP}) se presentan como un componente esencial, ofreciendo una alternativa a las aplicaciones centralizadas tradicionales. 
+Dentro de este entorno de Web3, las aplicaciones descentralizadas (ver imagen \ref{fig:DAPP}) se presentan como un componente esencial, ofreciendo una alternativa a las aplicaciones centralizadas tradicionales. 
 Aunque el concepto de DApp parece moderno, sus raíces se remontan más de 20 años. Las primeras aplicaciones en este ámbito fueron las aplicaciones de redes P2P, siendo algunas tan conocidas como eMule o BitTorrent, las cuales democratizaron el acceso a la información al distribuirla a través de una red de nodos (ordenadores) en lugar de centralizarla en servidores únicos~\cite{DApps}.
 
 \begin{figure}[h]
-	\label{img:DAPP}
 	\centering
 	\includegraphics[width=\textwidth]{DAPP}
 	\caption[Estructura de las DApps]{Estructura de las DApps~\cite{dAppDiagrama}.}
+	\label{fig:DAPP}
 \end{figure}
 
 El mercado de las DApps ha experimentado un crecimiento impresionante en los últimos años, escalando de un valor de mercado de 10.5 mil millones de dolares en 2019 a más de 25 mil millones en 2022, Se espera que este mercado mantenga un crecimiento acelerado, esperándose alcanzar una capitalización de 368 mil millones en 2027. Estas cifras subrayan la creciente importancia y potencial económico de las DApps en el ecosistema digital~\cite{DAppsEconomía}.
@@ -268,7 +268,7 @@ El precio del gas suele expresarse en gwei, cada gwei equivale a \(0,000000001\)
 Desde 2021 con la actualización \"London\" se introdujo el mecanismo EIP-1559, que hizo que el calculo de la tarifa de gas fuera más previsible, introduciendo los conceptos de tarifa 
 base y tarifa prioritaria.
 
-\textbf{La tarifa base} (ver tabla \ref{tabla:ajuste_tarifa_base}) indica la cantidad mínima de gas a pagar para que la transacción se considere como válida para tramitar.
+\textbf{La tarifa base} (ver tabla \ref{tab:ajuste_tarifa_base}) indica la cantidad mínima de gas a pagar para que la transacción se considere como válida para tramitar.
 La tarifa base se ajusta dinámicamente bloque a bloque basándose en la ocupación del bloque anterior. El sistema, calcula cuánto gas se utilizó en total para todas las transacciones en el bloque anterior y lo compara con el tamaño de bloque previamente definido por el protocolo. Este tamaño de bloque previamente definido es una medida de cuánto gas se espera que consuman las transacciones en un bloque ideal, cada bloque en la red Ethereum tiene un tamaño esperado de 15 millones de gas.
 Si el bloque anterior consumió más gas del tamaño previamente definido, la tarifa base aumentará para el siguiente bloque hasta un máximo de 12,5\%. 
 El crecimiento exponencial en el costo de las transacciones cuando los bloques están constantemente sobreocupados actúa como un freno contra la congestión y alcanzando un tamaño de equilibrio de 15 millones de gas de media por bloque , ya que solo las transacciones prioritarias de aquellos que estén dispuestos a pagar más serán ejecutadas.
@@ -291,7 +291,7 @@ El crecimiento exponencial en el costo de las transacciones cuando los bloques e
 		\bottomrule
 	\end{tabular}
 \caption[Ajuste de la Tarifa Base Bajo Demanda]{Evolución de la Tarifa Base en Ethereum.}
-\label{tabla:ajuste_tarifa_base}
+\label{tab:ajuste_tarifa_base}
 \end{centering}
 \end{table}
 
